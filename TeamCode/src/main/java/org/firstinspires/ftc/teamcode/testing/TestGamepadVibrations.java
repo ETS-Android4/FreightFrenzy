@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 @TeleOp(name = "Test Gamepad Rumble", group = "testing")
 public class TestGamepadVibrations extends OpMode {
     private ElapsedTime timer;
-    private long[] rumbleTimes = {15,30,45,60,75,90,105,115,120,130,140,145};
+    private final Long[] rumbleTimes = {15L,30L,45L,60L,75L,90L,105L,115L,120L,130L,140L,145L};
 
     @Override
     public void init() {
@@ -32,7 +32,7 @@ public class TestGamepadVibrations extends OpMode {
             timer.reset();
         }
 
-        if(Arrays.asList().contains(timer.time(TimeUnit.SECONDS))) {
+        if(Arrays.asList(rumbleTimes).contains(timer.time(TimeUnit.SECONDS))) {
             gamepad1.rumble(1.0,1.0,500);
         }
     }
