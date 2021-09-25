@@ -18,4 +18,18 @@ apply from: '../build.dependencies.gradle'
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+    implementation('org.openftc:easyopencv:1.4.1')
+    implementation 'com.acmerobotics.roadrunner:core:0.5.3'
+}
+
+repositories {
+    maven { url = "https://dl.bintray.com/first-tech-challenge/ftcsdk/" }
+    maven { url = 'https://maven.brott.dev/' }
+
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
 }
