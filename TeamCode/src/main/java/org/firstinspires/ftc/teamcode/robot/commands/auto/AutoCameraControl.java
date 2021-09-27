@@ -612,8 +612,10 @@ public class AutoCameraControl {
         double dev = 0;
         for(double d: arr)
             mu += d;
+        mu /= arr.length;
         for(double d: arr)
             dev += Math.pow(mu-d, 2);
+        dev /= arr.length;
 
         return dev;
     }
