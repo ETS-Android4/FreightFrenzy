@@ -15,7 +15,7 @@ public class Arm implements Subsystem {
         MIDDLE,
         DEPOSIT;
 
-        public double getPosition() {
+        public double getPosition() {   // TODO: Check values
             switch (this) {
                 case INTAKE:
                     return 0;

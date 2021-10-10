@@ -18,7 +18,7 @@ public class Slides implements Subsystem {
         OUT;
 
         @NonNull
-        public int getTargets() {
+        public int getTargets() {     // TODO: Check values
             switch (this) {
                 case IN:
                     return 0;
