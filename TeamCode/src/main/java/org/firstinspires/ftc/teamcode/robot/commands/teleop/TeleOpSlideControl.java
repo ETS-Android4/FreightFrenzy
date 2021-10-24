@@ -53,18 +53,20 @@ public class TeleOpSlideControl implements Command {
                 slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
             }
         }
+        if(telemetry != null) {
+            telemetry.addLine("Slide Telemetry:");
+            telemetry.addData("PowerIn:", powerIn);
+            telemetry.addData("PowerOut:",powerOut);
+            telemetry.addData("EncoderIn:", encoderIn);
+            telemetry.addData("EncoderOut:",encoderOut);
+            telemetry.addLine();
+            telemetry.addData("Power:", slides.getPower());
+            telemetry.addData("Current Pos:", slides.getCurrentPos());
+            telemetry.addData("Target Pos:", slides.getTargetPos());
+            telemetry.addData("RunMode:", slides.getRunMode());
+            telemetry.update();
+        }
 
-        telemetry.addLine("Slide Telemetry:");
-        telemetry.addData("PowerIn:", powerIn);
-        telemetry.addData("PowerOut:",powerOut);
-        telemetry.addData("EncoderIn:", encoderIn);
-        telemetry.addData("EncoderOut:",encoderOut);
-        telemetry.addLine();
-        telemetry.addData("Power:", slides.getPower());
-        telemetry.addData("Current Pos:", slides.getCurrentPos());
-        telemetry.addData("Target Pos:", slides.getTargetPos());
-        telemetry.addData("RunMode", slides.getRunMode());
-        telemetry.update();
 
     }
 

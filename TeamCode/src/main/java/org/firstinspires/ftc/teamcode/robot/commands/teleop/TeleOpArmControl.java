@@ -40,13 +40,15 @@ public class TeleOpArmControl implements Command {
             arm.deposit();
         }
 
-        telemetry.addLine("Arm:");
-        telemetry.addData("intake?", intake);
-        telemetry.addData("middle?", middle);
-        telemetry.addData("deposit?", deposit);
-        telemetry.addLine();
-        telemetry.addData("target pos", arm.getTargetPos());
-        telemetry.update();
+        if(telemetry != null) {
+            telemetry.addLine("Arm telemetry:");
+            telemetry.addData("intake?", intake);
+            telemetry.addData("middle?", middle);
+            telemetry.addData("deposit?", deposit);
+            telemetry.addLine();
+            telemetry.addData("target pos", arm.getTargetPos());
+            telemetry.update();
+        }
     }
 
     @Override
