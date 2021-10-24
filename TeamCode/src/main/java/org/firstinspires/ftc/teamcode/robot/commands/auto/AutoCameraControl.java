@@ -347,7 +347,7 @@ public class AutoCameraControl {
         if([l,m,r]=[0,0,0])
             confidence = 0
         else
-            confidence = [l,m,r].normalize.stddev * sqrt(3) // [0,0,1].stddev = sqrt(3) so multiplying by sqrt(3) allows for [0,1] scale
+            confidence = [l,m,r].normalize.var * 3 // [0,0,1].var = 3 so multiplying by 3 allows for [0,1] scale
         run: max(l,m,r)
         store past 10 entries
 
@@ -433,7 +433,7 @@ public class AutoCameraControl {
             confidence = 0;
         } else {
             normalizeByMagnitude(contourArray);
-            confidence = getVariance(contourArray);
+            confidence = getVariance(contourArray) * 3.0;
         }
          // Set current placement to the max contour count
         if(contoursLeft == maxContourCount) {
@@ -606,18 +606,24 @@ public class AutoCameraControl {
         }
     }
 
+    /**
+     * Returns population variance of a double array
+     *
+     * @param arr Array to solve variance
+     * @return The array's variance
+     */
     private double getVariance(double[] arr) {
-        // var(x) = sum((mu-x)^2)
-        double mu = 0;
-        double dev = 0;
-        for(double d: arr)
-            mu += d;
-        mu /= arr.length;
-        for(double d: arr)
-            dev += Math.pow(mu-d, 2);
-        dev /= arr.length;
+        // var(x) = sum((mu-x)^2)/n = (mu^2+sum(x^2)/n)/n
+        double mu1 = 0;
+        double mu2 = 0;
+        double len = arr.length;
+        for(double d: arr) {
+            mu1 += d;
+            mu2 += d*d;
+        }
 
-        return dev;
+
+        return (mu1*mu1 + mu2/len)/len;
     }
 
     private Pair<DuckPlacement, Double> calculateAdjustedPlacement() {
