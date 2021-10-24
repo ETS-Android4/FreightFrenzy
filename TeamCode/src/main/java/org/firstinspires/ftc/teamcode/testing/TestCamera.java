@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.AutoCameraControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
 
+@Autonomous(name = "test cam", group = "testing")
 public class TestCamera extends LinearOpMode implements DogeOpMode {
     private AutoCameraControl cam;
 
