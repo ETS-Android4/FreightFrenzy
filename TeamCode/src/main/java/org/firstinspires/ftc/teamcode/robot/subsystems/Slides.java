@@ -23,7 +23,7 @@ public class Slides implements Subsystem {
                 case IN:
                     return 0;
                 case OUT:
-                    return 100;
+                    return -2450;
                 default:
                     return 0;
             }
@@ -41,7 +41,7 @@ public class Slides implements Subsystem {
     }
 
     public void initHardware() {
-        slide = hardwareMap.get(DcMotorEx.class, "slide");
+        slide = hardwareMap.get(DcMotorEx.class, "slides");
         targetPos = slide.getCurrentPosition();
 
         slide.setTargetPosition(targetPos);

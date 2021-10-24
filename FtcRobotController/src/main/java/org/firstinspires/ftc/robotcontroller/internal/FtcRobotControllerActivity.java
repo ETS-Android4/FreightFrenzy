@@ -134,7 +134,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.acmerobotics.roadrunner.dashboard.FtcDashboard;
+//import com.acmerobotics.roadrunner.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.FtcDashboard;
 
 @SuppressWarnings("WeakerAccess")
 public class FtcRobotControllerActivity extends Activity
@@ -336,7 +337,6 @@ public class FtcRobotControllerActivity extends Activity
         popupMenu.inflate(R.menu.ftc_robot_controller);
         AnnotatedHooksClassFilter.getInstance().callOnCreateMenuMethods(
             FtcRobotControllerActivity.this, popupMenu.getMenu());
-        FtcDashboard.populateMenu(popupMenu.getMenu()); // TODO: dashboard indicator
         popupMenu.show();
       }
     });
@@ -410,7 +410,6 @@ public class FtcRobotControllerActivity extends Activity
 
     FtcAboutActivity.setBuildTimeFromBuildConfig(BuildConfig.APP_BUILD_TIME);
 
-    FtcDashboard.start(); //TODO: dashboard indicator
 
     // check to see if there is a preferred Wi-Fi to use.
     checkPreferredChannel();
@@ -490,7 +489,6 @@ public class FtcRobotControllerActivity extends Activity
 
     AnnotatedHooksClassFilter.getInstance().callOnDestroyMethods(this);
 
-    FtcDashboard.stop(); // TODO: dashboard indicator
   }
 
   protected void bindToService() {
@@ -548,7 +546,6 @@ public class FtcRobotControllerActivity extends Activity
     getMenuInflater().inflate(R.menu.ftc_robot_controller, menu);
     AnnotatedHooksClassFilter.getInstance().callOnCreateMenuMethods(this, menu);
 
-    FtcDashboard.populateMenu(menu); // TODO: dashboard indiator
     return true;
   }
 
@@ -715,7 +712,6 @@ public class FtcRobotControllerActivity extends Activity
       }
     });
 
-    FtcDashboard.attachWebServer(service.getWebServer()); // TODO: dashboard indicator
 
     AnnotatedHooksClassFilter.getInstance().callWebHandlerRegistrarMethods(this,
         service.getWebServer().getWebHandlerManager());
@@ -766,7 +762,7 @@ public class FtcRobotControllerActivity extends Activity
 
     AnnotatedHooksClassFilter.getInstance().callOnCreateEventLoopMethods(this, eventLoop);
 
-    FtcDashboard.attachEventLoop(eventLoop); //TODO: dashboard indicator
+    //FtcDashboard.attachEventLoop(eventLoop); //TODO: dashboard indicator
   }
 
   protected OpModeRegister createOpModeRegister() {

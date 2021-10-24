@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ug_refrence;
 
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -27,7 +28,8 @@ import org.firstinspires.ftc.teamcode.ug_refrence.robot.subsystems.Kicker;
 import org.firstinspires.ftc.teamcode.ug_refrence.robot.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.ug_refrence.robot.subsystems.Transfer;
 
-@TeleOp(name = "Command Drive", group = "TeleOp")
+@Disabled
+@TeleOp(name = "UG Command Drive", group = "TeleOp")
 public class CommandDrive extends LinearOpMode implements DogeOpMode {
     public static final float TRIGGER_THRESHOLD = 0.7f;
 

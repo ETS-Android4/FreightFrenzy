@@ -23,6 +23,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 @TeleOp(name = "Command Drive", group = "TeleOp")
 public class CommandDrive extends LinearOpMode implements DogeOpMode {
     public static final float TRIGGER_THRESHOLD = 0.7f;
+    public static final double DEFAULT_TIMEOUT = 5.0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,7 +50,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpArmControl(arm, gamepad1),
                 new TeleOpDriveControl(drive, gamepad1),
                 new TeleOpFlapControl(flap, gamepad1),
-                new TeleOpSlideControl(slides, gamepad1),
+                new TeleOpSlideControl(slides, gamepad1, telemetry),
                 new TeleOpCarouselControl(carousel, gamepad2),
                 new TeleOpIntakeControl(intake, gamepad2)
         );

@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.lang.annotation.Target;
+
 public class Arm implements Subsystem {
     private HardwareMap hardwareMap;
 
@@ -29,7 +31,7 @@ public class Arm implements Subsystem {
         }
     }
 
-    private double targetPos;
+    private POSITION targetPos;
 
     public Arm(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -43,26 +45,26 @@ public class Arm implements Subsystem {
 
     @Override
     public void periodic() {
-        arm.setPosition(targetPos);
+        arm.setPosition(targetPos.getPosition());
     }
 
     public void intake() {
-        targetPos = POSITION.INTAKE.getPosition();
+        targetPos = POSITION.INTAKE;
     }
 
     public void middle() {
-        targetPos = POSITION.MIDDLE.getPosition();
+        targetPos = POSITION.MIDDLE;
     }
 
     public void deposit() {
-        targetPos = POSITION.DEPOSIT.getPosition();
+        targetPos = POSITION.DEPOSIT;
     }
 
-    public void setTargetPos(int targetPos) {
+    public void setTargetPos(POSITION targetPos) {
         this.targetPos = targetPos;
     }
 
-    public double getTargetPos() {
+    public POSITION getTargetPos() {
         return targetPos;
     }
 }

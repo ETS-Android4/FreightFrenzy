@@ -33,7 +33,7 @@ public class TeleOpSlideControl implements Command {
 
     @Override
     public void periodic() {
-        double powerIn      = gamepad.left_trigger;
+        double powerIn      = gamepad.left_trigger; //FIXME: Make all bools
         double powerOut     = gamepad.right_trigger;
         boolean encoderIn   = gamepad.left_bumper;
         boolean encoderOut  = gamepad.right_bumper;
@@ -52,7 +52,10 @@ public class TeleOpSlideControl implements Command {
             if(encoderOut) {
                 slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
             }
+        } else {
+            slides.setPower(0);
         }
+
         if(telemetry != null) {
             telemetry.addLine("Slide Telemetry:");
             telemetry.addData("PowerIn:", powerIn);

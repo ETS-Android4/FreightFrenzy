@@ -63,4 +63,19 @@ public class Flap implements Subsystem {
     public POSITION getPosition() {
         return position;
     }
+
+    public void toggle() {
+        if(position == POSITION.OPEN) {
+            position = POSITION.CLOSE;
+        } else {
+            position = POSITION.OPEN;
+        }
+    }
+
+    public void open() {
+        position = POSITION.OPEN;
+    }
+    public void close() {
+        position = POSITION.CLOSE;
+    }
 }
