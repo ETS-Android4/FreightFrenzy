@@ -13,6 +13,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -36,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 @Config
+@Disabled
 @Autonomous(name = "AAATest Roadrunner Path", group = "testing")
 public class TestRoadrunnerAutoPath extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander = new DogeCommander(this);

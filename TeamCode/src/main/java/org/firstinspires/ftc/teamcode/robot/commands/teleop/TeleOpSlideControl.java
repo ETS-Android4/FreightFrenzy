@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.CommandDrive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
 public class TeleOpSlideControl implements Command {
@@ -12,10 +13,9 @@ public class TeleOpSlideControl implements Command {
     private Slides slides;
     private Telemetry telemetry;
 
-    private final double POWER_SCALAR = 0.4;
-    final double THRESHOLD = 0.5;
+    private final double POWER_SCALAR = 0.7;
 
-    public TeleOpSlideControl(Slides slides, Gamepad gamepad, Telemetry telemetry) {
+    public  TeleOpSlideControl(Slides slides, Gamepad gamepad, Telemetry telemetry) {
         this.slides = slides;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
@@ -33,16 +33,14 @@ public class TeleOpSlideControl implements Command {
 
     @Override
     public void periodic() {
-        double powerIn      = gamepad.left_trigger; //FIXME: Make all bools
-        double powerOut     = gamepad.right_trigger;
+        boolean powerIn      = gamepad.dpad_up;     //gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
+        boolean powerOut     = gamepad.dpad_down ;    //gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
         boolean encoderIn   = gamepad.left_bumper;
         boolean encoderOut  = gamepad.right_bumper;
 
-        if(powerIn > THRESHOLD || powerOut > THRESHOLD) {
+        if(powerIn || powerOut) {
             slides.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            powerIn = powerIn > THRESHOLD ? 1 : 0;
-            powerOut = powerOut > THRESHOLD ? 1 : 0;
-            slides.setPower((powerIn - powerOut) * POWER_SCALAR);
+            slides.setPower(((powerIn ? 1 : 0) - (powerOut ? 1 : 0)) * POWER_SCALAR);
         } else if(encoderIn ^ encoderOut) {
             slides.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
             slides.setPower(POWER_SCALAR);
@@ -52,7 +50,7 @@ public class TeleOpSlideControl implements Command {
             if(encoderOut) {
                 slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
             }
-        } else {
+        } else /*if(slides.getRunMode() != DcMotor.RunMode.RUN_TO_POSITION)*/{ //TODO: Uncomment once we finish testing
             slides.setPower(0);
         }
 

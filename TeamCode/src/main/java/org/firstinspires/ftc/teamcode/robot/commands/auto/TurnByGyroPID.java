@@ -63,7 +63,22 @@ public class TurnByGyroPID implements Command {
 
         pid.setPID(p, i, d);
     }
-    
+
+    public TurnByGyroPID(Drive drive, double target, double power,
+                         double p, double i, double d) {
+        this.drive = drive;
+
+        this.target = target;
+        this.power = power;
+
+        pid.setPID(p, i, d);
+    }
+    public TurnByGyroPID(Drive drive, double target, double power) {
+        this.drive = drive;
+
+        this.target = target;
+        this.power = power;
+    }
     
 
     // Overridden methods from Command interface

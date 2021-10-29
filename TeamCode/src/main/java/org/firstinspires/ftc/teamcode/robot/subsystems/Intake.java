@@ -10,7 +10,7 @@ public class Intake implements Subsystem {
     private HardwareMap hardwareMap;
     private DcMotor intake;
 
-    private double power = 0;
+    private double power;
 
     public Intake(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
@@ -20,6 +20,7 @@ public class Intake implements Subsystem {
     public void initHardware() {
         intake = hardwareMap.get(DcMotor.class,"intake");
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        power = 0.0;
     }
 
     @Override

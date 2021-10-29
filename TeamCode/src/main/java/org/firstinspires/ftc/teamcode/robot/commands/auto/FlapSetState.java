@@ -4,6 +4,7 @@ import com.disnodeteam.dogecommander.Command;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Flap;
 
+@Deprecated
 public class FlapSetState implements Command {
     private Flap flap;
 

@@ -82,6 +82,6 @@ public class SlidesByEncoder implements Command {
 
     @Override
     public boolean isCompleted() {
-        return slides.isBusy() || timer.seconds() > timeout;
+        return !slides.isBusy() || timer.seconds() > timeout;
     }
 }

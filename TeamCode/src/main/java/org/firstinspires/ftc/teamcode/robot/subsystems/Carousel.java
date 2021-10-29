@@ -19,6 +19,8 @@ public class Carousel implements Subsystem {
     public void initHardware() {
         carousel = hardwareMap.get(DcMotorEx.class, "carousel");
         carousel.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        power = 0.0;
     }
 
     @Override

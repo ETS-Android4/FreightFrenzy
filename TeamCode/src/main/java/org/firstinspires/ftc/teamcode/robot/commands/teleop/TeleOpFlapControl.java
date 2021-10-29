@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Flap;
 
+@Deprecated
 public class TeleOpFlapControl implements Command {
     private Flap flap;
     private Gamepad gamepad;

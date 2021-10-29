@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import androidx.annotation.NonNull;
 
+@Deprecated
 public class Flap implements Subsystem {
     private HardwareMap hardwareMap;
     private Servo flap;

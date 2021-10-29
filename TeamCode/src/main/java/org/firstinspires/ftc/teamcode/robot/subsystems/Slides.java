@@ -23,14 +23,14 @@ public class Slides implements Subsystem {
                 case IN:
                     return 0;
                 case OUT:
-                    return -2450;
+                    return -2650;
                 default:
                     return 0;
             }
         }
     }
 
-    private double power = 0.0;
+    private double power;
 
     private int targetPos;
 
@@ -51,6 +51,8 @@ public class Slides implements Subsystem {
 
         slide.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION,
                 new PIDFCoefficients(5.0, 0, 0, 0));
+
+        power = 0.0;
     }
 
     @Override

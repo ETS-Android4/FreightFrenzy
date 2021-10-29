@@ -22,16 +22,16 @@ public class Arm implements Subsystem {
                 case INTAKE:
                     return 0;
                 case MIDDLE:
-                    return 0.5;
+                    return 0.3;
                 case DEPOSIT:
-                    return 1;
+                    return 0.7;
                 default:
                     return 0;
             }
         }
     }
 
-    private POSITION targetPos;
+    private POSITION targetPos = POSITION.INTAKE;
 
     public Arm(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;

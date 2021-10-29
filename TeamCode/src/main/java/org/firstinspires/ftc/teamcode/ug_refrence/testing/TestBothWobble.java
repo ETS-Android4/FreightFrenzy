@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -28,6 +29,7 @@ import org.firstinspires.ftc.teamcode.ug_refrence.robot.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.ug_refrence.robot.subsystems.Transfer;
 
 @Config
+@Disabled
 @Autonomous(name = "Test Both Wobble", group = "testing")
 public class TestBothWobble extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander = new DogeCommander(this);
