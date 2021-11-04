@@ -34,7 +34,7 @@ public class TeleOpSlideControl implements Command {
     @Override
     public void periodic() {
         boolean powerIn      = gamepad.dpad_up;     //gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
-        boolean powerOut     = gamepad.dpad_down ;    //gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
+        boolean powerOut     = gamepad.dpad_down;    //gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
         boolean encoderIn   = gamepad.left_bumper;
         boolean encoderOut  = gamepad.right_bumper;
 

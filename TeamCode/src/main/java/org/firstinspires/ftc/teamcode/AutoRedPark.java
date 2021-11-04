@@ -73,15 +73,16 @@ public class AutoRedPark extends LinearOpMode implements DogeOpMode {
 
         commander.runCommandsParallel(new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.4));
 
+        sleep(2300);
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.INTAKE));
-        sleep(2000);
+        sleep(1000);
 
         commander.runCommand(new TurnByGyroPID(drive, telemetry, 80.0, turnPower));
         sleep(500);
 
-        commander.runCommand(new DriveByTimer(drive, 0.9, 0.6));
-        commander.runCommand(new StrafeByTimer(drive, 0.6, 0.5));
-        commander.runCommand(new DriveByTimer(drive, 0.7, 0.7));
+        commander.runCommand(new DriveByTimer(drive, 0.7, 0.6));
+        commander.runCommand(new StrafeByTimer(drive, 0.8, 0.5));
+        commander.runCommand(new DriveByTimer(drive, 0.9, 0.7));
         commander.runCommand(new StrafeByTimer(drive, 0.6, -0.6));
 
 

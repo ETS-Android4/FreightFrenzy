@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.commands.auto;
 
 import com.disnodeteam.dogecommander.Command;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
@@ -23,6 +24,7 @@ public class StrafeByTimer implements Command {
     @Override
     public void start(){
         timer.reset();
+        drive.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         drive.setDiagonalPower(power,-power);
     }
 

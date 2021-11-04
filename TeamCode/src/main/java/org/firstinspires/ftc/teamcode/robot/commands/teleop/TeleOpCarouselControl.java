@@ -37,12 +37,12 @@ public class TeleOpCarouselControl implements Command {
     public void periodic() {
         // Two Person Controls:
         // In: RB   Out: RT
-        boolean lb = gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
-        boolean rb = gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
+        boolean lt = gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
+        boolean rt = gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
 
         carousel.setPower(
-                (       lb   ? 1.0 :
-                        rb  ? -1.0 : 0.0
+                (       lt   ? 1.0 :
+                        rt  ? -1.0 : 0.0
                 ) * POWER_SCALAR);
 
         if(telemetry != null) {

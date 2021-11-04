@@ -34,7 +34,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(arm);
         commander.registerSubsystem(drive);
         commander.registerSubsystem(slides);
-        //commander.registerSubsystem(carousel);
+        commander.registerSubsystem(carousel);
         commander.registerSubsystem(intake);
 
         commander.init();
@@ -44,7 +44,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpArmControl(arm, gamepad2),
                 new TeleOpDriveControl(drive, gamepad1, telemetry),
                 new TeleOpSlideControl(slides, gamepad2, telemetry),
-                //new TeleOpCarouselControl(carousel, gamepad1),
+                new TeleOpCarouselControl(carousel, gamepad1),
                 new TeleOpIntakeControl(intake, gamepad2)
         );
     }

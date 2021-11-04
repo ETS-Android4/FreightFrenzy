@@ -22,7 +22,7 @@ public class Arm implements Subsystem {
                 case INTAKE:
                     return 0;
                 case MIDDLE:
-                    return 0.3;
+                    return 0.25 ;
                 case DEPOSIT:
                     return 0.7;
                 default:
