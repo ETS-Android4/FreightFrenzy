@@ -21,10 +21,13 @@ public class TeleOpArmSlideControl implements Command {
     
     private SwampbotsUtil util;
 
-    private boolean autoMode = false;
+    private boolean autoMode = true;
     private double droppingTimer = -1;
+    private double intakeTimer = -1;
+    private boolean goingDown = false;
 
-    private final double DROP_TIME = 1.5;   //seconds
+    private final double DROP_TIME = 1.0;   //seconds
+    private final double IN_TIME = 0.8;
     private final double POWER_SCALAR = 0.7;
 
     public TeleOpArmSlideControl(Arm arm, Slides slides, Gamepad gamepad, Telemetry telemetry) {
@@ -51,6 +54,7 @@ public class TeleOpArmSlideControl implements Command {
         timer.reset();
         t0 = timer.seconds();
         droppingTimer = DROP_TIME;
+        intakeTimer = IN_TIME;
     }
 
     @Override
@@ -78,33 +82,61 @@ public class TeleOpArmSlideControl implements Command {
 
         if(autoMode) {
             // Arm pos = f(slide pos) = {intake if slide pos > middle, middle if slideMax < slide pos < middle, out only by input}
-            if(slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() && droppingTimer >= DROP_TIME) {
-                arm.intake();
-            } else if(slides.getCurrentPos() < Slides.TARGETS.OUT.getTargets() && droppingTimer >= DROP_TIME) {
-                arm.middle();
-            }
-            if(deposit && slides.getCurrentPos() < Slides.TARGETS.OUT.getTargets()) {
-                arm.deposit();
-
-                droppingTimer = 0;
-            }
             if(encoderIn ^ encoderOut) {
-                droppingTimer = DROP_TIME;
                 slides.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slides.setPower(POWER_SCALAR);
-                if(encoderIn) {
-                    slides.setTargetPos(Slides.TARGETS.IN.getTargets());
-                }
                 if(encoderOut) {
-                    slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
+                    goingDown = false;
+
+                    intakeTimer = 0.0;
                 }
             }
-            if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets()) || 
-                    util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.IN.getTargets())) {
-                slides.setPower(0.0);
+
+            if(slides.getRunMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+                if (goingDown) { // Coming in
+                    if(droppingTimer >= DROP_TIME) {
+                        slides.setTargetPos(Slides.TARGETS.IN.getTargets());
+
+                        if (slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets()) {
+                            arm.intake();
+                        } else {
+                            arm.middle();
+                        }
+
+                    }
+                } else { // Going out
+                    arm.middle();
+
+                    if (intakeTimer >= IN_TIME) {
+                        slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
+
+                        if (encoderIn && util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets(), 30)) {
+                            arm.deposit();
+
+                            droppingTimer = 0.0;
+
+                            goingDown = true;
+                        } else if(encoderIn && !util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets(), 600)) {
+                            goingDown = true;
+                        }
+                    } else if(encoderIn) {
+                        goingDown = true;
+                    }
+
+                }
+
+
+//                if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets()) ||
+//                        util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.IN.getTargets())) {
+//                    slides.setPower(1);
+//                }
             }
 
             droppingTimer += deltaT;
+            intakeTimer += deltaT;
+
+
+
         } else {
             if(middle) {
                 arm.middle();
@@ -156,9 +188,11 @@ public class TeleOpArmSlideControl implements Command {
 
             telemetry.addLine("FSM Telemetry:");
             telemetry.addData("fsm active?", autoMode);
+            telemetry.addData("going down?", goingDown);
             telemetry.addData("delta t", deltaT);
             telemetry.addData("t0", t0);
             telemetry.addData("dropping timer", droppingTimer);
+            telemetry.addData("intake timer", intakeTimer);
 
             telemetry.update();
         }
