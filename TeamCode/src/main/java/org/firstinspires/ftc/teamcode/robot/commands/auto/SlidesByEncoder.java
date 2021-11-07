@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.CommandDrive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
+import androidx.annotation.NonNull;
+
 public class SlidesByEncoder implements Command {
     private Slides slides;
 
@@ -38,15 +40,15 @@ public class SlidesByEncoder implements Command {
         this(slides, counts, power, CommandDrive.DEFAULT_TIMEOUT, null);
     }
 
-    public SlidesByEncoder(Slides slides, Slides.TARGETS target, double power, double timeout, Telemetry telemetry){
+    public SlidesByEncoder(Slides slides, @NonNull Slides.TARGETS target, double power, double timeout, Telemetry telemetry){
         this(slides, target.getTargets(), power, timeout, telemetry);
     }
 
-    public SlidesByEncoder(Slides slides, Slides.TARGETS target, double power, double timeout){
+    public SlidesByEncoder(Slides slides, @NonNull Slides.TARGETS target, double power, double timeout){
         this(slides, target.getTargets(), power, timeout, null);
     }
 
-    public SlidesByEncoder(Slides slides, Slides.TARGETS target, double power){
+    public SlidesByEncoder(Slides slides, @NonNull Slides.TARGETS target, double power){
         this(slides, target.getTargets(), power, CommandDrive.DEFAULT_TIMEOUT, null);
     }
 
