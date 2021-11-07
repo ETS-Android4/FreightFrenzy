@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpDriveControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControl;
@@ -41,11 +42,10 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         waitForStart();
 
         commander.runCommandsParallel(
-                new TeleOpArmControl(arm, gamepad2),
                 new TeleOpDriveControl(drive, gamepad1, telemetry),
-                new TeleOpSlideControl(slides, gamepad2, telemetry),
                 new TeleOpCarouselControl(carousel, gamepad1),
-                new TeleOpIntakeControl(intake, gamepad2)
+                new TeleOpIntakeControl(intake, gamepad2),
+                new TeleOpArmSlideControl(arm, slides, gamepad2)
         );
     }
 }
