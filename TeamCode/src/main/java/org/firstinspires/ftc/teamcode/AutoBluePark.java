@@ -91,6 +91,4 @@ public class AutoBluePark extends LinearOpMode implements DogeOpMode {
         commander.stop();
     }
 
-    private int InchToCount(double inch){return (int)(inch* org.firstinspires.ftc.teamcode.robot.subsystems.Drive.COUNTS_PER_INCH_EMPIRICAL);}
-
 }

@@ -89,6 +89,6 @@ public class AutoRedPark extends LinearOpMode implements DogeOpMode {
         commander.stop();
     }
 
-    private int InchToCount(double inch){return (int)(inch* Drive.COUNTS_PER_INCH_EMPIRICAL);}
+
 
 }
