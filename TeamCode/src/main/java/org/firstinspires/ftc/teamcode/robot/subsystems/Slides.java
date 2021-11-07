@@ -15,6 +15,7 @@ public class Slides implements Subsystem {
 
     public enum TARGETS {
         IN,
+        MIDDLE,
         OUT;
 
         @NonNull
@@ -22,6 +23,8 @@ public class Slides implements Subsystem {
             switch (this) {
                 case IN:
                     return 0;
+                case MIDDLE:
+                    return -500;
                 case OUT:
                     return -2650;
                 default:
