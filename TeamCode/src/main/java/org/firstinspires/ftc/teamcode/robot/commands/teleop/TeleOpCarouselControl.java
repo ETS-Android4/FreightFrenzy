@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.commands.teleop;
 import com.disnodeteam.dogecommander.Command;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,11 +17,19 @@ public class TeleOpCarouselControl implements Command {
     private Telemetry telemetry;
 
     private final double POWER_SCALAR = 1.0;
+    private double acc = 0.5;
+    private double velo;
+
+    private ElapsedTime timer;
+    private double t0;
 
     public TeleOpCarouselControl(Carousel carousel, Gamepad gamepad, Telemetry telemetry) {
         this.carousel = carousel;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
+
+        timer = new ElapsedTime();
+        t0 = timer.seconds();
     }
 
     public TeleOpCarouselControl(Carousel carousel, Gamepad gamepad) {
@@ -40,8 +49,18 @@ public class TeleOpCarouselControl implements Command {
         boolean lt = gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
         boolean rt = gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
 
+        double deltaT = timer.seconds() - t0;
+        t0 = timer.seconds();
+
+        if(lt || rt) {
+            velo += acc * deltaT;
+        } else {
+            velo = 0;
+        }
+
         carousel.setPower(
-                (       lt   ? 1.0 :
+                velo *
+                (       lt  ?  1.0 :
                         rt  ? -1.0 : 0.0
                 ) * POWER_SCALAR);
 
