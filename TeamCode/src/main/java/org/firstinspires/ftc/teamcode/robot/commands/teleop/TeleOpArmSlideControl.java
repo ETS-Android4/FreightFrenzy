@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.robot.commands.teleop;
 import com.disnodeteam.dogecommander.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 
 public class TeleOpArmSlideControl implements Command {
     private Arm arm;
@@ -14,7 +16,15 @@ public class TeleOpArmSlideControl implements Command {
     private Gamepad gamepad;
     private Telemetry telemetry;
 
+    private ElapsedTime timer;
+    private double t0;
+    
+    private SwampbotsUtil util;
+
     private boolean autoMode = false;
+    private double droppingTimer = -1;
+
+    private final double DROP_TIME = 1.5;   //seconds
     private final double POWER_SCALAR = 0.7;
 
     public TeleOpArmSlideControl(Arm arm, Slides slides, Gamepad gamepad, Telemetry telemetry) {
@@ -22,6 +32,9 @@ public class TeleOpArmSlideControl implements Command {
         this.slides = slides;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
+
+        timer = new ElapsedTime();
+        util = new SwampbotsUtil();
     }
 
     public TeleOpArmSlideControl(Arm arm, Slides slides, Gamepad gamepad) {
@@ -34,6 +47,10 @@ public class TeleOpArmSlideControl implements Command {
 
         slides.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slides.setPower(0.0);
+
+        timer.reset();
+        t0 = timer.seconds();
+        droppingTimer = DROP_TIME;
     }
 
     @Override
@@ -46,13 +63,48 @@ public class TeleOpArmSlideControl implements Command {
         boolean encoderIn   = gamepad.left_bumper;
         boolean encoderOut  = gamepad.right_bumper;
 
+        boolean setAutoOn   = gamepad.dpad_left;
+        boolean setAutoOff  = gamepad.dpad_right;
+
+        if(setAutoOn) {
+            autoMode = true;
+        }
+        if(setAutoOff) {
+            autoMode = false;
+        }
+
+        double deltaT = timer.seconds() - t0;
+        t0 = timer.seconds();
+
         if(autoMode) {
-            // Arm pos = f(slide pos) = {intake if slide pos > -500, middle if slide pos slideMax < slide pos < -500, out only by input}
-            if(slides.getCurrentPos() > -500) {
+            // Arm pos = f(slide pos) = {intake if slide pos > middle, middle if slideMax < slide pos < middle, out only by input}
+            if(slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() && droppingTimer >= DROP_TIME) {
                 arm.intake();
-            } else if(slides.getCurrentPos() < Slides.TARGETS.OUT.getTargets()) {
+            } else if(slides.getCurrentPos() < Slides.TARGETS.OUT.getTargets() && droppingTimer >= DROP_TIME) {
                 arm.middle();
             }
+            if(deposit && slides.getCurrentPos() < Slides.TARGETS.OUT.getTargets()) {
+                arm.deposit();
+
+                droppingTimer = 0;
+            }
+            if(encoderIn ^ encoderOut) {
+                droppingTimer = DROP_TIME;
+                slides.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slides.setPower(POWER_SCALAR);
+                if(encoderIn) {
+                    slides.setTargetPos(Slides.TARGETS.IN.getTargets());
+                }
+                if(encoderOut) {
+                    slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
+                }
+            }
+            if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets()) || 
+                    util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.IN.getTargets())) {
+                slides.setPower(0.0);
+            }
+
+            droppingTimer += deltaT;
         } else {
             if(middle) {
                 arm.middle();
@@ -100,6 +152,13 @@ public class TeleOpArmSlideControl implements Command {
             telemetry.addData("current pos:", slides.getCurrentPos());
             telemetry.addData("target pos:", slides.getTargetPos());
             telemetry.addData("runMode:", slides.getRunMode());
+            telemetry.addLine();
+
+            telemetry.addLine("FSM Telemetry:");
+            telemetry.addData("fsm active?", autoMode);
+            telemetry.addData("delta t", deltaT);
+            telemetry.addData("t0", t0);
+            telemetry.addData("dropping timer", droppingTimer);
 
             telemetry.update();
         }
@@ -114,4 +173,5 @@ public class TeleOpArmSlideControl implements Command {
     public boolean isCompleted() {
         return false;
     }
+
 }
