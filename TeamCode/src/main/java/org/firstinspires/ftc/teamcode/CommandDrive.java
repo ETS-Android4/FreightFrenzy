@@ -7,11 +7,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCapstoneControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpDriveControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpSlideControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
+import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
@@ -31,12 +34,16 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         Slides slides = new Slides(hardwareMap);
         Carousel carousel = new Carousel(hardwareMap);
         Intake intake = new Intake(hardwareMap);
+        CapArm capArm = new CapArm(hardwareMap);
+        CapGrip capGrip = new CapGrip(hardwareMap);
 
         commander.registerSubsystem(arm);
         commander.registerSubsystem(drive);
         commander.registerSubsystem(slides);
         commander.registerSubsystem(carousel);
         commander.registerSubsystem(intake);
+        commander.registerSubsystem(capArm);
+        commander.registerSubsystem(capGrip);
 
         commander.init();
         waitForStart();
@@ -45,7 +52,8 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpDriveControl(drive, gamepad1, telemetry),
                 new TeleOpCarouselControl(carousel, gamepad1),
                 new TeleOpIntakeControl(intake, gamepad2),
-                new TeleOpArmSlideControl(arm, slides, gamepad2)
+                new TeleOpArmSlideControl(arm, slides, gamepad2),
+                new TeleOpCapstoneControl(capArm, capGrip, gamepad1)
         );
     }
 }
