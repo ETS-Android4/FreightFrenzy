@@ -14,7 +14,7 @@ public class TeleOpIntakeControl implements Command {
     private Intake intake;
     private Telemetry telemetry;
 
-    private final double POWER_SCALAR = 1.0;
+    private final double POWER_SCALAR = 0.69;
 
     public TeleOpIntakeControl(Intake intake, Gamepad gamepad, Telemetry telemetry) {
         this.intake = intake;
