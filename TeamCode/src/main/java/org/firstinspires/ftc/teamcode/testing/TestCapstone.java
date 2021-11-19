@@ -30,7 +30,7 @@ public class TestCapstone extends LinearOpMode implements DogeOpMode {
         waitForStart();
 
         commander.runCommandsParallel(
-            new TeleOpCapstoneControl(capArm, capGrip, gamepad1)
+            new TeleOpCapstoneControl(capArm, capGrip, gamepad1, telemetry)
         );
     }
 }
