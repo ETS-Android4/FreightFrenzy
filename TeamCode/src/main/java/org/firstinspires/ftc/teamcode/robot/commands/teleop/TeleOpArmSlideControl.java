@@ -65,7 +65,7 @@ public class TeleOpArmSlideControl implements Command {
         boolean powerIn     = gamepad.dpad_up;      //gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
         boolean powerOut    = gamepad.dpad_down;    //gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
         boolean encoderIn   = gamepad.left_bumper;
-        boolean encoderOut  = gamepad.right_bumper;
+        boolean encoderOut  = gamepad.x; //gamepad.right_bumper;
 
         boolean setAutoOn   = gamepad.dpad_left;
         boolean setAutoOff  = gamepad.dpad_right;
