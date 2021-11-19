@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCapstoneContro
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
 
-
+@Disabled
 @TeleOp(name = "Test Cap", group = "testing")
 public class TestCapstone extends LinearOpMode implements DogeOpMode {
 
