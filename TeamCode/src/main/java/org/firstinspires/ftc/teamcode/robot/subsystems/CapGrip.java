@@ -16,9 +16,9 @@ public class CapGrip implements Subsystem {
         public double getPosition() {   // TODO: Check values
             switch (this) {
                 case GRIP:
-                    return 0;
+                    return 0.0;
                 case PLACE:
-                    return 1;
+                    return 1.0;
                 default:
                     return 0;
             }
@@ -48,6 +48,10 @@ public class CapGrip implements Subsystem {
 
     public void place() {
         targetPos = POSITION.PLACE;
+    }
+
+    public void toggle() {
+        targetPos = targetPos == POSITION.GRIP ? POSITION.PLACE : POSITION.GRIP;
     }
 
     public void setTargetPos(POSITION targetPos) {

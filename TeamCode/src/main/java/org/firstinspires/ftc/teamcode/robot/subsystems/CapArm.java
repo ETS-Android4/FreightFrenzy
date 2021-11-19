@@ -7,18 +7,21 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class CapArm implements Subsystem {
     private HardwareMap hardwareMap;
 
-    private Servo cap;
+    private Servo arm;
 
     public enum POSITION {
         BOTTOM,
+        MIDDLE,
         TOP;
 
         public double getPosition() {   // TODO: Check values
             switch (this) {
                 case BOTTOM:
-                    return 0;
+                    return 0.07;
+                case MIDDLE:
+                    return 0.35;
                 case TOP:
-                    return 1;
+                    return 1.0;
                 default:
                     return 0;
             }
@@ -33,17 +36,21 @@ public class CapArm implements Subsystem {
 
     @Override
     public void initHardware() {
-        cap = hardwareMap.get(Servo.class, "cap_arm");
-        cap.setPosition(Arm.POSITION.INTAKE.getPosition());
+        arm = hardwareMap.get(Servo.class, "cap_arm");
+        arm.setPosition(targetPos.getPosition());
     }
 
     @Override
     public void periodic() {
-        cap.setPosition(targetPos.getPosition());
+        arm.setPosition(targetPos.getPosition());
     }
 
     public void top() {
         targetPos = POSITION.TOP;
+    }
+
+    public void middle() {
+        targetPos = POSITION.MIDDLE;
     }
 
     public void bottom() {
