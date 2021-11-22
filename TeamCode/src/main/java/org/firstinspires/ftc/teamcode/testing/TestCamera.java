@@ -10,7 +10,6 @@ import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.AutoCameraControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
 
-@Disabled
 @Autonomous(name = "test cam", group = "testing")
 public class TestCamera extends LinearOpMode implements DogeOpMode {
     private AutoCameraControl cam;
@@ -21,12 +20,18 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
 
         cam = new AutoCameraControl(new Camera(hardwareMap), gamepad1, gamepad2, telemetry);
 
-        while (opModeIsActive() && !isStopRequested()) {
+        while (!cam.getCamera().hasInitialized && !isStarted() && !isStopRequested());
+
+        while (!isStarted() && !isStopRequested()) {
             cam.periodic();
         }
 
         commander.init();
         waitForStart();
+
+        telemetry.addLine("ran");
+        telemetry.update();
+        sleep(3000);
 
     }
 }

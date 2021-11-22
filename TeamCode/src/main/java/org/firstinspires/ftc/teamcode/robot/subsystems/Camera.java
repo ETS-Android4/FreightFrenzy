@@ -47,6 +47,8 @@ public class Camera {
     private double boundLeft;
     private double boundRight;
 
+    public boolean hasInitialized = false;
+
     //Outputs
     private Mat blurOutput = new Mat();
     private Mat hsvThresholdOutput = new Mat();
@@ -61,13 +63,26 @@ public class Camera {
 
     public void initHardware() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam1"), cameraMonitorViewId);
-        webcam.openCameraDevice();
-        vision = new DuckPatternPipeline();
-        webcam.setPipeline(vision);
-        webcam.startStreaming(640, 480, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "cam"), cameraMonitorViewId);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                vision = new DuckPatternPipeline();
+                webcam.setPipeline(vision);
+                webcam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
 
-        FtcDashboard.getInstance().startCameraStream(webcam, 20);
+                hasInitialized = true;
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+
+
+//        FtcDashboard.getInstance().startCameraStream(webcam, 20);
     }
 
     public void periodic() {

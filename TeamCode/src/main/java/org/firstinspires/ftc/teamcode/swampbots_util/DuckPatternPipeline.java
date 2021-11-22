@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.swampbots_util;
 
-import org.firstinspires.ftc.teamcode.ug_refrence.GripRingPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
