@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPatternPipeline;
 import org.opencv.core.Mat;
@@ -10,6 +11,7 @@ import org.opencv.core.MatOfPoint;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,24 +57,35 @@ public class Camera {
     private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
     private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
-    public Camera(HardwareMap hardwareMap) {
+    public Camera(HardwareMap hardwareMap, Telemetry telemetry) {
         this.hardwareMap = hardwareMap;
 
-        initHardware();
+        initHardware(telemetry);
     }
 
-    public void initHardware() {
+    public void initHardware(Telemetry telemetry) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "cam"), cameraMonitorViewId);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
                 vision = new DuckPatternPipeline();
-                webcam.setPipeline(vision);
+                telemetry.addLine("opened");
+                telemetry.update();
+
                 webcam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                telemetry.addLine("gpu acc");
+                telemetry.update();
+                webcam.setPipeline(vision);
+                telemetry.addLine("pipeline set");
+                telemetry.update();
                 webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                telemetry.addLine("stream");
+                telemetry.update();
 
                 hasInitialized = true;
+                telemetry.addLine("inited");
+                telemetry.update();
             }
 
             @Override

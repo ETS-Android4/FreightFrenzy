@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.AutoCameraControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.swampbots_util.DuckPatternPipeline;
 
 @Autonomous(name = "test cam", group = "testing")
 public class TestCamera extends LinearOpMode implements DogeOpMode {
@@ -18,9 +19,14 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
     public void runOpMode() throws InterruptedException {
         DogeCommander commander = new DogeCommander(this);
 
-        cam = new AutoCameraControl(new Camera(hardwareMap), gamepad1, gamepad2, telemetry);
-
+        cam = new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
+        
         while (!cam.getCamera().hasInitialized && !isStarted() && !isStopRequested());
+
+        telemetry.addLine("started control");
+        telemetry.update();
+
+        sleep(3000);
 
         while (!isStarted() && !isStopRequested()) {
             cam.periodic();

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.swampbots_util;
 
+import android.graphics.Color;
+
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -13,7 +15,9 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DuckPatternPipeline extends OpenCvPipeline {
@@ -36,6 +40,7 @@ public class DuckPatternPipeline extends OpenCvPipeline {
     private static boolean drawRect = true;
     private static boolean showBlur = false;
     private static boolean showPoint = true;
+    private static boolean showTargetColor = true;
 
 
 
@@ -47,29 +52,23 @@ public class DuckPatternPipeline extends OpenCvPipeline {
 
     public static ArrayList<Point> rectPoints = new ArrayList<Point>();
 
+    private SwampbotsUtil util = new SwampbotsUtil();
+
     @Override
     public Mat processFrame(Mat input) {
-
-        // Step HSV_Threshold0:
 
         double[] hsvThresholdHue =          hsvHue;
         double[] hsvThresholdSaturation =   hsvSat;
         double[] hsvThresholdValue =        hsvVal;
-        Mat hsvThresholdInput = input;
-        hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
-
 
         // Step Blur0:
-        Mat blurInput = input;
-        GripDuckPipeline.BlurType blurType = GripDuckPipeline.BlurType.get("Gaussian Blur");
-        double blurRadius = 11;
-        blur(blurInput, blurType, blurRadius, blurOutput);
+//        Mat blurInput = input;
+//        GripDuckPipeline.BlurType blurType = GripDuckPipeline.BlurType.get("Gaussian Blur");
+//        double blurRadius = 11;
+//        blur(blurInput, blurType, blurRadius, blurOutput);
 
         // Step HSV_Threshold0:
-        hsvThresholdInput = blurOutput;
-        //double[] hsvThresholdHue = {10.154094476228165, 24.880546075085334};
-        //double[] hsvThresholdSaturation = {153.64208633093526, 255.0};
-        //double[] hsvThresholdValue = {55.03597122302158, 207.13310580204777};
+        Mat hsvThresholdInput = input;
         hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 
@@ -124,12 +123,12 @@ public class DuckPatternPipeline extends OpenCvPipeline {
                     new Point(
                             boundLeft,
                             rectBot),
-                    new Scalar(40, 150, 190), 2);  // Changed color to roughly match rings
+                    new Scalar(40, 150, 190), 2);
             Imgproc.line(
                     mat,
                     new Point(
                             boundRight,
-                            rectLeft),
+                            rectTop),
                     new Point(
                             boundRight,
                             rectBot),
@@ -137,17 +136,58 @@ public class DuckPatternPipeline extends OpenCvPipeline {
         }
 
         if(showPoint) {
-            ArrayList<Point> tempPoints = rectPoints;
+            try {
+                ArrayList<Point> tempPoints = rectPoints;
 
-            // Draw top points of Rectangles on screen
-            for (int i = 0; i < tempPoints.size(); i++) {
-                Imgproc.circle(
-                        mat,
-                        tempPoints.get(i),
-                        5,
-                        new Scalar(0, 0, 255),
-                        3);
+                // Draw top points of Rectangles on screen
+                for (int i = 0; i < tempPoints.size(); i++) {
+                    Imgproc.circle(
+                            mat,
+                            tempPoints.get(i),
+                            5,
+                            new Scalar(0, 0, 255),
+                            3);
+                }
+            } catch (Exception e) {
+
             }
+
+        }
+
+        if(showTargetColor) {
+            Imgproc.rectangle(
+                    mat,
+                    new Point(600,40), new Point(640,0),
+                    util.hsvToRgb(
+                            util.mean(hsvHue) / 180,
+                            util.mean(hsvSat) / 255,
+                            util.mean(hsvVal) / 255
+                    ),
+                    -1
+
+            );
+            Imgproc.rectangle(
+                    mat,
+                    new Point(560,40), new Point(600,0),
+                    util.hsvToRgb(
+                            ((float) hsvHue[1]) / 180,
+                            ((float) hsvSat[1]) / 255,
+                            ((float) hsvVal[1]) / 255
+                    ),
+                    -1
+
+            );
+            Imgproc.rectangle(
+                    mat,
+                    new Point(600,80), new Point(640,40),
+                    util.hsvToRgb(
+                            ((float) hsvHue[0]) / 180,
+                            ((float) hsvSat[0]) / 255,
+                            ((float) hsvVal[0]) / 255
+                    ),
+                    -1
+
+            );
         }
 
         return mat;
