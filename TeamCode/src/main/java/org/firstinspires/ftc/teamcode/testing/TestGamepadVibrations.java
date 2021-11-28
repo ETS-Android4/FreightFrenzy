@@ -5,18 +5,35 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
+
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-@Disabled
 @TeleOp(name = "Test Gamepad Rumble", group = "testing")
 public class TestGamepadVibrations extends OpMode {
     private ElapsedTime timer;
     private final Long[] rumbleTimes = {15L,30L,45L,60L,75L,90L,105L,115L,120L,130L,140L,145L};
 
+    private SwampbotsUtil util = new SwampbotsUtil();
     @Override
     public void init() {
         timer = new ElapsedTime();
+
+        telemetry.addData("100,200,40", util.hsvToRgb(100f/256,200f/256,40f/256));
+        telemetry.addData("40,120,170", util.hsvToRgb(40f/256,120f/256,120f/256));
+
+        for(int i=0; i<=10; i++) {
+            double h = Math.random();
+            double s = Math.random();
+            double v = Math.random();
+            telemetry.addData(util.roundTo(h*256,3)+","+util.roundTo(s*256,3)
+                    +","+util.roundTo(v*256, 3)+" ("+util.roundTo(h*256,3)+","+
+                    util.roundTo(s*100,3)+","+util.roundTo(v*100,3)+")",
+                    util.hsvToRgb(((float) h), (float) s, (float) v));
+        }
+
+        telemetry.update();
     }
 
     @Override
