@@ -159,9 +159,9 @@ public class DuckPatternPipeline extends OpenCvPipeline {
                     mat,
                     new Point(600,40), new Point(640,0),
                     util.hsvToRgb(
-                            util.mean(hsvHue) / 180,
-                            util.mean(hsvSat) / 255,
-                            util.mean(hsvVal) / 255
+                            util.mean(hsvHue) / 180f,
+                            util.mean(hsvSat) * 0.00392156862f,
+                            util.mean(hsvVal) * 0.00392156862f
                     ),
                     -1
 
@@ -170,9 +170,9 @@ public class DuckPatternPipeline extends OpenCvPipeline {
                     mat,
                     new Point(560,40), new Point(600,0),
                     util.hsvToRgb(
-                            ((float) hsvHue[1]) / 180,
-                            ((float) hsvSat[1]) / 255,
-                            ((float) hsvVal[1]) / 255
+                            ((float) hsvHue[1]) / 180f,
+                            ((float) hsvSat[1]) * 0.00392156862f,
+                            ((float) hsvVal[1]) * 0.00392156862f
                     ),
                     -1
 
@@ -181,9 +181,9 @@ public class DuckPatternPipeline extends OpenCvPipeline {
                     mat,
                     new Point(600,80), new Point(640,40),
                     util.hsvToRgb(
-                            ((float) hsvHue[0]) / 180,
-                            ((float) hsvSat[0]) / 255,
-                            ((float) hsvVal[0]) / 255
+                            ((float) hsvHue[0]) / 180f,
+                            ((float) hsvSat[0]) * 0.00392156862f,
+                            ((float) hsvVal[0]) * 0.00392156862f
                     ),
                     -1
 
