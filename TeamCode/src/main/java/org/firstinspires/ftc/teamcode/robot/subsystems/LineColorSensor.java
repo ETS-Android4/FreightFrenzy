@@ -30,7 +30,6 @@ public class LineColorSensor implements Subsystem {
     public void periodic() {
         colorRight = new Scalar(sensorRight.red(), sensorRight.green(), sensorRight.blue());
         colorLeft = new Scalar(sensorLeft.red(), sensorLeft.green(), sensorLeft.blue());
-
     }
 
     public Scalar getColorRight() {
