@@ -76,6 +76,7 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
     private void runPathMiddle() {
         runCommonPathBeforeSplit();
         telemetry.addLine("middle path");
+        telemetry.update();
 
 
         runCommonPathAfterSplit();
@@ -84,6 +85,7 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
     private void runPathTop() {
         runCommonPathBeforeSplit();
         telemetry.addLine("top path");
+        telemetry.update();
 
 
         runCommonPathAfterSplit();
@@ -91,6 +93,7 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
 
     private void runCommonPathAfterSplit() {
         telemetry.addLine("common path 2");
+        telemetry.update();
 
     }
 
