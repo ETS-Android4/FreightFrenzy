@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.CommandDrive.DEFAULT_TIMEOUT;
-
-import androidx.annotation.NonNull;
-
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -23,8 +19,12 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPlacement;
 
-@Autonomous(name = "Blue Park w\\ Cam", group = "finalized")
-public class AutoBlueParkWithCam extends LinearOpMode implements DogeOpMode {
+import androidx.annotation.NonNull;
+
+import static org.firstinspires.ftc.teamcode.CommandDrive.DEFAULT_TIMEOUT;
+
+@Autonomous(name = "Red Park w\\ Cam", group = "finalized")
+public class AutoRedParkWithCam extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander = new DogeCommander(this);
 
     private Drive drive;
@@ -180,19 +180,19 @@ public class AutoBlueParkWithCam extends LinearOpMode implements DogeOpMode {
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
         sleep(2000);
 
-        commander.runCommandsParallel(new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.8));
-        sleep(2300);
+        commander.runCommandsParallel(new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.4));
 
+        sleep(2300);
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.INTAKE));
         sleep(1000);
 
-        commander.runCommand(new TurnByGyroPID(drive, telemetry, -80.0, turnPower));
+        commander.runCommand(new TurnByGyroPID(drive, telemetry, 80.0, turnPower));
         sleep(500);
 
         commander.runCommand(new DriveByTimer(drive, 0.7, 0.6));
-        commander.runCommand(new StrafeByTimer(drive, 0.8, -0.5));
+        commander.runCommand(new StrafeByTimer(drive, 0.8, 0.5));
         commander.runCommand(new DriveByTimer(drive, 0.9, 0.7));
-        commander.runCommand(new StrafeByTimer(drive, 0.6, 0.6));
+        commander.runCommand(new StrafeByTimer(drive, 0.6, -0.6));
 
 
         commander.stop();
