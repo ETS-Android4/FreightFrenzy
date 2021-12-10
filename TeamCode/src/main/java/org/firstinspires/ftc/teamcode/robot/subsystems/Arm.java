@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.disnodeteam.dogecommander.Subsystem;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import java.lang.annotation.Target;
 
 public class Arm implements Subsystem {
     private HardwareMap hardwareMap;
