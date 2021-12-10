@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -11,7 +10,6 @@ import org.opencv.core.MatOfPoint;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +41,10 @@ public class Camera {
 
     private static boolean returnHSV = false;
     private static boolean drawRect = true;
-    private static boolean showBlur = false;
+    private static boolean showTargetColor = true;
     private static boolean showPoint = true;
 
-    private double boundLeft;
-    private double boundRight;
+    private double bound;
 
     public boolean hasInitialized = false;
 
@@ -103,8 +100,7 @@ public class Camera {
         vision.setRectTop(rectTop);
         vision.setRectRight(rectRight);
         vision.setRectBot(rectBot);
-        vision.setLeftBound(boundLeft);
-        vision.setRightBound(boundRight);
+        vision.setBound(bound);
 
         vision.setReturnHSV(returnHSV);
         vision.setDrawRect(drawRect);
@@ -122,27 +118,15 @@ public class Camera {
     public double[] getHsvHue() {
         return vision.gethsvHue();
     }
-
     public double[] getHsvSat() {
         return vision.getHsvSat();
     }
-
     public double[] getHsvVal() {
         return vision.getHsvVal();
     }
 
-
-
-    public boolean isDrawRect() {
-        return drawRect;
-    }
-
-
-    public double getLeftBound() {
-        return boundLeft;
-    }
-    public double getRightBound() {
-        return boundRight;
+    public double getBound() {
+        return bound;
     }
 
     public ArrayList<MatOfPoint> getFindContoursOutput() {
@@ -152,15 +136,12 @@ public class Camera {
     public static double getRectBot() {
         return rectBot;
     }
-
     public static double getRectLeft() {
         return rectLeft;
     }
-
     public static double getRectRight() {
         return rectRight;
     }
-
     public static double getRectTop() {
         return rectTop;
     }
@@ -168,7 +149,6 @@ public class Camera {
     public void setHsvHueMin(double hueMin) {
         hsvHue[0] = Math.max(hueMin, HSV_MIN);
     }
-
     public void setHsvHueMax(double hueMax) {
         hsvHue[1] = Math.min(hueMax, HUE_MAX);
     }
@@ -176,34 +156,28 @@ public class Camera {
     public void setHsvSatMin(double satMin) {
         hsvSat[0] = Math.max(satMin, HSV_MIN);
     }
-
     public void setHsvSatMax(double satMax) {
         hsvSat[1] = Math.min(satMax, SAT_MAX);
     }
+
     public void setHsvValMin(double valMin) {
         hsvVal[0] = Math.max(valMin, HSV_MIN);
     }
-
     public void setHsvValMax(double valMax) {
         hsvVal[1] = Math.min(valMax, VAL_MAX);
     }
 
-
-
-    public static void setRectBot(double rectBot) {
-        Camera.rectBot = rectBot;
+    public void setRectBot(double rectBot) {
+        this.rectBot = rectBot;
     }
-
-    public static void setRectLeft(double rectLeft) {
-        Camera.rectLeft = rectLeft;
+    public void setRectLeft(double rectLeft) {
+        this.rectLeft = rectLeft;
     }
-
-    public static void setRectRight(double rectRight) {
-        Camera.rectRight = rectRight;
+    public void setRectRight(double rectRight) {
+        this.rectRight = rectRight;
     }
-
-    public static void setRectTop(double rectTop) {
-        Camera.rectTop = rectTop;
+    public void setRectTop(double rectTop) {
+        this.rectTop = rectTop;
     }
 
     public List<MatOfPoint> getContoursOutput(){
@@ -211,26 +185,20 @@ public class Camera {
     }
 
     public void setReturnHSV(boolean returnHSV){
-        Camera.returnHSV = returnHSV;
+        this.returnHSV = returnHSV;
     }
-
-    public void setShowBlur(boolean showBlur) {
-        Camera.showBlur = showBlur;
+    public void showTargetColor(boolean showTargetColor) {
+        this.showTargetColor = showTargetColor;
     }
-
     public void setShowPoint(boolean showPoint) {
-        Camera.showPoint = showPoint;
+        this.showPoint = showPoint;
     }
-
     public void setDrawRect(boolean drawRect) {
-        Camera.drawRect = drawRect;
+        this.drawRect = drawRect;
     }
 
-    public void setLeftBound(double bound) {
-        boundLeft = bound;
-    }
-    public void setRightBound(double bound) {
-        boundRight = bound;
+    public void setBound(double bound) {
+        this.bound = bound;
     }
 
 }

@@ -33,12 +33,10 @@ public class DuckPatternPipeline extends OpenCvPipeline {
     private static double rectBot   = 313.23;
     private static double rectRight = 308.82;
 
-    private static double boundLeft = 253.48;
-    private static double boundRight= 300.00;
+    private static double bound = 320;
 
     private static boolean returnHSV = false;
     private static boolean drawRect = true;
-    private static boolean showBlur = false;
     private static boolean showPoint = true;
     private static boolean showTargetColor = true;
 
@@ -98,8 +96,8 @@ public class DuckPatternPipeline extends OpenCvPipeline {
 
         if(returnHSV)
             return drawExtras(hsvThresholdOutput);
-        if(showBlur)
-            return drawExtras(blurOutput);
+//        if(showBlur)
+//            return drawExtras(blurOutput);
         return drawExtras(input);
     }
 
@@ -118,21 +116,21 @@ public class DuckPatternPipeline extends OpenCvPipeline {
             Imgproc.line(
                     mat,
                     new Point(
-                            boundLeft,
+                            bound,
                             rectTop),
                     new Point(
-                            boundLeft,
+                            bound,
                             rectBot),
                     new Scalar(40, 150, 190), 2);
-            Imgproc.line(
-                    mat,
-                    new Point(
-                            boundRight,
-                            rectTop),
-                    new Point(
-                            boundRight,
-                            rectBot),
-                    new Scalar(40, 150, 190), 2);
+//            Imgproc.line(
+//                    mat,
+//                    new Point(
+//                            boundRight,
+//                            rectTop),
+//                    new Point(
+//                            boundRight,
+//                            rectBot),
+//                    new Scalar(40, 150, 190), 2);
         }
 
         if(showPoint) {
@@ -392,10 +390,7 @@ public class DuckPatternPipeline extends OpenCvPipeline {
     public double getRectBot()      { return rectBot;}
     public double getRectRight()    { return rectRight;}
 
-    public double getLeftBound()        { return boundLeft;}
-    public double getBoundRight() {
-        return boundRight;
-    }
+    public double getBound()        { return bound;}
 
     public List<MatOfPoint> getFilteredContours()   {return filterContoursOutput;}
 
@@ -420,10 +415,7 @@ public class DuckPatternPipeline extends OpenCvPipeline {
     public void setRectBot(double bot)      { rectBot   =     bot;}
     public void setRectRight(double right)  { rectRight =   right;}
 
-    public void setLeftBound(double bound)     { boundLeft    = bound;}
-    public void setRightBound(double bound) {
-        boundRight = bound;
-    }
+    public void setBound(double bound)     { this.bound    = bound;}
 
     public void setReturnHSV(boolean retHsv)    { returnHSV = retHsv;}
     public void setDrawRect(boolean draw)       { drawRect  = draw;}
