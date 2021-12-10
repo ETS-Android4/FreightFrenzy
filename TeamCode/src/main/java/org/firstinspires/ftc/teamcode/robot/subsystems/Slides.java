@@ -30,9 +30,9 @@ public class Slides implements Subsystem {
                 case OUT:
                     return -1230;
                 case MID_PLACE:
-                    return -780;
+                    return -570;
                 case BOTTOM_PLACE:
-                    return -340;
+                    return -560;
                 default:
                     return 0;
             }
