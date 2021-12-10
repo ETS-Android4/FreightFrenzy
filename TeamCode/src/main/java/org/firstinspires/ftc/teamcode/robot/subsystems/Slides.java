@@ -16,7 +16,9 @@ public class Slides implements Subsystem {
     public enum TARGETS {
         IN,
         MIDDLE,
-        OUT;
+        OUT,
+        MID_PLACE,
+        BOTTOM_PLACE;
 
         @NonNull
         public int getTargets() {     // TODO: Check values
@@ -26,7 +28,11 @@ public class Slides implements Subsystem {
                 case MIDDLE:
                     return -50;
                 case OUT:
-                    return -1200;
+                    return -1230;
+                case MID_PLACE:
+                    return -780;
+                case BOTTOM_PLACE:
+                    return -340;
                 default:
                     return 0;
             }
