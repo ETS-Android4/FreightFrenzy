@@ -10,7 +10,9 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideContro
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCapstoneControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpDriveControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeColorSensor;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpLineColorSensor;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpSlideControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
@@ -18,6 +20,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.robot.subsystems.IntakeColorSensor;
+import org.firstinspires.ftc.teamcode.robot.subsystems.LineColorSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
 @TeleOp(name = "Command Drive", group = "TeleOp")
@@ -37,6 +41,10 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         CapArm capArm = new CapArm(hardwareMap);
         CapGrip capGrip = new CapGrip(hardwareMap);
 
+        LineColorSensor lineColorSensor = new LineColorSensor(hardwareMap);
+        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
+
+
         commander.registerSubsystem(arm);
         commander.registerSubsystem(drive);
         commander.registerSubsystem(slides);
@@ -44,6 +52,9 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(intake);
         commander.registerSubsystem(capArm);
         commander.registerSubsystem(capGrip);
+
+        commander.registerSubsystem(lineColorSensor);
+        commander.registerSubsystem(intakeColorSensor);
 
         commander.init();
         waitForStart();
@@ -53,7 +64,10 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpCarouselControl(carousel, gamepad1),
                 new TeleOpIntakeControl(intake, gamepad2),
                 new TeleOpArmSlideControl(arm, slides, gamepad2),
-                new TeleOpCapstoneControl(capArm, capGrip, gamepad1)
+                new TeleOpCapstoneControl(capArm, capGrip, gamepad1),
+
+                new TeleOpLineColorSensor(lineColorSensor, true),
+                new TeleOpIntakeColorSensor(intakeColorSensor, true)
         );
     }
 }
