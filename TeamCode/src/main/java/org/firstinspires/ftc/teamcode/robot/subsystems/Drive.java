@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
+import com.arcrobotics.ftclib.controller.wpilibcontroller.SimpleMotorFeedforward;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveKinematics;
+import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveWheelSpeeds;
 import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -10,6 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
 public class Drive implements Subsystem {
     // Hardware map
@@ -32,6 +36,9 @@ public class Drive implements Subsystem {
     private double rrPower = 0;
     private double goSlow = FAST;
     private boolean initIMU;
+
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.5097); // 509.7 mm TODO: Tune this if needed
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,1,0); //TODO: Tune this
 
 
     public static final double COUNTS_PER_INCH_EMPIRICAL = 1000/24.0; // 1000 Counts every 24 inches
@@ -138,6 +145,25 @@ public class Drive implements Subsystem {
     }
 
     /**
+     * Set the velocity of each motor using a Feedforward controller. Functions similar to normal driving.
+     *
+     * @param leftVelocity velocity for left motors
+     * @param rightVelocity velocity for right motors
+     */
+    public void setFeedforwardPower(double leftVelocity, double rightVelocity) {
+        setPower(feedforward.calculate(leftVelocity), feedforward.calculate(rightVelocity));
+    }
+
+    /**
+     * Set the velocity of each motor using a Feedforward controller. Functions similar to normal driving.
+     *
+     * @param wheelSpeeds velocity for each motor
+     */
+    public void setFeedforwardPower(DifferentialDriveWheelSpeeds wheelSpeeds) {
+        setFeedforwardPower(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
+    }
+
+    /**
      * Sets the targets for each motor
      *
      * @param flTarget target for Front Left motor
@@ -239,5 +265,13 @@ public class Drive implements Subsystem {
     public void reverseFlDrive(){
         if(flDrive.getDirection() == DcMotorSimple.Direction.FORWARD) flDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         else flDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+    }
+
+    public DifferentialDriveKinematics getKinematics() {
+        return kinematics;
+    }
+
+    public SimpleMotorFeedforward getFeedforward() {
+        return feedforward;
     }
 }
