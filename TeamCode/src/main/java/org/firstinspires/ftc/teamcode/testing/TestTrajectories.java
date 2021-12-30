@@ -56,7 +56,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         );
 
         Trajectory.State goal = trajectory.sample(1.2);
-        ChassisSpeeds adjSpeeds = controller.calculate(start, basicMove, 1.0, 0);
+        ChassisSpeeds adjSpeeds = controller.calculate(start, goal);
         DifferentialDriveWheelSpeeds wheelSpeeds = driveKinematics.toWheelSpeeds(adjSpeeds);
 
         double leftSpeed = wheelSpeeds.leftMetersPerSecond;
