@@ -19,12 +19,16 @@ import com.arcrobotics.ftclib.trajectory.TrajectoryConfig;
 import com.arcrobotics.ftclib.trajectory.TrajectoryGenerator;
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByTrajectory;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
 import java.util.ArrayList;
 
+@Autonomous(name = "Test Trajectories", group = "testing")
 public class TestTrajectories extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander;
     private RamseteController controller;
@@ -35,6 +39,11 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         commander = new DogeCommander(this);
+
+        Drive drive = new Drive(hardwareMap, true);
+
+        commander.registerSubsystem(drive);
+
         controller = new RamseteController(1,0.1);
         driveKinematics = new DifferentialDriveKinematics(Units.feetToMeters(12.9));
 
@@ -45,7 +54,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(-4.3), Units.feetToMeters(2.6)));
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(4.2), Units.feetToMeters(5)));
 
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(5), Units.feetToMeters(5));
         config.setReversed(true);
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
@@ -55,15 +64,22 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
                 config
         );
 
-        Trajectory.State goal = trajectory.sample(1.2);
-        ChassisSpeeds adjSpeeds = controller.calculate(start, goal);
-        DifferentialDriveWheelSpeeds wheelSpeeds = driveKinematics.toWheelSpeeds(adjSpeeds);
+        commander.init();
 
-        double leftSpeed = wheelSpeeds.leftMetersPerSecond;
-        double rightSpeed = wheelSpeeds.rightMetersPerSecond;
+        sleep(500);
 
-        double leftPower = pidfController.calculate(leftSpeed);
-        double rightPower = pidfController.calculate(rightSpeed);
+        commander.runCommand(new DriveByTrajectory(drive, trajectory, controller, telemetry));
+
+//
+//        Trajectory.State goal = trajectory.sample(1.2);
+//        ChassisSpeeds adjSpeeds = controller.calculate(start, goal);
+//        DifferentialDriveWheelSpeeds wheelSpeeds = driveKinematics.toWheelSpeeds(adjSpeeds);
+//
+//        double leftSpeed = wheelSpeeds.leftMetersPerSecond;
+//        double rightSpeed = wheelSpeeds.rightMetersPerSecond;
+//
+//        double leftPower = pidfController.calculate(leftSpeed);
+//        double rightPower = pidfController.calculate(rightSpeed);
 
     }
 }
