@@ -55,7 +55,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(4.2), Units.feetToMeters(5)));
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(5), Units.feetToMeters(5));
-        config.setReversed(true);
+        config.setReversed(false);
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 start,
