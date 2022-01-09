@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@Config
 public class Shooter implements Subsystem {
     // Hardware map
     private HardwareMap hardwareMap;
