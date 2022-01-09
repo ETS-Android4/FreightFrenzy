@@ -9,9 +9,9 @@ public enum DuckPlacement {
     @Override
     public String toString() {
         switch (this) {
-            case LEFT:    return "ZERO";
-            case CENTER:      return "ONE";
-            case RIGHT:    return "FOUR";
+            case LEFT:    return "LEFT";
+            case CENTER:      return "CENTER";
+            case RIGHT:    return "RIGHT";
             case UNKNOWN:       return "UNKNOWN";
             default:            return "[Defaulted]";
         }

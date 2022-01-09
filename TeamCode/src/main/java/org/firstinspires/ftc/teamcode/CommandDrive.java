@@ -42,7 +42,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         CapGrip capGrip = new CapGrip(hardwareMap);
 
         LineColorSensor lineColorSensor = new LineColorSensor(hardwareMap);
-        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
+//        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
 
 
         commander.registerSubsystem(arm);
@@ -54,20 +54,20 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(capGrip);
 
         commander.registerSubsystem(lineColorSensor);
-        commander.registerSubsystem(intakeColorSensor);
+//        commander.registerSubsystem(intakeColorSensor);
 
         commander.init();
         waitForStart();
 
         commander.runCommandsParallel(
-                new TeleOpDriveControl(drive, gamepad1, telemetry),
+                new TeleOpDriveControl(drive, gamepad1),
                 new TeleOpCarouselControl(carousel, gamepad1),
                 new TeleOpIntakeControl(intake, gamepad2),
-                new TeleOpArmSlideControl(arm, slides, gamepad2),
+                new TeleOpArmSlideControl(arm, slides, gamepad2, telemetry),
                 new TeleOpCapstoneControl(capArm, capGrip, gamepad1),
 
-                new TeleOpLineColorSensor(lineColorSensor, true),
-                new TeleOpIntakeColorSensor(intakeColorSensor, true)
+                new TeleOpLineColorSensor(lineColorSensor, true)
+//                new TeleOpIntakeColorSensor(intakeColorSensor, true)
         );
     }
 }

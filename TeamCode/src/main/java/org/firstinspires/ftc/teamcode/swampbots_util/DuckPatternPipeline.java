@@ -33,7 +33,8 @@ public class DuckPatternPipeline extends OpenCvPipeline {
     private static double rectBot   = 313.23;
     private static double rectRight = 308.82;
 
-    private static double bound = 320;
+    //red: 533.70
+    private static double bound = 533.70;
 
     private static boolean returnHSV = false;
     private static boolean drawRect = true;

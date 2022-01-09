@@ -15,8 +15,8 @@ public class TeleOpCarouselControl implements Command {
     private Telemetry telemetry;
 
     private final double POWER_SCALAR = 1.0;
-    private final double BASE_VELO = 0.2;
-    private final double ACC = 1.0;
+    private final double BASE_VELO = 1.0;
+    private final double ACC = 0.0;
 
     private double velo = 0;
 
