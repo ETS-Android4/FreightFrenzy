@@ -39,6 +39,11 @@ public class DriveByTrajectory implements Command {
 
         timer.reset();
         t0 = timer.seconds();
+
+        if(telemetry != null) {
+            telemetry.addData("traj @ t=0", trajectory.sample(0));
+            telemetry.update();
+        }
     }
 
     @Override
@@ -55,8 +60,8 @@ public class DriveByTrajectory implements Command {
 
         if(telemetry != null) {
             telemetry.addLine("Drive by Trajectory Telemetry:");
-            telemetry.addLine(String.format(Locale.ENGLISH, "current (x,y,Θ) = (%.2f, %.2f, %.2f)", currentPose.getX(), currentPose.getY(), currentPose.getRotation()));
-            telemetry.addLine(String.format(Locale.ENGLISH, "target (x,y,Θ) = (%.2f, %.2f, %.2f)", goalState.poseMeters.getX(), goalState.poseMeters.getY(), goalState.poseMeters.getRotation()));
+            telemetry.addLine(String.format(Locale.ENGLISH, "current (x,y,Θ) = (%.2f, %.2f, %.2f)", currentPose.getX(), currentPose.getY(), currentPose.getRotation().getDegrees()));
+            telemetry.addLine(String.format(Locale.ENGLISH, "target (x,y,Θ) = (%.2f, %.2f, %.2f)", goalState.poseMeters.getX(), goalState.poseMeters.getY(), goalState.poseMeters.getRotation().getDegrees()));
             telemetry.addLine(String.format(Locale.ENGLISH, "target (v,a,κ) = (%.3f, %.3f, %.3f)", goalState.velocityMetersPerSecond, goalState.accelerationMetersPerSecondSq, goalState.curvatureRadPerMeter));
             telemetry.addLine();
             telemetry.addLine(String.format(Locale.ENGLISH, "Adjusted Speeds (l,r) = (%.4f, %.4f)", wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond));
@@ -82,6 +87,6 @@ public class DriveByTrajectory implements Command {
         Trajectory.State lastState = allStates.get(allStates.size() - 1);
 
 
-        return lastState.equals(currentState) || timer.seconds() > trajectory.getTotalTimeSeconds();
+        return lastState.equals(currentState) || timer.seconds() >= trajectory.getTotalTimeSeconds();
     }
 }

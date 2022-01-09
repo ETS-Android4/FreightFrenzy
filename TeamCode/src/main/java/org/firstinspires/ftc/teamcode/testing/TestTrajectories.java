@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.RamseteCommand;
 import com.arcrobotics.ftclib.controller.PController;
 import com.arcrobotics.ftclib.controller.PIDFController;
@@ -28,12 +29,20 @@ import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
 import java.util.ArrayList;
 
+@Config
 @Autonomous(name = "Test Trajectories", group = "testing")
 public class TestTrajectories extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander;
     private RamseteController controller;
-    private DifferentialDriveKinematics driveKinematics;
-    private PIDFController pidfController = new PIDFController(0.35, 0.02, 0.5, 0);
+
+    public static double ax0 = 0.0;
+    public static double ay0 = 0.0;
+    public static double atheta0 = 0.0;
+    public static double bx1 = 1.0;
+    public static double by1 = 0.0;
+    public static double cxf = 2.0;
+    public static double cyf = 0.0;
+    public static double cthetaf = -90.0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -44,29 +53,34 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
 
         commander.registerSubsystem(drive);
 
-        controller = new RamseteController(1,0.1);
-        driveKinematics = new DifferentialDriveKinematics(Units.feetToMeters(12.9));
 
-        Pose2d start = new Pose2d(Units.feetToMeters(2.0), Units.feetToMeters(3.5), Rotation2d.fromDegrees(90));
-        Pose2d basicMove = new Pose2d(Units.feetToMeters(1.4), Units.feetToMeters(9.7), Rotation2d.fromDegrees(-30));
+        controller = new RamseteController(0.3,0.1);
+
+
+
+
+        Pose2d start = new Pose2d(Units.feetToMeters(ax0), Units.feetToMeters(ay0), Rotation2d.fromDegrees(atheta0));
+        Pose2d end = new Pose2d(Units.feetToMeters(cxf), Units.feetToMeters(cyf), Rotation2d.fromDegrees(cthetaf));
 
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<>();
-        interiorWaypoints.add(new Translation2d(Units.feetToMeters(-4.3), Units.feetToMeters(2.6)));
-        interiorWaypoints.add(new Translation2d(Units.feetToMeters(4.2), Units.feetToMeters(5)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(bx1), Units.feetToMeters(by1)));
 
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(5), Units.feetToMeters(5));
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(50), Units.feetToMeters(50));
         config.setReversed(false);
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 start,
                 interiorWaypoints,
-                basicMove,
-                config
-        );
+                end,
+                config);
 
         commander.init();
 
-        sleep(500);
+        telemetry.addLine("Ready!");
+        telemetry.addData("Total time", trajectory.getTotalTimeSeconds());
+        telemetry.update();
+
+        waitForStart();
 
         commander.runCommand(new DriveByTrajectory(drive, trajectory, controller, telemetry));
 

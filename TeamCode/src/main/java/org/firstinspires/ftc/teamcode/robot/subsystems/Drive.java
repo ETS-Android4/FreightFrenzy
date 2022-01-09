@@ -37,7 +37,7 @@ public class Drive implements Subsystem {
     private double goSlow = FAST;
     private boolean initIMU;
 
-    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.5097); // 509.7 mm TODO: Tune this if needed
+    private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.4064); // 509.7 mm TODO: Tune this if needed
     private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,1,0); //TODO: Tune this
 
 
@@ -81,8 +81,9 @@ public class Drive implements Subsystem {
 
 
         // Reverse front right
-        rlDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        flDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+//        frDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rlDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+//        flDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         rrDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         flDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -113,6 +114,21 @@ public class Drive implements Subsystem {
         this.frPower = rightPower;
         this.rlPower = leftPower;
         this.rrPower = rightPower;
+    }
+
+    /**
+     * Sets power to the motors on opposite sides. Functions the same as normal drive.
+     *
+     * @param flPower power for the front left motor
+     * @param frPower power for the front right motor
+     * @param rlPower power for the rear left motor
+     * @param rrPower power for the rear right motor
+     */
+    public void setPower(double flPower, double frPower, double rlPower, double rrPower) {
+        this.flPower = flPower;
+        this.frPower = frPower;
+        this.rlPower = rlPower;
+        this.rrPower = rrPower;
     }
 
     /**
