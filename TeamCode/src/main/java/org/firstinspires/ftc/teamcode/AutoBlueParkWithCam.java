@@ -128,7 +128,7 @@ public class AutoBlueParkWithCam extends LinearOpMode implements DogeOpMode {
                 new DriveByTimer(drive, 0.5, -0.30, telemetry));  //TODO: get correct (time,power)
         sleep(500);
 
-        commander.runCommand(new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_PLACE, 0.4, DEFAULT_TIMEOUT, telemetry));
+//        commander.runCommand(new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_PLACE, 0.4, DEFAULT_TIMEOUT, telemetry));
         sleep(2000);
 
 
@@ -145,7 +145,7 @@ public class AutoBlueParkWithCam extends LinearOpMode implements DogeOpMode {
                 new DriveByTimer(drive, 0.6, -0.42, telemetry));  //TODO: get correct (time,power)
         sleep(500);
 
-        commander.runCommand(new SlidesByEncoder(slides, Slides.TARGETS.MID_PLACE, 0.4, DEFAULT_TIMEOUT, telemetry));
+//        commander.runCommand(new SlidesByEncoder(slides, Slides.TARGETS.MID_PLACE, 0.4, DEFAULT_TIMEOUT, telemetry));
         sleep(2000);
 
 
