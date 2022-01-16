@@ -17,8 +17,8 @@ public class Slides implements Subsystem {
         IN,
         MIDDLE,
         OUT,
-        MID_PLACE,
-        BOTTOM_PLACE;
+        LOW_SHARED,
+        HIGH_SHARED;
 
         @NonNull
         public int getTargets() {     // TODO: Check values
@@ -29,9 +29,9 @@ public class Slides implements Subsystem {
                     return -50;
                 case OUT:
                     return -1230;
-                case MID_PLACE:
+                case LOW_SHARED:
                     return -570;
-                case BOTTOM_PLACE:
+                case HIGH_SHARED:
                     return -560;
                 default:
                     return 0;

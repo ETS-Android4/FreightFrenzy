@@ -12,7 +12,9 @@ public class Arm implements Subsystem {
     public enum POSITION {
         INTAKE,
         MIDDLE,
-        DEPOSIT;
+        DEPOSIT,
+        LOW_SHARED,
+        HIGH_SHARED;
 
         public double getPosition() {   // TODO: Check values
             switch (this) {
@@ -22,6 +24,10 @@ public class Arm implements Subsystem {
                     return 0.25;
                 case DEPOSIT:
                     return 0.7;
+                case LOW_SHARED:
+                    return 0.3;
+                case HIGH_SHARED:
+                    return 0.5;
                 default:
                     return 0;
             }
@@ -55,6 +61,14 @@ public class Arm implements Subsystem {
 
     public void deposit() {
         targetPos = POSITION.DEPOSIT;
+    }
+
+    public void lowShared() {
+        targetPos = POSITION.LOW_SHARED;
+    }
+
+    public void highShared() {
+        targetPos = POSITION.HIGH_SHARED;
     }
 
     public void setTargetPos(POSITION targetPos) {
