@@ -369,6 +369,8 @@ public class TeleOpArmSlideControl implements Command {
             powerOut    = gamepad.dpad_down;    //gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
             encoderIn   = gamepad.left_bumper;
             encoderOut  = gamepad.x; //gamepad.right_bumper;
+            lowShared   = gamepad.dpad_left;    // Remove button collisions
+            highShared  = gamepad.dpad_right;   // Remove button collisions
 
             if(middle) {
                 arm.middle();
@@ -378,6 +380,8 @@ public class TeleOpArmSlideControl implements Command {
                 arm.deposit();
             } else if(lowShared) {
                 arm.lowShared();
+            } else if(highShared) {
+                arm.highShared();
             }
             if(powerIn || powerOut) {
                 slides.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
