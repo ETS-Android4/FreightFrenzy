@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Transform2d;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 import java.util.Arrays;
 import java.util.Locale;
 
+@Config
 public class TrackRobotPosition {
     private Drive drive;
     private Pose2d initialPos;
@@ -30,6 +32,8 @@ public class TrackRobotPosition {
     private double t1;
     private double velocity;
     private Pair<int[], int[]> encoderPositions;
+
+    public static double scaleVelocity = 3.0;
 
     public TrackRobotPosition(Drive drive, Pose2d initialPos, Telemetry telemetry) {
         this.drive = drive;
@@ -115,8 +119,8 @@ public class TrackRobotPosition {
             deltaEncoder[i] = encoderPositions.snd[i] - encoderPositions.fst[i];
         }
 
-        velocity = Arrays.stream(deltaEncoder).sum() / 4.0 / deltaT; // Average encoders correspond to velocity (Counts / Sec)
-        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL); // Fix units (Counts / Sec => Inch / Sec => m/s)
+        velocity = Arrays.stream(deltaEncoder).sum() / Drive.NUMBER_OF_ENCODERS / deltaT; // Average encoders correspond to velocity (Counts / Sec)
+        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL * scaleVelocity); // Fix units (Counts / Sec => Inch / Sec => m/s)
 
         periodic(time, velocity, angle);
     }

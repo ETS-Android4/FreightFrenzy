@@ -42,6 +42,7 @@ public class Drive implements Subsystem {
 
 
     public static final double COUNTS_PER_INCH_EMPIRICAL = 1000/24.0; // 1000 Counts every 24 inches
+    public static final int NUMBER_OF_ENCODERS = 2;
 
     //private final SynchronousPID pid = new SynchronousPID
 
@@ -77,10 +78,10 @@ public class Drive implements Subsystem {
 
 
         // Reverse front right
-//        frDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        frDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 //        rlDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 //        flDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-        rrDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rrDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         flDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

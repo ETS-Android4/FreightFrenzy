@@ -32,11 +32,13 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
     public static double ax0 = 0.0;
     public static double ay0 = 0.0;
     public static double atheta0 = 0.0;
-    public static double bx1 = 1.0;
+    public static double bx1 = 2.0;
     public static double by1 = 0.0;
-    public static double cxf = 2.0;
+    public static double cxf = 4.0;
     public static double cyf = 0.0;
-    public static double cthetaf = -90.0;
+    public static double cthetaf = 0.0;
+    public static double maxAcc = 50.0;
+    public static double maxAngAcc = 50.0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -59,7 +61,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<>();
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(bx1), Units.feetToMeters(by1)));
 
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(50), Units.feetToMeters(50));
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(maxAcc), Units.feetToMeters());
         config.setReversed(false);
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
