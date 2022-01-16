@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.robot.commands.auto;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.arcrobotics.ftclib.controller.wpilibcontroller.RamseteController;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.ChassisSpeeds;
@@ -16,6 +20,7 @@ import java.util.Locale;
 
 public class DriveByTrajectory implements Command {
     private Drive drive;
+    private TrackRobotPosition tracker;
 
     private ElapsedTime timer;
     private double t0;
@@ -30,12 +35,16 @@ public class DriveByTrajectory implements Command {
         this.controller = controller;
         this.telemetry = telemetry;
 
+        tracker = new TrackRobotPosition(drive, trajectory.getInitialPose(), this.telemetry);
+
         timer = new ElapsedTime();
     }
 
     @Override
     public void start() {
         drive.setPower(0, 0);
+
+        tracker.start();
 
         timer.reset();
         t0 = timer.seconds();
@@ -46,12 +55,16 @@ public class DriveByTrajectory implements Command {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void periodic() {
         double t1 = timer.seconds();
 
-        Pose2d currentPose = trajectory.sample(t0).poseMeters;
-        Trajectory.State goalState = trajectory.sample(t1);
+        tracker.setParameters(t1, drive.getCurrentPositions(), drive.heading());
+        tracker.periodic();
+
+        Pose2d currentPose = tracker.getPose(); //TODO: Replace this with where the robot actually is at this instant
+        Trajectory.State goalState = trajectory.sample(t0); //TODO: Replace this with where the robot should be at this instant
         ChassisSpeeds adjSpeeds = controller.calculate(currentPose, goalState);
 
         DifferentialDriveWheelSpeeds wheelSpeeds = drive.getKinematics().toWheelSpeeds(adjSpeeds);
@@ -78,6 +91,7 @@ public class DriveByTrajectory implements Command {
     public void stop() {
 
         drive.setPower(0, 0);
+        tracker.stop();
     }
 
     @Override
