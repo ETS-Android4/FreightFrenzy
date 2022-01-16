@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot.commands.auto;
+package org.firstinspires.ftc.teamcode.swampbots_util;
 
 import android.os.Build;
 
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class TrackRobotPosition implements Command {
+public class TrackRobotPosition {
     private Drive drive;
     private Pose2d initialPos;
     private Telemetry telemetry;
@@ -50,7 +50,6 @@ public class TrackRobotPosition implements Command {
         this(drive, new Pose2d(new Translation2d(0,0), new Rotation2d(0)), null);
     }
 
-    @Override
     public void start() {
         currentPos = initialPos;
         theta = initialPos.getRotation();
@@ -60,23 +59,19 @@ public class TrackRobotPosition implements Command {
         t0 = 0;
     }
 
+    /**
+     * Update the robot to track it's position
+     *
+     * @param time timestamp of when the data was pushed
+     * @param velocity current velocity of the robot
+     * @param angle angle of the robot in Radians
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public void periodic() {
-        double deltaT = t1 - t0;
+    public void periodic(double time, double velocity, float angle) {
+        double deltaT = time - t0;
 
         // Change in angle of rotation
-        Rotation2d deltaTheta = theta.minus(currentPos.getRotation());
-
-        if(Double.isNaN(velocity)) {
-            int[] deltaEncoder = new int[4];
-            for (int i = 0; i < 4; i++) {
-                deltaEncoder[i] = encoderPositions.snd[i] - encoderPositions.fst[i];
-            }
-
-            velocity = Arrays.stream(deltaEncoder).sum() / 4.0 / deltaT; // Average encoders correspond to velocity (Counts / Sec)
-            velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL); // Fix units (Counts / Sec => Inch / Sec => m/s)
-        }
+        Rotation2d deltaTheta = new Rotation2d(angle).minus(currentPos.getRotation());
 
         // Parameterize velocity into x and y components
         double vx = velocity * theta.getCos();
@@ -100,52 +95,39 @@ public class TrackRobotPosition implements Command {
         t0 = t1;
     }
 
-    @Override
-    public void stop() {
-
-    }
-
-    @Override
-    public boolean isCompleted() {
-        return false;
-    }
-
     /**
-     * Set the parameters needed to track to robot position
-     *
-     * @param time timestamp of when the data was pushed
-     * @param velocity current velocity of the robot
-     * @param angle angle of the robot in Radians
-     */
-    public void setParameters(double time, double velocity, float angle) {
-        t1 = time;
-        this.velocity = velocity;
-        theta = new Rotation2d(angle);
-    }
-
-    /**
-     * Set the parameters needed to track to robot position
+     * Update the robot to track it's position
      *
      * @param time timestamp of when the data was pushed
      * @param encoderPos current encoder values of the robot [fl, fr, rl, rr]
      * @param angle angle of the robot in Radians
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void setParameters(double time, int[] encoderPos, float angle) {
-        t1 = time;
-        velocity = Double.NaN;
+    public void periodic(double time, int[] encoderPos, float angle) {
+        double deltaT = time - t0;
 
-        // Store previous positions in A and put current positions in B
-        for(int i = 0; i < 4; i++) {
+        int[] deltaEncoder = new int[4];
+        for (int i = 0; i < 4; i++) {
+            // Swap array values
             encoderPositions.fst[i] = encoderPositions.snd[i];
             encoderPositions.snd[i] = encoderPos[i];
+
+            deltaEncoder[i] = encoderPositions.snd[i] - encoderPositions.fst[i];
         }
 
+        velocity = Arrays.stream(deltaEncoder).sum() / 4.0 / deltaT; // Average encoders correspond to velocity (Counts / Sec)
+        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL); // Fix units (Counts / Sec => Inch / Sec => m/s)
 
-        theta = new Rotation2d(angle);
+        periodic(time, velocity, angle);
     }
 
+    public void stop() {
 
+    }
+
+    public boolean isCompleted() {
+        return false;
+    }
 
     public Pose2d getPose() {
         return currentPos;

@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
+import org.firstinspires.ftc.teamcode.swampbots_util.TrackRobotPosition;
 
 import java.util.List;
 import java.util.Locale;
@@ -60,8 +61,7 @@ public class DriveByTrajectory implements Command {
     public void periodic() {
         double t1 = timer.seconds();
 
-        tracker.setParameters(t1, drive.getCurrentPositions(), drive.heading());
-        tracker.periodic();
+        tracker.periodic(t1, drive.getCurrentPositions(), drive.heading());
 
         Pose2d currentPose = tracker.getPose(); //TODO: Replace this with where the robot actually is at this instant
         Trajectory.State goalState = trajectory.sample(t0); //TODO: Replace this with where the robot should be at this instant
@@ -89,7 +89,6 @@ public class DriveByTrajectory implements Command {
 
     @Override
     public void stop() {
-
         drive.setPower(0, 0);
         tracker.stop();
     }
