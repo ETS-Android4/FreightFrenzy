@@ -40,9 +40,11 @@ public class Drive implements Subsystem {
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.4064); // 509.7 mm TODO: Tune this if needed
     private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,1,0); //TODO: Tune this
 
-
-    public static final double COUNTS_PER_INCH_EMPIRICAL = 1000/24.0; // 1000 Counts every 24 inches
-    public static final int NUMBER_OF_ENCODERS = 2;
+    private static final double MOTOR_COUNTS_PER_REV = 100548.0 / 187.0 / 4.0; // ~537.69 ppr / 4 counts/pulse
+    private static final double MOTOR_REV_TO_WHEEL_REV = 1.0 / 1.0 * 27.0 / 17.0; // 1:1 bevel & 27:17 pulley
+    private static final double WHEEL_REV_TO_METERS = Math.PI * 72.0 / 1000.0; // ~0.226 m, 8.9 in
+    public static final double COUNTS_PER_INCH_EMPIRICAL = MOTOR_COUNTS_PER_REV * MOTOR_REV_TO_WHEEL_REV * Units.metersToInches(WHEEL_REV_TO_METERS); // 1000 Counts every 24 inches
+    public static final int NUMBER_OF_ENCODERS = 4;
 
     //private final SynchronousPID pid = new SynchronousPID
 
@@ -78,9 +80,9 @@ public class Drive implements Subsystem {
 
 
         // Reverse front right
-        frDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-//        rlDrive.setDirection(DcMotorSimple.Direction.REVERSE);
-//        flDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+//        frDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        rlDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        flDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 //        rrDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         flDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -176,6 +178,18 @@ public class Drive implements Subsystem {
         setFeedforwardPower(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     }
 
+    public void setRocketLeaguePower(double speed, double turn, boolean goSlow) {
+        this.goSlow = goSlow ? SLOW : FAST;
+        speed   = speed * this.goSlow;
+        turn    = turn * this.goSlow;
+
+        if(speed > 0.0) {
+            setPower(speed - turn, speed + turn);
+        } else {
+            setPower(speed + turn, speed - turn);
+        }
+    }
+
     /**
      * Sets the targets for each motor
      *
@@ -220,6 +234,10 @@ public class Drive implements Subsystem {
      */
     public int[] getCurrentPositions() {
         return new int[]{flDrive.getCurrentPosition(), frDrive.getCurrentPosition(), rlDrive.getCurrentPosition(), rrDrive.getCurrentPosition()};
+    }
+
+    public int inchToCounts(double inches) {
+        return (int) (inches / COUNTS_PER_INCH_EMPIRICAL);
     }
 
     /**

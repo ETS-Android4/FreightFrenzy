@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.robot.commands.teleop;
 
 import com.disnodeteam.dogecommander.Command;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -39,7 +41,7 @@ public class TeleOpCarouselControl implements Command {
     @Override
     public void start() {
         carousel.setPower(0);
-        carousel.setDirection(DcMotorSimple.Direction.FORWARD);
+        carousel.setDirection(CRServo.Direction.FORWARD);
     }
 
     @Override

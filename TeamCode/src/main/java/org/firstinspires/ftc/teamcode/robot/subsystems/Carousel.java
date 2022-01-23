@@ -1,13 +1,16 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.disnodeteam.dogecommander.Subsystem;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Carousel implements Subsystem {
     private HardwareMap hardwareMap;
-    private DcMotorEx carousel;
+    private CRServo leftCarousel;
+    private CRServo rightCarousel;
 
     private double power;
 
@@ -17,35 +20,43 @@ public class Carousel implements Subsystem {
 
     @Override
     public void initHardware() {
-        carousel = hardwareMap.get(DcMotorEx.class, "carousel");
-        carousel.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftCarousel = hardwareMap.get(CRServo.class, "left_carousel");
+        rightCarousel = hardwareMap.get(CRServo.class, "right_carousel");
 
-        power = 0.0;
+        leftCarousel.setDirection(CRServo.Direction.FORWARD);
+        rightCarousel.setDirection(CRServo.Direction.FORWARD);
+
+        power = 0.5;
     }
 
     @Override
     public void periodic() {
-        carousel.setPower(power);
+        leftCarousel.setPower(power);
+        rightCarousel.setPower(power);
     }
 
     public double getPower() {
         return power;
     }
 
-    public DcMotorSimple.Direction getDirection() {
-        return carousel.getDirection();
+    public CRServo.Direction getDirection() {
+        return leftCarousel.getDirection();
     }
 
     public void setPower(double power) {
         this.power = power;
     }
 
-    public void setDirection(DcMotorSimple.Direction direction) {
-        carousel.setDirection(direction);
+    public void setDirection(CRServo.Direction direction) {
+        leftCarousel.setDirection(direction);
+        rightCarousel.setDirection(direction);
     }
 
     public void reverse() {
-        if(carousel.getDirection() == DcMotorSimple.Direction.FORWARD) carousel.setDirection(DcMotorSimple.Direction.REVERSE);
-        else carousel.setDirection(DcMotorSimple.Direction.FORWARD);
+        if(leftCarousel.getDirection() == CRServo.Direction.FORWARD) leftCarousel.setDirection(CRServo.Direction.REVERSE);
+        else leftCarousel.setDirection(CRServo.Direction.FORWARD);
+
+        if(rightCarousel.getDirection() == CRServo.Direction.FORWARD) rightCarousel.setDirection(CRServo.Direction.REVERSE);
+        else rightCarousel.setDirection(CRServo.Direction.FORWARD);
     }
 }

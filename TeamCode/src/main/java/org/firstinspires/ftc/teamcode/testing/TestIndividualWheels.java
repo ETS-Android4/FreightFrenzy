@@ -28,6 +28,10 @@ public class TestIndividualWheels extends OpMode {
         double rr = gamepad1.y ? 1 : 0; //fr
 
         drive.setPower(fl * POWER_SCALE, fr*POWER_SCALE, rl*POWER_SCALE, rr*POWER_SCALE);
+        if(fl == 0 && fr == 0 && rl == 0 && rr == 0) {
+//            drive.setPower(gamepad1.left_stick_y, gamepad1.right_stick_y);
+            drive.setRocketLeaguePower(gamepad1.right_trigger - gamepad1.left_trigger, gamepad1.left_stick_x * 0.75, false);
+        }
         drive.periodic();
 
         telemetry.addData("fl", fl);
