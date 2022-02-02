@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.swampbots_util;
 import android.graphics.Color;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.robotcore.internal.android.dx.util.Hex;
 import org.firstinspires.ftc.robotcore.internal.android.dx.util.HexParser;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
@@ -157,5 +159,14 @@ public class SwampbotsUtil {
         }
 
         return closest;
+    }
+
+    public static int mean(@NonNull int ...vals) {
+        int mu = 0;
+        for(int v : vals) {
+            mu += v;
+        }
+
+        return mu / vals.length;
     }
 }
