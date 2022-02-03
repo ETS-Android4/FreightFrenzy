@@ -31,6 +31,8 @@ public class TeleOpArmControl implements Command {
         boolean intake = gamepad.a; //intake
         boolean middle = gamepad.x; //middle
         boolean deposit = gamepad.b; //deposit
+        boolean high = gamepad.dpad_up;
+        boolean low = gamepad.dpad_down;
 
         if(middle) {
             arm.middle();
@@ -38,6 +40,10 @@ public class TeleOpArmControl implements Command {
             arm.intake();
         } else if(deposit) {
             arm.deposit();
+        } else if(high) {
+            arm.highShared();
+        } else if(low) {
+            arm.lowShared();
         }
 
         if(telemetry != null) {
@@ -46,7 +52,10 @@ public class TeleOpArmControl implements Command {
             telemetry.addData("middle?", middle);
             telemetry.addData("deposit?", deposit);
             telemetry.addLine();
-            telemetry.addData("target pos", arm.getTargetPos());
+            telemetry.addData("current pos", arm.getCurrentPos());
+            telemetry.addData("target pos", arm.getTargetPos().getPosition());
+            telemetry.addData("init pos", arm.getInitialPos());
+            telemetry.addData("adj power", arm.calculatePower(arm.getCurrentPos(), arm.getTargetPos().getPosition()));
             telemetry.update();
         }
     }

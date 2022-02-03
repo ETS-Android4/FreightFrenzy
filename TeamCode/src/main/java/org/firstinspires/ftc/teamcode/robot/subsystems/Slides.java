@@ -3,15 +3,19 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import androidx.annotation.NonNull;
 
+import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
+
 public class Slides implements Subsystem {
     private HardwareMap hardwareMap;
 
-    private DcMotorEx slide;
+    private DcMotorEx slideRight;
+    private DcMotorEx slideLeft;
 
     public enum TARGETS {
         IN,
@@ -50,33 +54,50 @@ public class Slides implements Subsystem {
     }
 
     public void initHardware() {
-        slide = hardwareMap.get(DcMotorEx.class, "slides");
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        targetPos = slide.getCurrentPosition();
+        slideLeft   = hardwareMap.get(DcMotorEx.class, "slide_left");
+        slideRight  = hardwareMap.get(DcMotorEx.class, "slide_right");
 
-        slide.setTargetPosition(targetPos);
-        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        targetPos = SwampbotsUtil.mean(slideLeft.getCurrentPosition(), slideRight.getCurrentPosition());
 
-        slide.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION,
+        slideLeft.setTargetPosition(targetPos);
+        slideRight.setTargetPosition(targetPos);
+
+        slideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        slideLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION,
                 new PIDFCoefficients(5.0, 0, 0, 0));
+        slideRight.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION,
+                new PIDFCoefficients(5.0, 0, 0, 0));
+
+        slideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         power = 0.0;
     }
 
     @Override
     public void periodic() {
-        if (slide.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
-            slide.setTargetPosition(targetPos);
+        if (slideLeft.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+            slideLeft.setTargetPosition(targetPos);
+        }
+        if (slideRight.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+            slideRight.setTargetPosition(targetPos);
         }
 
-        slide.setPower(power);
+        slideLeft.setPower(power);
+        slideRight.setPower(power);
     }
 
 
     public DcMotor.RunMode getRunMode() {
-        return slide.getMode();
+        return slideLeft.getMode();
     }
 
     public double getPower() {
@@ -84,11 +105,11 @@ public class Slides implements Subsystem {
     }
 
     public boolean isBusy() {
-        return slide.isBusy();
+        return slideLeft.isBusy();
     }
 
     public void setRunMode(DcMotor.RunMode runMode) {
-        slide.setMode(runMode);
+        slideLeft.setMode(runMode);
     }
 
     public void setPower(double power) {
@@ -100,16 +121,22 @@ public class Slides implements Subsystem {
     }
 
     public int getCurrentPos() {
-        return slide.getCurrentPosition();
+        return slideLeft.getCurrentPosition();
     }
 
     public int getTargetPos() {
-        return slide.getTargetPosition();
+        return slideLeft.getTargetPosition();
     }
 
     public void resetEncoder() {
-        DcMotor.RunMode currentRunMode = slide.getMode();
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(currentRunMode);
+        // Reset Left
+        DcMotor.RunMode currentRunMode = slideLeft.getMode();
+        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideLeft.setMode(currentRunMode);
+
+        // Reset Right
+        currentRunMode = slideRight.getMode();
+        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideRight.setMode(currentRunMode);
     }
 }

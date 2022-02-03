@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 
-@Disabled
+
 @TeleOp(name = "Test Arm", group = "testing")
 public class TestArm extends LinearOpMode implements DogeOpMode {
     @Override

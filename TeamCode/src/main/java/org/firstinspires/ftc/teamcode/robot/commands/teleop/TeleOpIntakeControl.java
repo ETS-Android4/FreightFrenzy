@@ -16,6 +16,8 @@ public class TeleOpIntakeControl implements Command {
 
     private final double POWER_SCALAR = 0.69;
 
+    private boolean liftToggle = true;
+
     public TeleOpIntakeControl(Intake intake, Gamepad gamepad, Telemetry telemetry) {
         this.intake = intake;
         this.gamepad = gamepad;
@@ -30,6 +32,8 @@ public class TeleOpIntakeControl implements Command {
     public void start() {
         intake.setPower(0);
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        intake.out();
     }
 
     @Override
@@ -40,6 +44,16 @@ public class TeleOpIntakeControl implements Command {
                 (       gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD   ? 1.0 :
                         gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD  ? -1.0 : 0.0
                 ) * POWER_SCALAR);
+
+        // Press both sticks in to toggle lift
+        if(gamepad.left_stick_button && gamepad.right_stick_button) {
+            if(liftToggle) {
+                intake.toggle();
+                liftToggle = false;
+            }
+        } else {
+            liftToggle = true;
+        }
 
         if(telemetry != null) {
             telemetry.addLine("Intake Telemetry:");
