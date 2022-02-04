@@ -26,7 +26,7 @@ public class Carousel implements Subsystem {
         leftCarousel.setDirection(CRServo.Direction.FORWARD);
         rightCarousel.setDirection(CRServo.Direction.FORWARD);
 
-        power = 0.5;
+        power = 0;
     }
 
     @Override

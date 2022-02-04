@@ -45,10 +45,12 @@ public class TeleOpSlideControl implements Command {
             slides.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
             slides.setPower(POWER_SCALAR);
             if(encoderIn) {
-                slides.setTargetPos(Slides.TARGETS.IN.getTargets());
+//                slides.setTargetPos(Slides.TARGETS.IN.getTargets());
+                slides.setTargetPos((int) Slides.testVal1);
             }
             if(encoderOut) {
-                slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
+//                slides.setTargetPos(Slides.TARGETS.OUT.getTargets());
+                slides.setTargetPos(((int) Slides.testVal2));
             }
         } else /*if(slides.getRunMode() != DcMotor.RunMode.RUN_TO_POSITION)*/{ //TODO: Uncomment once we finish testing
             slides.setPower(0);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,11 +12,16 @@ import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 
+@Config
 public class Slides implements Subsystem {
     private HardwareMap hardwareMap;
 
     private DcMotorEx slideRight;
     private DcMotorEx slideLeft;
+
+    public static double testVal1 = 0;
+    public static double testVal2 = 0;
+    public static double motorCombo = 0;
 
     public enum TARGETS {
         IN,
@@ -30,13 +36,13 @@ public class Slides implements Subsystem {
                 case IN:
                     return 0;
                 case MIDDLE:
-                    return -50;
+                    return -95;
                 case OUT:
-                    return -1230;
+                    return -450;
                 case LOW_SHARED:
-                    return -570;
+                    return -270;
                 case HIGH_SHARED:
-                    return -560;
+                    return -360;
                 default:
                     return 0;
             }
@@ -91,8 +97,10 @@ public class Slides implements Subsystem {
             slideRight.setTargetPosition(targetPos);
         }
 
-        slideLeft.setPower(power);
-        slideRight.setPower(power);
+        if(motorCombo % 2 == 0)
+            slideLeft.setPower(power);
+        if(motorCombo % 3 == 0)
+            slideRight.setPower(power);
     }
 
 

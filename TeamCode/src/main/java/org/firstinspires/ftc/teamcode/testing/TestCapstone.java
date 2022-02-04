@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCapstoneControl;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Cap;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
 
-@Disabled
 @TeleOp(name = "Test Cap", group = "testing")
 public class TestCapstone extends LinearOpMode implements DogeOpMode {
 
@@ -19,18 +19,15 @@ public class TestCapstone extends LinearOpMode implements DogeOpMode {
     public void runOpMode() throws InterruptedException {
         DogeCommander commander = new DogeCommander(this);
 
+        Cap cap = new Cap(hardwareMap);
 
-        CapArm capArm = new CapArm(hardwareMap);
-        CapGrip capGrip = new CapGrip(hardwareMap);
-
-        commander.registerSubsystem(capArm);
-        commander.registerSubsystem(capGrip);
+        commander.registerSubsystem(cap);
 
         commander.init();
         waitForStart();
 
         commander.runCommandsParallel(
-            new TeleOpCapstoneControl(capArm, capGrip, gamepad1, telemetry)
+            new TeleOpCapstoneControl(cap, gamepad1, telemetry)
         );
     }
 }

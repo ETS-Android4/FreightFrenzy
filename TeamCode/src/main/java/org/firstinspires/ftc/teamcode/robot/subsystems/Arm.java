@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 
+@Config
 public class Arm implements Subsystem {
     private HardwareMap hardwareMap;
 
@@ -18,8 +23,29 @@ public class Arm implements Subsystem {
 
     private SwampbotsUtil util;
 
-    private final double POWER_SCALAR = 0.7;
+    public static double POWER_SCALAR = 0.7;
 
+    public double power = 0.0;
+
+    public static double hold1 = 0.5;
+    public static double hold2 = 0.51;
+
+    public static double target = 100.0;
+    public static double tolerance = 10;
+
+    public static double kP = 0.001;
+    public static double kI = 0.001;
+    public static double kD = 0.001;
+
+    private int testTarget = 0;
+
+    private PIDCoefficients pid;
+    private ElapsedTime timer;
+    private double t0;
+    private double prevError = 0;
+    private double deltaError = 0;
+    private double totalError = 0;
+    
     @Deprecated
     public enum OLD_POSITION {
         INTAKE,
@@ -58,7 +84,7 @@ public class Arm implements Subsystem {
                 case INTAKE:
                     return 0;
                 case MIDDLE:
-                    return 25;
+                    return 570;
                 case DEPOSIT:
                     return 70;
                 case LOW_SHARED:
@@ -78,6 +104,8 @@ public class Arm implements Subsystem {
         this.hardwareMap = hardwareMap;
 
         util = new SwampbotsUtil();
+        pid = new PIDCoefficients(kP, kI, kD);
+        timer = new ElapsedTime();
     }
 
     @Override
@@ -89,26 +117,33 @@ public class Arm implements Subsystem {
         encoder0 = encoder.getCurrentPosition();
 
         arm1.setDirection(CRServo.Direction.FORWARD);
-        arm2.setDirection(CRServo.Direction.REVERSE);
+        arm2.setDirection(CRServo.Direction.FORWARD);
+
+
 
         targetPos = POSITION.INTAKE;
 
-        arm1.setPower(scalePower(0.0));
-        arm2.setPower(scalePower(0.0));
+        arm1.setPower(0.0);
+        arm2.setPower(0.0);
 
 //        arm1.setPosition(POSITION.INTAKE.getPosition());
 //        arm2.setPosition(POSITION.INTAKE.getPosition());
+        timer.reset();
+        t0 = timer.seconds();
     }
 
     @Override
     public void periodic() {
-        double power = calculatePower(encoder.getCurrentPosition(), targetPos.getPosition());
 
-        arm1.setPower(scalePower(power));
-        arm2.setPower(scalePower(power));
+//        double power = calculatePower(encoder.getCurrentPosition(), targetPos.getPosition());
+        power = calculatePower(encoder.getCurrentPosition(), testTarget);
+
+        arm1.setPower(power * POWER_SCALAR);
+        arm2.setPower(power * POWER_SCALAR);
 
 //        arm1.setPosition(targetPos.getPosition());
 //        arm2.setPosition(targetPos.getPosition());
+        t0 = timer.seconds();
     }
 
     public void intake() {
@@ -135,6 +170,10 @@ public class Arm implements Subsystem {
         this.targetPos = targetPos;
     }
 
+    public void setTargetPos(int targetPos) {
+        testTarget = targetPos;
+    }
+
     public POSITION getTargetPos() {
         return targetPos;
     }
@@ -149,21 +188,31 @@ public class Arm implements Subsystem {
 
     public double calculatePower(double current, int target) {
         current = current - encoder0;
+        double deltaPos = target - current;
 
-        if(util.isCloseEnough((int) current, target, 5))
-            return 0.0;
-        if(current > target) {
-            return -1.0;
-        }
-        if(current < target) {
-            return 1.0;
-        }
+        deltaError = deltaPos - prevError;
+        totalError += deltaPos;
 
-        return 0.0;
-    }
+        double deltaT = timer.seconds() - t0;
+        double p = deltaPos * deltaT * pid.p;
+        double i = totalError * deltaT * pid.i;
+        double d = deltaError * deltaT * pid.d;
 
-    private double scalePower(double power) {
-        // [-1, 1] -> [0, 1]
-        return (power * POWER_SCALAR + 1.0) / 2.0;
+        prevError = deltaPos;
+        if(util.isCloseEnough((int) current, target, ((int) tolerance)))
+            totalError = 0;
+
+        return p + i + d;
+
+//        if(util.isCloseEnough((int) current, target, ((int) tolerance)))
+//            return 0.0;
+//        if(current > target) {
+//            return -1.0;
+//        }
+//        if(current < target) {
+//            return 1.0;
+//        }
+
+        
     }
 }

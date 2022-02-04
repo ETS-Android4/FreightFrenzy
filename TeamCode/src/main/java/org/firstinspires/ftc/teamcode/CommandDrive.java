@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpLineColorSensor;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpSlideControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Cap;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
@@ -38,8 +39,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         Slides slides = new Slides(hardwareMap);
         Carousel carousel = new Carousel(hardwareMap);
         Intake intake = new Intake(hardwareMap);
-        CapArm capArm = new CapArm(hardwareMap);
-        CapGrip capGrip = new CapGrip(hardwareMap);
+        Cap cap = new Cap(hardwareMap);
 
         LineColorSensor lineColorSensor = new LineColorSensor(hardwareMap);
 //        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
@@ -50,8 +50,6 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(slides);
         commander.registerSubsystem(carousel);
         commander.registerSubsystem(intake);
-        commander.registerSubsystem(capArm);
-        commander.registerSubsystem(capGrip);
 
         commander.registerSubsystem(lineColorSensor);
 //        commander.registerSubsystem(intakeColorSensor);
@@ -64,7 +62,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpCarouselControl(carousel, gamepad1),
                 new TeleOpIntakeControl(intake, gamepad2),
                 new TeleOpArmSlideControl(arm, slides, gamepad2, telemetry),
-                new TeleOpCapstoneControl(capArm, capGrip, gamepad1),
+                new TeleOpCapstoneControl(cap, gamepad1),
 
                 new TeleOpLineColorSensor(lineColorSensor, true)
 //                new TeleOpIntakeColorSensor(intakeColorSensor, true)
