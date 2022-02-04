@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.ArmFeedforward;
 import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -32,14 +34,24 @@ public class Arm implements Subsystem {
     public static double target = 100.0;
     public static double tolerance = 10;
 
-    public static double kP = 0.001;
-    public static double kI = 0.001;
-    public static double kD = 0.001;
+//    public static double kP = 1.0e-3;
+//    public static double kI = 8.0e-7;
+//    public static double kD = -4.0e-5;
+    public static double kSq = 0.001;
+    public static double kBase = 10;
+    public static double kL = 0;
+    public static double kInv = 3;
 
-    private int testTarget = 0;
+    public double kSqrt = 0;
+    public double kLog = 0;
+    public double kInverse = 0;
 
-    private SynchronousPID pid;
-    
+    public int testTarget = 0;
+    public double error = 0;
+
+    public SynchronousPID pid;
+//    private ArmFeedforward feedforward = new ArmFeedforward();
+
     @Deprecated
     public enum OLD_POSITION {
         INTAKE,
@@ -98,7 +110,7 @@ public class Arm implements Subsystem {
         this.hardwareMap = hardwareMap;
 
         util = new SwampbotsUtil();
-        pid = new SynchronousPID(kP, kI, kD);
+//        pid = new SynchronousPID(kP, kI, kD);
     }
 
     @Override
@@ -127,10 +139,10 @@ public class Arm implements Subsystem {
     public void periodic() {
 
 //        double power = calculatePower(encoder.getCurrentPosition(), targetPos.getPosition());
-        power = calculatePower(encoder.getCurrentPosition(), testTarget);
-
-        arm1.setPower(power * POWER_SCALAR);
-        arm2.setPower(power * POWER_SCALAR);
+//        power = calculatePower(encoder.getCurrentPosition(), testTarget);
+//
+//        arm1.setPower(power * POWER_SCALAR);
+//        arm2.setPower(power * POWER_SCALAR);
 
 //        arm1.setPosition(targetPos.getPosition());
 //        arm2.setPosition(targetPos.getPosition());
@@ -179,8 +191,14 @@ public class Arm implements Subsystem {
 
     public double calculatePower(double current, int target) {
         current = current - encoder0;
-        pid.setSetpoint(target);
-        return pid.calculate(current);
+        error = current - target;
+//        pid.setSetpoint(target);
+//        return pid.calculate(current);
+        kSqrt = Math.signum(error) * Math.sqrt(Math.abs(error)) * kSq;
+        kLog = Math.abs(error) > 1 ? Math.log10(Math.abs(error)) / Math.log10(kBase) * kL : 0;
+        kInverse = error == 0 ? 0 : 1 / error * kInv;
+        return kSqrt + kLog + kInverse;
+
 
 //        if(util.isCloseEnough((int) current, target, ((int) tolerance)))
 //            return 0.0;

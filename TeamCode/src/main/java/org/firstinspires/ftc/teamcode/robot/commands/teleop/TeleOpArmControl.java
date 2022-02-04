@@ -52,10 +52,10 @@ public class TeleOpArmControl implements Command {
 
 //        arm.power = gamepad.left_stick_y * scalar;
         if(gamepad.right_bumper) {
-            arm.power = arm.calculatePower(arm.getCurrentPos(), (int) arm.target);
+            arm.setTargetPos(((int) arm.target));
         }
         if(gamepad.left_bumper) {
-            arm.power = arm.calculatePower(arm.getCurrentPos(), 0);
+            arm.setTargetPos(0);
         }
         if(!gamepad.left_bumper && !gamepad.right_bumper) {
             arm.power = 0;
@@ -69,10 +69,17 @@ public class TeleOpArmControl implements Command {
             telemetry.addLine();
             telemetry.addData("power", arm.power);
             telemetry.addData("current pos", arm.getCurrentPos());
-            telemetry.addData("target pos", arm.getTargetPos().getPosition());
+            telemetry.addData("target pos", arm.testTarget);
             telemetry.addData("init pos", arm.getInitialPos());
             telemetry.addData("net counts", arm.getCurrentPos() - arm.getInitialPos());
             telemetry.addData("adj power", arm.calculatePower(arm.getCurrentPos(), arm.getTargetPos().getPosition()));
+            telemetry.addLine();
+            telemetry.addData("error", arm.error);
+            telemetry.addData("kSqrt", arm.kSqrt);
+            telemetry.addData("kLog", arm.kLog);
+            telemetry.addData("kInv", arm.kInverse);
+//            telemetry.addData("pid error", arm.pid.getError());
+//            telemetry.addData("pid", arm.pid.get());
             telemetry.update();
         }
     }

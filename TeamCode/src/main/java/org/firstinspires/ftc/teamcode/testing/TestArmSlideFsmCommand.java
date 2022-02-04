@@ -7,10 +7,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideKickerControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Kicker;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
-@Disabled
 @TeleOp(name = "Test FSM", group = "testing")
 public class TestArmSlideFsmCommand extends LinearOpMode implements DogeOpMode {
 
@@ -20,15 +21,17 @@ public class TestArmSlideFsmCommand extends LinearOpMode implements DogeOpMode {
 
         Arm arm = new Arm(hardwareMap);
         Slides slides = new Slides(hardwareMap);
+        Kicker kicker = new Kicker(hardwareMap);
 
         commander.registerSubsystem(arm);
         commander.registerSubsystem(slides);
+        commander.registerSubsystem(kicker);
 
         commander.init();
         waitForStart();
 
         commander.runCommandsParallel(
-                 new TeleOpArmSlideControl(arm, slides, gamepad1, telemetry)
+                 new TeleOpArmSlideKickerControl(arm, slides, kicker, gamepad1, telemetry)
         );
     }
 }
