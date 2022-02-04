@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
+import org.firstinspires.ftc.teamcode.swampbots_util.SynchronousPID;
+import org.jetbrains.annotations.TestOnly;
 
 @Config
 public class Arm implements Subsystem {
@@ -27,9 +29,6 @@ public class Arm implements Subsystem {
 
     public double power = 0.0;
 
-    public static double hold1 = 0.5;
-    public static double hold2 = 0.51;
-
     public static double target = 100.0;
     public static double tolerance = 10;
 
@@ -39,12 +38,7 @@ public class Arm implements Subsystem {
 
     private int testTarget = 0;
 
-    private PIDCoefficients pid;
-    private ElapsedTime timer;
-    private double t0;
-    private double prevError = 0;
-    private double deltaError = 0;
-    private double totalError = 0;
+    private SynchronousPID pid;
     
     @Deprecated
     public enum OLD_POSITION {
@@ -54,7 +48,7 @@ public class Arm implements Subsystem {
         LOW_SHARED,
         HIGH_SHARED;
 
-        public double getPosition() {   // TODO: Check values
+        public double getPosition() {
             switch (this) {
                 case INTAKE:
                     return 0;
@@ -104,8 +98,7 @@ public class Arm implements Subsystem {
         this.hardwareMap = hardwareMap;
 
         util = new SwampbotsUtil();
-        pid = new PIDCoefficients(kP, kI, kD);
-        timer = new ElapsedTime();
+        pid = new SynchronousPID(kP, kI, kD);
     }
 
     @Override
@@ -128,8 +121,6 @@ public class Arm implements Subsystem {
 
 //        arm1.setPosition(POSITION.INTAKE.getPosition());
 //        arm2.setPosition(POSITION.INTAKE.getPosition());
-        timer.reset();
-        t0 = timer.seconds();
     }
 
     @Override
@@ -143,7 +134,6 @@ public class Arm implements Subsystem {
 
 //        arm1.setPosition(targetPos.getPosition());
 //        arm2.setPosition(targetPos.getPosition());
-        t0 = timer.seconds();
     }
 
     public void intake() {
@@ -170,6 +160,7 @@ public class Arm implements Subsystem {
         this.targetPos = targetPos;
     }
 
+    @TestOnly
     public void setTargetPos(int targetPos) {
         testTarget = targetPos;
     }
@@ -188,21 +179,8 @@ public class Arm implements Subsystem {
 
     public double calculatePower(double current, int target) {
         current = current - encoder0;
-        double deltaPos = target - current;
-
-        deltaError = deltaPos - prevError;
-        totalError += deltaPos;
-
-        double deltaT = timer.seconds() - t0;
-        double p = deltaPos * deltaT * pid.p;
-        double i = totalError * deltaT * pid.i;
-        double d = deltaError * deltaT * pid.d;
-
-        prevError = deltaPos;
-        if(util.isCloseEnough((int) current, target, ((int) tolerance)))
-            totalError = 0;
-
-        return p + i + d;
+        pid.setSetpoint(target);
+        return pid.calculate(current);
 
 //        if(util.isCloseEnough((int) current, target, ((int) tolerance)))
 //            return 0.0;
