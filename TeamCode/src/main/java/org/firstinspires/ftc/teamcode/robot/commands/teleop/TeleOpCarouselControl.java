@@ -17,21 +17,21 @@ public class TeleOpCarouselControl implements Command {
     private Telemetry telemetry;
 
     private final double POWER_SCALAR = 1.0;
-    private final double BASE_VELO = 1.0;
-    private final double ACC = 0.0;
-
-    private double velo = 0;
-
-    private ElapsedTime timer;
-    private double t0;
+//    private final double BASE_VELO = 1.0;
+//    private final double ACC = 0.0;
+//
+//    private double velo = 0;
+//
+//    private ElapsedTime timer;
+//    private double t0;
 
     public TeleOpCarouselControl(Carousel carousel, Gamepad gamepad, Telemetry telemetry) {
         this.carousel = carousel;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
 
-        timer = new ElapsedTime();
-        t0 = timer.seconds();
+//        timer = new ElapsedTime();
+//        t0 = timer.seconds();
     }
 
     public TeleOpCarouselControl(Carousel carousel, Gamepad gamepad) {
@@ -48,31 +48,37 @@ public class TeleOpCarouselControl implements Command {
     public void periodic() {
         // Two Person Controls:
         // In: RB   Out: RT
-        boolean lt = gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
-        boolean rt = gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
+//        boolean lt = gamepad.left_trigger > CommandDrive.TRIGGER_THRESHOLD;
+//        boolean rt = gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD;
+        double rawPower = gamepad.left_stick_y;
+        double adjPower = Math.cbrt(rawPower);
 
-        double deltaT = timer.seconds() - t0;
-        t0 = timer.seconds();
+        carousel.setPower(adjPower * POWER_SCALAR);
 
-        if(lt || rt) {
-            velo += ACC * deltaT;
-        } else {
-            velo = 0;
-        }
-
-        carousel.setPower(
-                (velo + BASE_VELO) *
-                (       lt  ?  1.0 :
-                        rt  ? -1.0 : 0.0
-                ) * POWER_SCALAR);
+//        double deltaT = timer.seconds() - t0;
+//        t0 = timer.seconds();
+//
+//        if(lt || rt) {
+//            velo += ACC * deltaT;
+//        } else {
+//            velo = 0;
+//        }
+//
+//        carousel.setPower(
+//                (velo + BASE_VELO) *
+//                (       lt  ?  1.0 :
+//                        rt  ? -1.0 : 0.0
+//                ) * POWER_SCALAR);
 
         if(telemetry != null) {
             telemetry.addLine("Carousel Data:");
-            telemetry.addData("acc:", ACC);
-            telemetry.addData("velo:", velo);
-            telemetry.addData("deltaT:", deltaT);
-            telemetry.addData("acc * delta t", ACC *deltaT);
-            telemetry.addData("delta v / 1 sec", ACC /deltaT);
+//            telemetry.addData("acc:", ACC);
+//            telemetry.addData("velo:", velo);
+//            telemetry.addData("deltaT:", deltaT);
+//            telemetry.addData("acc * delta t", ACC *deltaT);
+//            telemetry.addData("delta v / 1 sec", ACC /deltaT);
+            telemetry.addData("Raw Power:", rawPower);
+            telemetry.addData("Adj Power:", adjPower);
             telemetry.addLine();
             telemetry.addData("Power:", carousel.getPower());
             telemetry.addData("Direction:", carousel.getDirection());
