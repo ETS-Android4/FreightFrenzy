@@ -71,6 +71,10 @@ public class Intake implements Subsystem {
         intake.setDirection(direction);
     }
 
+    public void setRunMode(DcMotor.RunMode runMode) {
+        intake.setMode(runMode);
+    }
+
     public void reverse() {
         if(intake.getDirection() == DcMotorSimple.Direction.FORWARD) intake.setDirection(DcMotorSimple.Direction.REVERSE);
         else intake.setDirection(DcMotorSimple.Direction.FORWARD);

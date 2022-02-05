@@ -62,8 +62,16 @@ public class Kicker implements Subsystem {
         this.position = position;
     }
 
+    public void setDirection(Servo.Direction direction) {
+        kicker.setDirection(direction);
+    }
+
     public POSITION getPosition() {
         return position;
+    }
+
+    public Servo.Direction getDirection() {
+        return kicker.getDirection();
     }
 
     public void toggle() {
