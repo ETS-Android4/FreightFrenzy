@@ -51,15 +51,15 @@ public class TeleOpArmControl implements Command {
         }
 
 //        arm.power = gamepad.left_stick_y * scalar;
-        if(gamepad.right_bumper) {
-            arm.setTargetPos(((int) arm.target));
-        }
-        if(gamepad.left_bumper) {
-            arm.setTargetPos(0);
-        }
-        if(!gamepad.left_bumper && !gamepad.right_bumper) {
-            arm.power = 0;
-        }
+//        if(gamepad.right_bumper) {
+//            arm.setTargetPos(((int) arm.target));
+//        }
+//        if(gamepad.left_bumper) {
+//            arm.setTargetPos(0);
+//        }
+//        if(!gamepad.left_bumper && !gamepad.right_bumper) {
+//            arm.power = 0;
+//        }
 
         if(telemetry != null) {
             telemetry.addLine("Arm telemetry:");
@@ -67,17 +67,17 @@ public class TeleOpArmControl implements Command {
             telemetry.addData("middle?", middle);
             telemetry.addData("deposit?", deposit);
             telemetry.addLine();
-            telemetry.addData("power", arm.power);
-            telemetry.addData("current pos", arm.getCurrentPos());
-            telemetry.addData("target pos", arm.testTarget);
-            telemetry.addData("init pos", arm.getInitialPos());
-            telemetry.addData("net counts", arm.getCurrentPos() - arm.getInitialPos());
-            telemetry.addData("adj power", arm.calculatePower(arm.getCurrentPos(), arm.getTargetPos().getPosition()));
-            telemetry.addLine();
-            telemetry.addData("error", arm.error);
-            telemetry.addData("kSqrt", arm.kSqrt);
-            telemetry.addData("kLog", arm.kLog);
-            telemetry.addData("kInv", arm.kInverse);
+//            telemetry.addData("power", arm.power);
+//            telemetry.addData("current pos", arm.getCurrentPos());
+//            telemetry.addData("target pos", arm.testTarget);
+//            telemetry.addData("init pos", arm.getInitialPos());
+//            telemetry.addData("net counts", arm.getCurrentPos() - arm.getInitialPos());
+//            telemetry.addData("adj power", arm.calculatePower(arm.getCurrentPos(), arm.getTargetPos().getPosition()));
+//            telemetry.addLine();
+//            telemetry.addData("error", arm.error);
+//            telemetry.addData("kSqrt", arm.kSqrt);
+//            telemetry.addData("kLog", arm.kLog);
+//            telemetry.addData("kInv", arm.kInverse);
 //            telemetry.addData("pid error", arm.pid.getError());
 //            telemetry.addData("pid", arm.pid.get());
             telemetry.update();
