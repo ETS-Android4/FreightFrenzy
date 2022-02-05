@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.wpilibcontroller.SimpleMotorFeedforward;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveKinematics;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveWheelSpeeds;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
+@Config
 public class Drive implements Subsystem {
     // Hardware map
     private HardwareMap hardwareMap;
