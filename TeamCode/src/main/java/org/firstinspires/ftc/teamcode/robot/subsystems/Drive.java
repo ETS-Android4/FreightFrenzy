@@ -22,6 +22,24 @@ public class Drive implements Subsystem {
     private final double SLOW = 0.4;
     private final double FAST = 1.0;
 
+    private enum SPEEDS {
+        SLOW, FAST,
+        RL_SLOW;
+
+        public double getSpeed() {
+            switch (this) {
+                case SLOW:
+                    return 0.4;
+                case FAST:
+                    return 1.0;
+                case RL_SLOW:
+                    return slowModeValue;
+                default:
+                    return SPEEDS.FAST.getSpeed();
+            }
+        }
+    }
+
     // Components
     private DcMotor flDrive;
     private DcMotor frDrive;
@@ -45,6 +63,13 @@ public class Drive implements Subsystem {
     private static final double WHEEL_REV_TO_METERS = Math.PI * 72.0 / 1000.0; // ~0.226 m, 8.9 in
     public static final double COUNTS_PER_INCH_EMPIRICAL = MOTOR_COUNTS_PER_REV * MOTOR_REV_TO_WHEEL_REV * Units.metersToInches(WHEEL_REV_TO_METERS); // 1000 Counts every 24 inches
     public static final int NUMBER_OF_ENCODERS = 4;
+
+    // pubic static variables for Dashboard
+    public static double turningMultiplier = 0.5;
+    public static double movingTurnMultiplier = 1.0;
+    public static double speedMultiplier = 1.0;
+    public static double movingDeadzone = 0.05;
+    public static double slowModeValue = 0.3;
 
     //private final SynchronousPID pid = new SynchronousPID
 
@@ -152,7 +177,7 @@ public class Drive implements Subsystem {
      * @param goSlow sets the speed multiplier
      */
     public void setMecanumPower(double drive, double strafe, double twist, boolean goSlow) {
-        this.goSlow = goSlow ? SLOW : FAST;
+        this.goSlow = goSlow ? SPEEDS.SLOW.getSpeed() : SPEEDS.FAST.getSpeed();
         flPower = (drive + strafe + twist) * this.goSlow;
         frPower = (drive - strafe - twist) * this.goSlow;
         rlPower = (drive - strafe + twist) * this.goSlow;
@@ -178,10 +203,32 @@ public class Drive implements Subsystem {
         setFeedforwardPower(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     }
 
+    /**
+     * Sets the power for a Differential Drive train inspired by Rocket League
+     *
+     * @param speed how fast to move forward and back
+     * @param turn how fast to turn
+     * @param goSlow scale total speed down
+     */
     public void setRocketLeaguePower(double speed, double turn, boolean goSlow) {
-        this.goSlow = goSlow ? SLOW : FAST;
+//        this.goSlow = goSlow ? SLOW : FAST;
+//        speed   = speed * this.goSlow;
+//        turn    = turn * this.goSlow;
+
+        // Change turning speed for if you are moving or not
+        if(Math.abs(speed) < movingDeadzone) {
+            // Assume "stationary" turning
+            speed   = speed * speedMultiplier;
+            turn    = turn  * turningMultiplier;
+        } else {
+            // Assume "moving" turning
+            speed   = speed * speedMultiplier;
+            turn    = turn  * movingTurnMultiplier;
+        }
+
+        this.goSlow = goSlow ? SPEEDS.RL_SLOW.getSpeed() : SPEEDS.FAST.getSpeed();
         speed   = speed * this.goSlow;
-        turn    = turn * this.goSlow;
+        turn    = turn  * this.goSlow;
 
         if(speed > 0.0) {
             setPower(speed - turn, speed + turn);
