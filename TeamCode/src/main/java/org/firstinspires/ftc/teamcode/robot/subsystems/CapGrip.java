@@ -4,6 +4,7 @@ import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Deprecated
 public class CapGrip implements Subsystem {
     private HardwareMap hardwareMap;
 
