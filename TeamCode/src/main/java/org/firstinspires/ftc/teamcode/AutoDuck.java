@@ -63,7 +63,7 @@ public class AutoDuck extends LinearOpMode implements DogeOpMode {
 //        commander.runCommand(new DriveByEncoder(drive, drive.inchToCounts(1.0), drive.heading(),0.3,3, telemetry));
 
         sleep(100);
-        carousel.setPower(10.0);
+        carousel.setPower(turnPower);
         carousel.periodic();
         sleep(5000);
         carousel.setPower(0.5);
@@ -76,5 +76,7 @@ public class AutoDuck extends LinearOpMode implements DogeOpMode {
         sleep(2000);
         drive.setPower(0,0);
         drive.periodic();
+
+        commander.stop();
     }
 }
