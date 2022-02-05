@@ -24,7 +24,7 @@ public class TeleOpArmSlideKickerControl implements Command {
     private SwampbotsUtil util;
 
     private boolean autoMode = true;
-    private double droppingTimer = -1;
+    private double kickerTimer = -1;
     private double intakeTimer = -1;
     private boolean goingDown = false;
 
@@ -36,6 +36,8 @@ public class TeleOpArmSlideKickerControl implements Command {
     private double currentTimeout = -1;
 
     private boolean cancelMove = false;
+
+    private boolean kickerToggle = true;
 
     private enum States {
         INTAKE,
@@ -50,13 +52,13 @@ public class TeleOpArmSlideKickerControl implements Command {
 
     private enum TIMEOUTS {
         ARM_INTAKE_TO_MIDDLE,
-        DROP;
+        KICKER;
 
         public double getTimeout() { // TODO: Check values
             switch (this) {
                 case ARM_INTAKE_TO_MIDDLE:
                     return 1.3;
-                case DROP:
+                case KICKER:
                     return 0.6;
                 default:
                     return 0.0;
@@ -89,7 +91,7 @@ public class TeleOpArmSlideKickerControl implements Command {
 
         timer.reset();
         t0 = timer.seconds();
-        droppingTimer = DROP_TIME;
+        kickerTimer = DROP_TIME;
         intakeTimer = IN_TIME;
 
         currentState = States.INTAKE;
@@ -114,6 +116,7 @@ public class TeleOpArmSlideKickerControl implements Command {
         boolean deposit = gamepad.a;
         boolean lowShared = gamepad.b;
         boolean highShared = gamepad.x;
+        boolean toggleKicker = gamepad.y;
 
         if(setAutoOn) {
             autoMode = true;
@@ -132,14 +135,23 @@ public class TeleOpArmSlideKickerControl implements Command {
             //TODO: Make sure this all works
             switch (currentState) {
                 case INTAKE:
-//                    kicker.open();
+
+                    // Allow toggling the kicker when we are in
+                    if(toggleKicker) {
+                        if(kickerToggle) {
+                            kicker.toggle();
+                            kickerToggle = false;
+                        }
+                    } else {
+                        kickerToggle = true;
+                    }
 
                     if(oneOfThree(deposit, lowShared, highShared)) { // Only one is pressed
                         kicker.close();
                         goingDown = false;
 
                         intakeTimer = 0.0;
-                        slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
+//                        slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                         arm.middle();
                     }
 
@@ -153,9 +165,9 @@ public class TeleOpArmSlideKickerControl implements Command {
                     if(cancelMoveAndReturn && !goingDown) {
                         cancelMove = true;
                         arm.middle(); // Prob need a fix for if you cancel and are too close to 'middle' s.t. arm hits robot
-                        slides.setTargetPos(Slides.TARGETS.IN.getTargets());
+                        slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                     }
-                    if(cancelMove && slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() + 50) {
+                    if(cancelMove && slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() - 50) { // -50 b/c slides get more negative as they go further out
                         if(oneOfThree(deposit, lowShared, highShared)) {
                             cancelMove = false;
 
@@ -165,19 +177,20 @@ public class TeleOpArmSlideKickerControl implements Command {
                         if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 50)) {
                             arm.intake();
                             slides.setTargetPos(Slides.TARGETS.IN.getTargets());
+                            kicker.open();
                             currentState = States.INTAKE;
                         }
                     }
 
-                    if(dropAndReturn) {
+                    if(dropAndReturn && !cancelMove) {
                         kicker.open();
                         //Drop what is used to drop
-                        droppingTimer = 0.0;
+                        kickerTimer = 0.0;
                         goingDown = true;
                     }
 
                     if(goingDown) {
-                        if(droppingTimer > TIMEOUTS.DROP.getTimeout()) {
+                        if(kickerTimer > TIMEOUTS.KICKER.getTimeout()) {
                             arm.middle();
                             slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                         }
@@ -209,7 +222,7 @@ public class TeleOpArmSlideKickerControl implements Command {
                         arm.middle(); // Prob need a fix for if you cancel and are too close to 'middle' s.t. arm hits robot
                         slides.setTargetPos(Slides.TARGETS.IN.getTargets());
                     }
-                    if(cancelMove && slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() + 50) {
+                    if(cancelMove && slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() - 50) {
                         if(oneOfThree(deposit, lowShared, highShared)) {
                             cancelMove = false;
 
@@ -223,15 +236,15 @@ public class TeleOpArmSlideKickerControl implements Command {
                         }
                     }
 
-                    if(dropAndReturn) {
+                    if(dropAndReturn && !cancelMove) {
                         kicker.open();
                         //Drop what is used to drop
-                        droppingTimer = 0.0;
+                        kickerTimer = 0.0;
                         goingDown = true;
                     }
 
                     if(goingDown) {
-                        if(droppingTimer > TIMEOUTS.DROP.getTimeout()) {
+                        if(kickerTimer > TIMEOUTS.KICKER.getTimeout()) {
                             arm.middle();
                             slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                         }
@@ -264,7 +277,7 @@ public class TeleOpArmSlideKickerControl implements Command {
                         arm.middle(); // Prob need a fix for if you cancel and are too close to 'middle' s.t. arm hits robot
                         slides.setTargetPos(Slides.TARGETS.IN.getTargets());
                     }
-                    if(cancelMove && slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() + 50) {
+                    if(cancelMove && slides.getCurrentPos() > Slides.TARGETS.MIDDLE.getTargets() - 50) {
                         if(oneOfThree(deposit, lowShared, highShared)) {
                             cancelMove = false;
 
@@ -278,15 +291,15 @@ public class TeleOpArmSlideKickerControl implements Command {
                         }
                     }
 
-                    if(dropAndReturn) {
+                    if(dropAndReturn && !cancelMove) {
                         kicker.open();
                         //Drop what is used to drop
-                        droppingTimer = 0.0;
+                        kickerTimer = 0.0;
                         goingDown = true;
                     }
 
                     if(goingDown) {
-                        if(droppingTimer > TIMEOUTS.DROP.getTimeout()) {
+                        if(kickerTimer > TIMEOUTS.KICKER.getTimeout()) {
                             arm.middle();
                             slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                         }
@@ -364,7 +377,7 @@ public class TeleOpArmSlideKickerControl implements Command {
 ////                }
 //            }
 
-            droppingTimer += deltaT;
+            kickerTimer += deltaT;
             intakeTimer += deltaT;
 
 
@@ -434,17 +447,26 @@ public class TeleOpArmSlideKickerControl implements Command {
             telemetry.addData("runMode:", slides.getRunMode());
             telemetry.addLine();
 
+            telemetry.addLine("Kicker Telemetry:");
+            telemetry.addData("toggle?", toggleKicker);
+            telemetry.addData("can toggle?", kickerToggle);
+            telemetry.addLine();
+            telemetry.addData("raw position:", kicker.getPosition());
+            telemetry.addData("real position:", kicker.getPosition().getPosition());
+            telemetry.addData("direction:", kicker.getDirection());
+            telemetry.addLine();
+
             telemetry.addLine("FSM Telemetry:");
             telemetry.addData("fsm active?", autoMode);
             telemetry.addData("going down?", goingDown);
             telemetry.addData("cancelling action?", cancelMoveAndReturn);
             telemetry.addLine();
-            telemetry.addData("current state", currentState);
+            telemetry.addData("current state:", currentState);
             telemetry.addLine();
-            telemetry.addData("delta t", deltaT);
-            telemetry.addData("t0", t0);
-            telemetry.addData("dropping timer", droppingTimer);
-            telemetry.addData("intake timer", intakeTimer);
+            telemetry.addData("delta t=", deltaT);
+            telemetry.addData("t0:", t0);
+            telemetry.addData("dropping timer:", kickerTimer);
+            telemetry.addData("intake timer:", intakeTimer);
 
             telemetry.update();
         }
