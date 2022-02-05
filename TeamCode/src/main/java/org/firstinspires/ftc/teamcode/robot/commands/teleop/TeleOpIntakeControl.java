@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robot.commands.teleop;
 
 import com.disnodeteam.dogecommander.Command;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -33,6 +34,10 @@ public class TeleOpIntakeControl implements Command {
         intake.setPower(0);
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
 
+//        intake.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset encoder for Arm // Not needed anymore b/c of switch to normal servos
+//        intake.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
         intake.out();
     }
 
@@ -45,8 +50,8 @@ public class TeleOpIntakeControl implements Command {
                         gamepad.right_trigger > CommandDrive.TRIGGER_THRESHOLD  ? -1.0 : 0.0
                 ) * POWER_SCALAR);
 
-        // Press both sticks in to toggle lift
-        if(gamepad.left_stick_button && gamepad.right_stick_button) {
+        boolean toggleLift = gamepad.guide;
+        if(toggleLift) {
             if(liftToggle) {
                 intake.toggle();
                 liftToggle = false;
