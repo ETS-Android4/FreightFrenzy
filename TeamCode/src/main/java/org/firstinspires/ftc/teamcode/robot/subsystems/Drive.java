@@ -68,7 +68,7 @@ public class Drive implements Subsystem {
 
     // pubic static variables for Dashboard
     public static double turningMultiplier = 0.5;
-    public static double movingTurnMultiplier = 1.0;
+    public static double movingTurnMultiplier = -1.0;
     public static double speedMultiplier = 1.0;
     public static double movingDeadzone = 0.05;
     public static double slowModeValue = 0.3;

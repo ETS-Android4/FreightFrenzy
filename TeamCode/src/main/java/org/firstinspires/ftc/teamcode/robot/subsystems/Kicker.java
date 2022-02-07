@@ -12,16 +12,19 @@ public class Kicker implements Subsystem {
 
     public enum POSITION {
         OPEN,
+        HOLD,
         CLOSE;
 
         public double getPosition() {
             switch (this) {
                 case OPEN:
-                    return 0.0;
+                    return 0.5;
+                case HOLD:
+                    return 0.2;
                 case CLOSE:
-                    return 1.0;
+                    return 0.0;
                 default:
-                    return CLOSE.getPosition();
+                    return HOLD.getPosition();
             }
         }
 
@@ -76,7 +79,7 @@ public class Kicker implements Subsystem {
 
     public void toggle() {
         if(position == POSITION.OPEN) {
-            position = POSITION.CLOSE;
+            position = POSITION.HOLD;
         } else {
             position = POSITION.OPEN;
         }
@@ -87,5 +90,8 @@ public class Kicker implements Subsystem {
     }
     public void close() {
         position = POSITION.CLOSE;
+    }
+    public void hold() {
+        position = POSITION.HOLD;
     }
 }

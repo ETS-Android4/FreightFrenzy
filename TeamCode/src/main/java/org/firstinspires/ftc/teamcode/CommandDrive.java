@@ -41,7 +41,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         Kicker kicker = new Kicker(hardwareMap);
         Carousel carousel = new Carousel(hardwareMap);
         Intake intake = new Intake(hardwareMap);
-        Cap cap = new Cap(hardwareMap);
+//        Cap cap = new Cap(hardwareMap);
 
 //        LineColorSensor lineColorSensor = new LineColorSensor(hardwareMap);
 //        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
@@ -64,8 +64,8 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpRocketLeagueDriveControl(drive, gamepad1),
                 new TeleOpCarouselControl(carousel, gamepad2),
                 new TeleOpIntakeControl(intake, gamepad2),
-                new TeleOpArmSlideKickerControl(arm, slides, kicker, gamepad2, telemetry),
-                new TeleOpCapstoneControl(cap, gamepad1)
+                new TeleOpArmSlideKickerControl(arm, slides, kicker, gamepad2, telemetry)//,
+//                new TeleOpCapstoneControl(cap, gamepad1)
 
 //                new TeleOpLineColorSensor(lineColorSensor, true)
 //                new TeleOpIntakeColorSensor(intakeColorSensor, true)

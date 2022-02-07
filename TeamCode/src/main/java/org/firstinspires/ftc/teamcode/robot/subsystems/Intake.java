@@ -21,9 +21,9 @@ public class Intake implements Subsystem {
         public double getPosition() {
             switch (this) {
                 case IN:
-                    return 0.0;
-                case OUT:
                     return 1.0;
+                case OUT:
+                    return 0.4;
                 default:
                     return 0.0;
             }
@@ -41,6 +41,8 @@ public class Intake implements Subsystem {
 
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
         power = 0.0;
+
+        lift.setPosition(LIFT_POSITIONS.IN.getPosition());
 
         position = LIFT_POSITIONS.IN;
     }

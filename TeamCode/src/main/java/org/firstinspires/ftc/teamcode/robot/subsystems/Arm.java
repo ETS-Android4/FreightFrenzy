@@ -72,13 +72,13 @@ public class Arm implements Subsystem {
                 case INTAKE:
                     return 0;
                 case MIDDLE:
-                    return 0.05;
+                    return 0.08;
                 case DEPOSIT:
-                    return 0.7;
+                    return 0.8;
                 case LOW_SHARED:
-                    return 0.3;
+                    return 1.0;
                 case HIGH_SHARED:
-                    return 0.5;
+                    return 1.0;
                 default:
                     return 0;
             }
@@ -149,7 +149,7 @@ public class Arm implements Subsystem {
     public void periodic() {
         double position = targetPos.getPosition();
 
-        position = testPos;
+//        position = testPos;
 
         arm1.setPosition(position);
         arm2.setPosition(position);

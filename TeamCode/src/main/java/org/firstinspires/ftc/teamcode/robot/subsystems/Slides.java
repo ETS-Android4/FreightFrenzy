@@ -36,13 +36,13 @@ public class Slides implements Subsystem {
                 case IN:
                     return 0;
                 case MIDDLE:
-                    return -95;
+                    return -15;
                 case OUT:
                     return -450;
                 case LOW_SHARED:
                     return -270;
                 case HIGH_SHARED:
-                    return -360;
+                    return -180;
                 default:
                     return 0;
             }
