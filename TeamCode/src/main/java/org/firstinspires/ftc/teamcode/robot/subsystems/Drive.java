@@ -356,4 +356,15 @@ public class Drive implements Subsystem {
     public SimpleMotorFeedforward getFeedforward() {
         return feedforward;
     }
+
+    public double[] getCurrent() {
+        double[] current = new double[]{
+                flDrive.getCurrent(CurrentUnit.MILLIAMPS),
+                frDrive.getCurrent(CurrentUnit.MILLIAMPS),
+                rlDrive.getCurrent(CurrentUnit.MILLIAMPS),
+                rrDrive.getCurrent(CurrentUnit.MILLIAMPS)
+        };
+
+        return current;
+    }
 }
