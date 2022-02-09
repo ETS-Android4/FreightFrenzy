@@ -367,4 +367,27 @@ public class Drive implements Subsystem {
 
         return current;
     }
+
+    public double[] getVelocities() {
+        double[] velocities = new double[]{
+                flDrive.getVelocity(),
+                frDrive.getVelocity(),
+                rlDrive.getVelocity(),
+                rrDrive.getVelocity()
+        };
+
+        return velocities;
+    }
+
+    public DcMotorEx[] getMotors() {
+        DcMotorEx[] motors = new DcMotorEx[]{
+                flDrive,
+                frDrive,
+                rlDrive,
+                rrDrive
+        };
+
+        return motors;
+    }
+
 }

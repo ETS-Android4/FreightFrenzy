@@ -10,18 +10,23 @@ import com.arcrobotics.ftclib.kinematics.wpilibkinematics.ChassisSpeeds;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveWheelSpeeds;
 import com.arcrobotics.ftclib.trajectory.Trajectory;
 import com.disnodeteam.dogecommander.Command;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.roadrunner_util.Encoder;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.swampbots_util.TrackRobotPosition;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.DoubleStream;
 
 public class DriveByTrajectory implements Command {
     private Drive drive;
     private TrackRobotPosition tracker;
+
+    private List<Encoder> encoders;
 
     private ElapsedTime timer;
     private double t0;
@@ -35,6 +40,10 @@ public class DriveByTrajectory implements Command {
         this.trajectory = trajectory;
         this.controller = controller;
         this.telemetry = telemetry;
+
+        for(DcMotorEx m : drive.getMotors()) {
+            encoders.add(new Encoder(m));
+        }
 
         tracker = new TrackRobotPosition(drive, trajectory.getInitialPose(), this.telemetry);
 
@@ -61,7 +70,13 @@ public class DriveByTrajectory implements Command {
     public void periodic() {
         double t1 = timer.seconds();
 
-        tracker.periodic(t1, drive.getCurrentPositions(), drive.heading());
+        double[] velocities = encoders.stream().
+                flatMapToDouble(encoder -> DoubleStream.of(encoder.getCorrectedVelocity()))
+                .toArray();
+
+//        encoders.forEach(encoder -> encoder.getCorrectedVelocity());
+
+        tracker.periodic(t1, velocities, drive.heading());
 
         Pose2d currentPose = tracker.getPose(); //TODO: Replace this with where the robot actually is at this instant
         Trajectory.State goalState = trajectory.sample(t0); //TODO: Replace this with where the robot should be at this instant

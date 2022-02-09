@@ -134,6 +134,16 @@ public class TrackRobotPosition {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void periodic(double time, double[] velocities, float angle) {
+        double deltaT = time - t0;
+
+        velocity = Arrays.stream(velocities).sum() / Drive.NUMBER_OF_ENCODERS / deltaT;
+        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL * scaleVelocity);
+
+        periodic(time, velocity, angle);
+    }
+
     public boolean isCompleted() {
         return false;
     }
