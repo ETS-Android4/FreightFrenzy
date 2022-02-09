@@ -8,12 +8,14 @@ import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
 @Config
@@ -43,10 +45,10 @@ public class Drive implements Subsystem {
     }
 
     // Components
-    private DcMotor flDrive;
-    private DcMotor frDrive;
-    private DcMotor rlDrive;
-    private DcMotor rrDrive;
+    private DcMotorEx flDrive;
+    private DcMotorEx frDrive;
+    private DcMotorEx rlDrive;
+    private DcMotorEx rrDrive;
     private BNO055IMU imu;
 
     // State and interface variables
@@ -87,10 +89,10 @@ public class Drive implements Subsystem {
 
     @Override
     public void initHardware() {
-        flDrive = hardwareMap.get(DcMotor.class, "fl_drive");
-        frDrive = hardwareMap.get(DcMotor.class, "fr_drive");
-        rlDrive = hardwareMap.get(DcMotor.class, "rl_drive");
-        rrDrive = hardwareMap.get(DcMotor.class, "rr_drive");
+        flDrive = hardwareMap.get(DcMotorEx.class, "fl_drive");
+        frDrive = hardwareMap.get(DcMotorEx.class, "fr_drive");
+        rlDrive = hardwareMap.get(DcMotorEx.class, "rl_drive");
+        rrDrive = hardwareMap.get(DcMotorEx.class, "rr_drive");
 
         if(initIMU){
             BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
