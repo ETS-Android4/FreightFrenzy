@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpDriveCurrentTracking;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpRocketLeagueDriveControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 
@@ -24,7 +25,8 @@ public class TestRocketLeagueControl extends LinearOpMode implements DogeOpMode 
         waitForStart();
 
         commander.runCommandsParallel(
-                new TeleOpRocketLeagueDriveControl(drive, gamepad1, telemetry)
+                new TeleOpRocketLeagueDriveControl(drive, gamepad1, telemetry),
+                new TeleOpDriveCurrentTracking(drive)
                 // new CommandToTest(sub...)
         );
     }
