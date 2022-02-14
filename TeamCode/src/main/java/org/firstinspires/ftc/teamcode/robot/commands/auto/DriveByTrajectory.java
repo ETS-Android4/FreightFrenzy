@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.roadrunner_util.Encoder;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.swampbots_util.TrackRobotPosition;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.DoubleStream;
@@ -26,7 +27,7 @@ public class DriveByTrajectory implements Command {
     private Drive drive;
     private TrackRobotPosition tracker;
 
-    private List<Encoder> encoders;
+    private ArrayList<Encoder> encoders = new ArrayList<>(4);
 
     private ElapsedTime timer;
     private double t0;
@@ -68,7 +69,7 @@ public class DriveByTrajectory implements Command {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void periodic() {
-        double t1 = timer.seconds();
+        double t0 = timer.seconds();
 
         double[] velocities = encoders.stream().
                 flatMapToDouble(encoder -> DoubleStream.of(encoder.getCorrectedVelocity()))
@@ -76,7 +77,7 @@ public class DriveByTrajectory implements Command {
 
 //        encoders.forEach(encoder -> encoder.getCorrectedVelocity());
 
-        tracker.periodic(t1, velocities, drive.heading());
+        tracker.periodic(velocities, drive.heading());
 
         Pose2d currentPose = tracker.getPose(); //TODO: Replace this with where the robot actually is at this instant
         Trajectory.State goalState = trajectory.sample(t0); //TODO: Replace this with where the robot should be at this instant
@@ -94,12 +95,10 @@ public class DriveByTrajectory implements Command {
             telemetry.addLine();
             telemetry.addLine(String.format(Locale.ENGLISH, "Adjusted Speeds (l,r) = (%.4f, %.4f)", wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond));
             telemetry.addLine();
-            telemetry.addLine(String.format(Locale.ENGLISH, "Time (t0,t1,Δt) = (%.5f, %.5f, %.5f)", t0, t1, (t1 - t0)));
+            telemetry.addLine(String.format(Locale.ENGLISH, "Time (t0) = (%.5f)", t0));
             telemetry.update();
 
         }
-
-        t0 = t1;
     }
 
     @Override

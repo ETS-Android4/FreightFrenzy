@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Transform2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.disnodeteam.dogecommander.Command;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.sun.tools.javac.util.Pair;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -26,10 +27,11 @@ public class TrackRobotPosition {
     private Pose2d initialPos;
     private Telemetry telemetry;
 
+    private ElapsedTime timer;
+
     private Pose2d currentPos;
     private double t0;
     private Rotation2d theta;
-    private double t1;
     private double velocity;
     private Pair<int[], int[]> encoderPositions;
 
@@ -40,6 +42,7 @@ public class TrackRobotPosition {
         this.initialPos = initialPos;
         this.telemetry = telemetry;
 
+        timer = new ElapsedTime();
     }
 
     public TrackRobotPosition(Drive drive, Pose2d initialPos) {
@@ -60,19 +63,19 @@ public class TrackRobotPosition {
 
         encoderPositions = new Pair<>(drive.getCurrentPositions(), new int[]{0, 0, 0, 0});
 
-        t0 = 0;
+        timer.reset();
+        t0 = timer.seconds();
     }
 
     /**
      * Update the robot to track it's position
      *
-     * @param time timestamp of when the data was pushed
      * @param velocity current velocity of the robot
      * @param angle angle of the robot in Radians
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void periodic(double time, double velocity, float angle) {
-        double deltaT = time - t0;
+    public void periodic(double velocity, float angle) {
+        double deltaT = timer.seconds() - t0;
 
         // Change in angle of rotation
         theta = new Rotation2d(angle);
@@ -95,25 +98,25 @@ public class TrackRobotPosition {
             telemetry.addLine(String.format(Locale.ENGLISH, "change (Δx,Δy,ΔΘ) = (%.4f, %.4f, %.4f)", deltaX, deltaY, deltaTheta.getDegrees()));
             telemetry.addData("theta.sin()", theta.getSin());
             telemetry.addData("theta.cos()", theta.getCos());
-            telemetry.addData("deltaTheta", deltaTheta);
+//            telemetry.addData("deltaTheta", deltaTheta);
             telemetry.addData("deltaPos", deltaPos);
             telemetry.addLine();
-            telemetry.addLine(String.format(Locale.ENGLISH, "Time (t0,t1,Δt) = (%.5f, %.5f, %.5f)", t0, t1, deltaT));
+            telemetry.addLine(String.format(Locale.ENGLISH, "Time (t0,Δt) = (%.5f, %.5f)", t0, deltaT));
             telemetry.addLine(); // We don't update telemetry here because we update it in main program
         }
-        t0 = time;
+
+        t0 = timer.seconds();
     }
 
     /**
      * Update the robot to track it's position
      *
-     * @param time timestamp of when the data was pushed
      * @param encoderPos current encoder values of the robot [fl, fr, rl, rr]
      * @param angle angle of the robot in Radians
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void periodic(double time, int[] encoderPos, float angle) {
-        double deltaT = time - t0;
+    public void periodic(int[] encoderPos, float angle) {
+        double deltaT = timer.seconds() - t0;
 
         int[] deltaEncoder = new int[4];
         for (int i = 0; i < 4; i++) {
@@ -127,21 +130,35 @@ public class TrackRobotPosition {
         velocity = Arrays.stream(deltaEncoder).sum() / Drive.NUMBER_OF_ENCODERS / deltaT; // Average encoders correspond to velocity (Counts / Sec)
         velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL * scaleVelocity); // Fix units (Counts / Sec => Inch / Sec => m/s)
 
-        periodic(time, velocity, angle);
+        periodic(velocity, angle);
     }
 
     public void stop() {
 
     }
 
+    /**
+     * Update the robot to track it's position
+     *
+     * @param velocities current velocity of each wheel [fl, fr, rl, rr]
+     * @param angle angle of the robot in Radians
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void periodic(double time, double[] velocities, float angle) {
-        double deltaT = time - t0;
+    public void periodic(double[] velocities, float angle) {
+        double deltaT = timer.seconds() - t0;
 
         velocity = Arrays.stream(velocities).sum() / Drive.NUMBER_OF_ENCODERS / deltaT;
         velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL * scaleVelocity);
 
-        periodic(time, velocity, angle);
+        if(telemetry != null) {
+            telemetry.addLine();
+            telemetry.addData("FL Adj Velo:", velocities[0]);
+            telemetry.addData("FR Adj Velo:", velocities[1]);
+            telemetry.addData("RL Adj Velo:", velocities[2]);
+            telemetry.addData("RR Adj Velo:", velocities[3]);
+        }
+
+        periodic(velocity, angle);
     }
 
     public boolean isCompleted() {
