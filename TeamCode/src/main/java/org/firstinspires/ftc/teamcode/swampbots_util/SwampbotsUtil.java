@@ -54,6 +54,13 @@ public class SwampbotsUtil {
 
     }
 
+    public enum TIME_UNITS {
+        SECONDS,
+        MILLISECONDS,
+        NANOSECONDS,
+        MINUTES;
+    }
+
     public SwampbotsUtil() {
 
     }
@@ -168,5 +175,9 @@ public class SwampbotsUtil {
         }
 
         return mu / vals.length;
+    }
+
+    public static int inchToCount(double inches) {
+        return (int) (inches * COUNTS_PER_INCH);
     }
 }
