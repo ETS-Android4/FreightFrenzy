@@ -15,21 +15,12 @@ public class TeleOpRocketLeagueDriveControl implements Command {
     private Drive drive;
     private Gamepad gamepad;
     private Telemetry telemetry;
-//    private TrackRobotPosition tracker;
-//
-//    private ElapsedTime timer;
-//    private double t0;
-
-
 
     // Constructor
     public TeleOpRocketLeagueDriveControl(Drive drive, Gamepad gamepad, Telemetry telemetry) {
         this.drive = drive;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
-
-//        tracker = new TrackRobotPosition(drive, new Pose2d(new Translation2d(0, 0), new Rotation2d(0)), this.telemetry);
-//        timer = new ElapsedTime();
     }
     public TeleOpRocketLeagueDriveControl(Drive drive, Gamepad gamepad) {
         this(drive ,gamepad, null);
@@ -38,11 +29,6 @@ public class TeleOpRocketLeagueDriveControl implements Command {
     @Override
     public void start() {
         drive.setPower(0,0);
-
-//        tracker.start();
-//
-//        timer.reset();
-//        t0 = timer.seconds();
     }
 
     @Override
@@ -53,12 +39,8 @@ public class TeleOpRocketLeagueDriveControl implements Command {
 
         drive.setRocketLeaguePower(speed, turn, goSlow);
 
-//        double t1 = timer.seconds();
-//
-//        tracker.periodic(t1, drive.getCurrentPositions(), drive.heading());
-
         if(telemetry != null) {
-            telemetry.addLine("Drive Telemetry");
+            telemetry.addLine("Drive Telemetry:");
             telemetry.addData("speed:", speed);
             telemetry.addData("turn:", turn);
             telemetry.addData("goSlow?", goSlow);
