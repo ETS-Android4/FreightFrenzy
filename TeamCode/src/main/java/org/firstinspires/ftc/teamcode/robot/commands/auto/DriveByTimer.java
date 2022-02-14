@@ -40,6 +40,7 @@ public class DriveByTimer implements Command {
         if(telemetry != null) {
             telemetry.addData("Timer", timer.seconds());
             telemetry.addData("Seconds", seconds);
+            telemetry.addData("encoder[0]", drive.getCurrentPositions()[0]);
 
             telemetry.update();
         }
