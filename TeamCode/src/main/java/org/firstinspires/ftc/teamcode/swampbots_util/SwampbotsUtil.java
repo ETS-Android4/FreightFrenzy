@@ -17,6 +17,7 @@ import java.util.List;
 import kotlin.Triple;
 
 public class SwampbotsUtil {
+    public static double COUNTS_PER_INCH = 3000.0 / 83.0;
 
     public enum COLORS {
         RED, GREEN, BLUE,
