@@ -39,6 +39,8 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
     public static double cthetaf = 0.0;
     public static double maxAcc = 50.0;
     public static double maxAngAcc = 50.0;
+    public static double rBeta = 0.3;
+    public static double rZeta = 0.1;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -50,7 +52,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(drive);
 
 
-        controller = new RamseteController(0.3,0.1);
+        controller = new RamseteController(rBeta, rZeta);
 
 
 
@@ -61,7 +63,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         ArrayList<Translation2d> interiorWaypoints = new ArrayList<>();
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(bx1), Units.feetToMeters(by1)));
 
-        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(maxAcc), Units.feetToMeters(50));
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(maxAcc), Units.feetToMeters(maxAngAcc));
         config.setReversed(false);
 
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
