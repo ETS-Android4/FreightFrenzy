@@ -17,12 +17,11 @@ public class DriveByEncoder implements Command {
     private int counts;
     private double timeout;
 
-
     private DcMotor.RunMode prevRunMode;
 
     private final double DRIVE_SPEED = 0.6;
     private final double MAX_DRIVE_SPEED = Math.min(DRIVE_SPEED + 0.1, 1.0);
-    private final double K_P = 0.01; // Proportional coefficient for gyro-controlled driving
+    private final double K_P = 0.005; // Proportional coefficient for gyro-controlled driving
 
     double target;
     double heading;
@@ -90,7 +89,7 @@ public class DriveByEncoder implements Command {
         correction = error * K_P;
         newLeftPower = Math.min((power - correction), MAX_DRIVE_SPEED);
         newRightPower = Math.min((power + correction), MAX_DRIVE_SPEED);
-        drive.setPower(newLeftPower,newRightPower);
+        drive.setPower(newLeftPower, newRightPower);
 
         if(telemetry != null) {
             telemetry.addData("Timer", timer);
