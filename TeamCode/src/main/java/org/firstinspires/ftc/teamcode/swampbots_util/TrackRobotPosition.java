@@ -78,8 +78,8 @@ public class TrackRobotPosition {
         double deltaT = timer.seconds() - t0;
 
         // Change in angle of rotation
-        theta = new Rotation2d(angle);
-        Rotation2d deltaTheta = theta.minus(currentPos.getRotation());
+        theta = new Rotation2d(Units.degreesToRadians(angle));
+//        Rotation2d deltaTheta = theta.minus(currentPos.getRotation());
 
         // Parameterize velocity into x and y components
         double vx = velocity * theta.getCos();
@@ -89,13 +89,13 @@ public class TrackRobotPosition {
         Translation2d deltaPos = new Translation2d(deltaX, deltaY);
 
 //        currentPos.plus(new Transform2d(deltaPos, deltaTheta));
-        currentPos = new Pose2d(currentPos.getTranslation().plus(deltaPos), currentPos.getRotation().plus(deltaTheta));
+        currentPos = new Pose2d(currentPos.getTranslation().plus(deltaPos), theta);
 
         if(telemetry != null) {
             telemetry.addLine("Robot Tracker Data:");
             telemetry.addLine(String.format(Locale.ENGLISH, "current (x,y,Θ) = (%.2f, %.2f, %.2f)", currentPos.getX(), currentPos.getY(), currentPos.getRotation().getDegrees()));
             telemetry.addLine(String.format(Locale.ENGLISH, "velocity (v,vx,vy) = (%.4f, %.4f, %.4f)", velocity, vx, vy));
-            telemetry.addLine(String.format(Locale.ENGLISH, "change (Δx,Δy,ΔΘ) = (%.4f, %.4f, %.4f)", deltaX, deltaY, deltaTheta.getDegrees()));
+            telemetry.addLine(String.format(Locale.ENGLISH, "change (Δx,Δy,ΔΘ) = (%.4f, %.4f, %.4f)", deltaX, deltaY, -1.0));
             telemetry.addData("theta.sin()", theta.getSin());
             telemetry.addData("theta.cos()", theta.getCos());
 //            telemetry.addData("deltaTheta", deltaTheta);
