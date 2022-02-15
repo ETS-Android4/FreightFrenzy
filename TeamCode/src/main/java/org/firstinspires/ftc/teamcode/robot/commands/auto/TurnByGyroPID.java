@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.commands.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.disnodeteam.dogecommander.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
  *
  * @author Blake (mentor-coded gang)
  */
+@Config
 public class TurnByGyroPID implements Command {
 
     // Subsystem(s)
@@ -31,12 +33,12 @@ public class TurnByGyroPID implements Command {
 
 
     // PID controller
-    public final double MAX_SPEED = 0.6;    // Maximum motor power
-    public final double P = 0.025;          // Proportional coefficient
-    public final double I = 0.0;            // Integral coefficient
-    public final double D = 0.0;            // Derivative coefficient
-    public final double TOLERANCE = 2.7;    // Allowable error ("close-enough" factor) for when we can stop
-    SynchronousPID pid = new SynchronousPID(P, I, D);
+    public static double MAX_SPEED = 0.6;    // Maximum motor power
+    public static double kP = 0.025;          // Proportional coefficient
+    public static double kI = 0.0;            // Integral coefficient
+    public static double kD = 0.0;            // Derivative coefficient
+    public static double TOLERANCE = 2.7;    // Allowable error ("close-enough" factor) for when we can stop
+    SynchronousPID pid = new SynchronousPID(kP, kI, kD);
 
     private double error = TOLERANCE + 1.0; // Default value to clear first isCompleted() check (otherwise is 0.0, so isCompleted() returns true immediately)
 
