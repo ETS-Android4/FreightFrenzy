@@ -128,7 +128,7 @@ public class TrackRobotPosition {
         }
 
         velocity = Arrays.stream(deltaEncoder).sum() / Drive.NUMBER_OF_ENCODERS / deltaT; // Average encoders correspond to velocity (Counts / Sec)
-        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL * scaleVelocity); // Fix units (Counts / Sec => Inch / Sec => m/s)
+        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL); // Fix units (Counts / Sec => Inch / Sec => m/s)
 
         periodic(velocity, angle);
     }
@@ -148,7 +148,7 @@ public class TrackRobotPosition {
         double deltaT = timer.seconds() - t0;
 
         velocity = Arrays.stream(velocities).sum() / Drive.NUMBER_OF_ENCODERS / deltaT;
-        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL * scaleVelocity);
+        velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL);
 
         if(telemetry != null) {
             telemetry.addLine();
