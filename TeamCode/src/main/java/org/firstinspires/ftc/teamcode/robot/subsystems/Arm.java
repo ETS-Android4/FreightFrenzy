@@ -54,7 +54,7 @@ public class Arm implements Subsystem {
 //    public int testTarget = 0;
 //    public double error = 0;
 
-    public static double testPos = 0.5;
+    public static double testPos = -1.0;
 
 //    public SynchronousPID pid;
 //    private ArmFeedforward feedforward = new ArmFeedforward();
@@ -64,21 +64,27 @@ public class Arm implements Subsystem {
         INTAKE,
         MIDDLE,
         DEPOSIT,
+        LOW_HUB,
+        MIDDLE_HUB,
         LOW_SHARED,
         HIGH_SHARED;
 
         public double getPosition() {
             switch (this) {
                 case INTAKE:
-                    return 0;
+                    return 0.405;
                 case MIDDLE:
-                    return 0.08;
+                    return 0.425;
                 case DEPOSIT:
-                    return 0.8;
+                    return 0.56;
+                case LOW_HUB:
+                    return 0.61;
+                case MIDDLE_HUB:
+                    return 0.60;
                 case LOW_SHARED:
-                    return 1.0;
+                    return 0.58;
                 case HIGH_SHARED:
-                    return 1.0;
+                    return 0.58;
                 default:
                     return 0;
             }
@@ -149,9 +155,12 @@ public class Arm implements Subsystem {
     public void periodic() {
         double position = targetPos.getPosition();
 
-//        position = testPos;
+//        if(testPos >= 0.0)
+//            position = testPos;
 
+//        if(POWER_SCALAR < 0.6)
         arm1.setPosition(position);
+//        if(POWER_SCALAR > 0.4)
         arm2.setPosition(position);
 //        arm1.setPower(position);
 //        arm2.setPower(position);
