@@ -53,7 +53,7 @@ public class Kicker implements Subsystem {
         kicker = hardwareMap.get(Servo.class, "kicker");
         kicker.setDirection(Servo.Direction.FORWARD);
 
-        position = POSITION.CLOSE;
+        position = POSITION.HOLD;
     }
 
     @Override
