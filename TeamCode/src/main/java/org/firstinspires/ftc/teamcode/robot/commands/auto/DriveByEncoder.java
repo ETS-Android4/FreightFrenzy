@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 
 import static org.firstinspires.ftc.teamcode.CommandDrive.DEFAULT_TIMEOUT;
 
+import java.math.MathContext;
+
 public class DriveByEncoder implements Command {
     private Drive drive;
 
@@ -21,7 +23,7 @@ public class DriveByEncoder implements Command {
 
     private final double DRIVE_SPEED = 0.6;
     private final double MAX_DRIVE_SPEED = Math.min(DRIVE_SPEED + 0.1, 1.0);
-    private final double K_P = 0.005; // Proportional coefficient for gyro-controlled driving
+    private double K_P = 0.005; // Proportional coefficient for gyro-controlled driving
 
     double target;
     double heading;
@@ -42,6 +44,8 @@ public class DriveByEncoder implements Command {
         this.target = target;
         this.timeout = timeout;
         this.telemetry = telemetry;
+
+        K_P = Math.signum(counts) * K_P; // This works because it does
     }
 
     public DriveByEncoder(Drive drive, int counts, double target, double power) {
