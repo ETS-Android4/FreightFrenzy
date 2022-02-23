@@ -315,8 +315,8 @@ public class Drive implements Subsystem {
      */
     public boolean driveIsBusy() {
         // If these are combined with || (ORs), then it waits for all four motors to finish. We are switching to && (ANDs) so that only one motor need finish
-        return flDrive.isBusy() || frDrive.isBusy() || rlDrive.isBusy() || rrDrive.isBusy(); //Edited by Blake on Jan 16 2021
-//        return flDrive.isBusy() && frDrive.isBusy() && rlDrive.isBusy() && rrDrive.isBusy();  // Reflipped order Feb 27 2021
+//        return flDrive.isBusy() || frDrive.isBusy() || rlDrive.isBusy() || rrDrive.isBusy(); //Edited by Blake on Jan 16 2021
+        return flDrive.isBusy() && frDrive.isBusy() && rlDrive.isBusy() && rrDrive.isBusy();  // Reflipped order Feb 27 2021
     }
 
     /**
