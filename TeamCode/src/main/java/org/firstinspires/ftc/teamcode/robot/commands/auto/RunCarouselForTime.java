@@ -43,6 +43,11 @@ public class RunCarouselForTime implements Command {
 
     @Override
     public boolean isCompleted() {
+        if(timer.seconds() > seconds) {
+            carousel.setPower(0);
+            carousel.periodic();
+            return true;
+        }
         return timer.seconds() > seconds;
     }
 }
