@@ -121,7 +121,7 @@ public class SwampbotsUtil {
         return new Scalar(r * 255, g * 255, b * 255);
     }
 
-    public float mean(double[] arr) {
+    public float mean(@NonNull double[] arr) {
         float mu = 0;
         for(double d : arr) {
             mu += d;
