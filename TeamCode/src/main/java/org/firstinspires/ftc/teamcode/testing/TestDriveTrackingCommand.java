@@ -48,11 +48,11 @@ public class TestDriveTrackingCommand implements Command {
 
     @Override
     public void periodic() {
-        double speed = gamepad.right_trigger - gamepad.left_trigger;
-        double turn = gamepad.left_stick_x;
+        double speed = gamepad.left_stick_y;
+        double turn = gamepad.right_stick_x;
         boolean goSlow = gamepad.left_bumper || gamepad.right_bumper;
 
-        drive.setRocketLeaguePower(speed, turn, goSlow);
+        drive.setArcadePower(speed, turn, goSlow);
 
         double[] velocities = encoders.stream().
                 flatMapToDouble(encoder -> DoubleStream.of(encoder.getCorrectedVelocity()))
