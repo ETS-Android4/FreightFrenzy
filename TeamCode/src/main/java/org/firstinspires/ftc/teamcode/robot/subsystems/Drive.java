@@ -241,6 +241,14 @@ public class Drive implements Subsystem {
         }
     }
 
+    public void setArcadePower(double speed, double turn, boolean goSlow) {
+        this.goSlow = goSlow ? SPEEDS.SLOW.getSpeed() : SPEEDS.FAST.getSpeed();
+        speed   = speed * this.goSlow;
+        turn    = turn  * this.goSlow;
+
+        setPower((speed - turn) * -1, (speed + turn) * -1);
+    }
+
     /**
      * Sets the targets for each motor
      *
