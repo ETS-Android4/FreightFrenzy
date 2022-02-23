@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot.commands.auto;
 
 import com.disnodeteam.dogecommander.Command;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 
 public class ArmSetState implements Command {
@@ -37,16 +38,9 @@ public class ArmSetState implements Command {
 
     @Override
     public void start() {
-        if(state != null && state == Arm.POSITION.DEPOSIT) {
-            arm.deposit();
-        }
-        if(state != null && state == Arm.POSITION.MIDDLE) {
-            arm.middle();
-        }
-        if(state != null && state == Arm.POSITION.INTAKE) {
-            arm.intake();
-        }
-        if(state == null) {
+        if(state != null) {
+            arm.setTargetPos(state);
+        } else {
             switch (arm.getTargetPos()) {
                 case DEPOSIT:
                     if(toggleDirection) {
