@@ -34,7 +34,7 @@ public class TurnByGyroPID implements Command {
 
     // PID controller
     public static double MAX_SPEED = 0.6;    // Maximum motor power
-    public static double kP = 0.025;          // Proportional coefficient
+    public static double kP = 0.005;          // Proportional coefficient
     public static double kI = 0.0;            // Integral coefficient
     public static double kD = 0.0;            // Derivative coefficient
     public static double TOLERANCE = 2.7;    // Allowable error ("close-enough" factor) for when we can stop
