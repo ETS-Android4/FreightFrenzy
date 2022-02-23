@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.robot.commands.auto;
 
 import static org.firstinspires.ftc.teamcode.ug_refrence.CommandDrive.TRIGGER_THRESHOLD;
 
+import androidx.core.math.MathUtils;
+
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.util.MathUtil;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -13,6 +16,7 @@ import org.firstinspires.ftc.teamcode.swampbots_util.DuckPatternPipeline;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPlacement;
 import org.firstinspires.ftc.teamcode.swampbots_util.GamepadCooldowns;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
@@ -23,6 +27,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.ToDoubleFunction;
 
 //bot 313.23    left 193.12 right 308.82    top 182.74  bound 253.48
 
@@ -32,6 +37,8 @@ public class AutoCameraControl {
     private Gamepad gamepad2;
     private MultipleTelemetry multiTelemetry;
     private Telemetry telemetry;
+
+    private SwampbotsUtil util;
 
     private GamepadCooldowns gp1;
     private GamepadCooldowns gp2;
@@ -43,6 +50,8 @@ public class AutoCameraControl {
     private int togglePoint = 0;
     // Cooldown in the order: a, b, x, y
     private final boolean[] buttonCooldown = {false, false, false, false};
+
+    private boolean stopPointTelemetry = true;//TODO: Make false
 
 
     public static final double THRESHOLD_STEP = 0.04;
@@ -78,6 +87,8 @@ public class AutoCameraControl {
         timer = new ElapsedTime();
         timer.reset();
 
+        util = new SwampbotsUtil();
+
     }
 
     public AutoCameraControl(Camera camera, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry){
@@ -92,6 +103,8 @@ public class AutoCameraControl {
 
         timer = new ElapsedTime();
         timer.reset();
+
+        util = new SwampbotsUtil();
 
     }
 
@@ -319,8 +332,8 @@ public class AutoCameraControl {
         //--------------------------------------------------------------------------------------
 
         contours = camera.getContoursOutput();
-        double contoursLeft = 0;
-        double contoursCenter = 0;
+//        double contoursLeft = 0;
+//        double contoursCenter = 0;
 //        double contoursRight = 0;
         double confidence = 0;
 
@@ -354,6 +367,10 @@ public class AutoCameraControl {
 
         DuckPatternPipeline.rectPoints.clear();
 
+        List<Pair<Double, Double>> xWeights = new ArrayList<>();
+//        double weightedXPos = 0.0;
+//        double totalWeight  = 0.0;
+
         if (telemetry != null) {
             telemetry.addData("contour count", contours.size());
         }
@@ -381,31 +398,32 @@ public class AutoCameraControl {
                     rectPoint.x = contourRect.width/2.0 + contourRect.x;
                     rectPoint.y = contourRect.y + contourRect.height/2.0;
 
+                    Pair<Double, Double> weight = new Pair<>(rectPoint.x, contourRect.area());
+                    xWeights.add(weight);
+//                    weightedXPos += rectPoint.x * contourRect.area();
+//                    totalWeight += contourRect.area();
+
 
                     DuckPatternPipeline.rectPoints.add(new Point(rectPoint.x, rectPoint.y));
 
-                    if (telemetry != null) {
+                    if (telemetry != null && !stopPointTelemetry) {
                         telemetry.addLine("In box");
                         telemetry.addData("rect point", new Point(rectPoint.x, rectPoint.y));
+                        telemetry.addLine();
                     }
-                    if (multiTelemetry != null) {
+                    if (multiTelemetry != null && !stopPointTelemetry) {
                         multiTelemetry.addLine("In box");
                         multiTelemetry.addData("Rect point", new Point(rectPoint.x, rectPoint.y));
+                        multiTelemetry.addLine();
                     }
 
                     // Check which region contour is in
-                    if (rectPoint.x < localBound) {
-                        contoursLeft += contourRect.area();
-                    } else {
-                        contoursCenter += contourRect.area();
-                    }
+//                    if (rectPoint.x < localBound) {
+//                        contoursLeft += contourRect.area();
+//                    } else {
+//                        contoursCenter += contourRect.area();
+//                    }
 
-                    if (telemetry != null) {
-                        telemetry.addLine();
-                    }
-                    if (multiTelemetry != null) {
-                        multiTelemetry.addLine();
-                    }
                 }
 
             }
@@ -420,18 +438,66 @@ public class AutoCameraControl {
             //contourIterateError = true;
         }
 
-        DuckPlacement currentPlacement = DuckPlacement.RIGHT;
+         DuckPlacement currentPlacement = DuckPlacement.RIGHT;
 
-        if(contoursLeft != 0 || contoursCenter != 0) { // L & C not 0
-            if(contoursLeft > contoursCenter) {
-                currentPlacement = DuckPlacement.LEFT;
-            } else {
-                currentPlacement = DuckPlacement.RIGHT;
+
+         if(xWeights.size() != 0) {
+            double sumXWeight = xWeights.stream().mapToDouble(pair -> pair.fst * pair.snd).sum();
+            double totalWeight = xWeights.stream().mapToDouble(pair -> pair.snd).sum();
+            double weightedXPos = sumXWeight / totalWeight;
+            DuckPatternPipeline.rectPoints.add(new Point(weightedXPos, IMG_HEIGHT * 0.75));
+
+            for(int i = 0; i < IMG_HEIGHT / 4; i += 20) {
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.15, IMG_WIDTH - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.5469, IMG_WIDTH - i));
+//                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.6, IMG_WIDTH - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.92, IMG_WIDTH - i));
             }
-            confidence = Math.abs(contoursLeft - contoursCenter) / (contoursLeft + contoursCenter);
+
+             confidence = Math.sqrt(totalWeight / 20000);
+
+            if(weightedXPos < IMG_WIDTH * 0.15) {
+                currentPlacement = DuckPlacement.LEFT;
+                confidence *= 1.1; // Slight multiplier due to small possible range of values
+//                telemetry.addLine("LEFT");
+            } else if(weightedXPos < IMG_WIDTH * 0.5469) {
+                currentPlacement = DuckPlacement.CENTER;
+
+//                telemetry.addLine("CENTER");
+            } else if(weightedXPos < IMG_WIDTH * 0.95) {
+                currentPlacement = DuckPlacement.RIGHT;
+
+//                telemetry.addLine("RIGHT");
+            }
+
+            confidence = Math.min(confidence, 1.0);
+//            confidence = x;
+
+
+
+            if(telemetry != null) {
+                telemetry.addData("Placement:", currentPlacement);
+                telemetry.addData("Weighted x pos:", sumXWeight);
+                telemetry.addData("Total weight:", totalWeight);
+                telemetry.addData("Ratio \" \"", weightedXPos);
+                telemetry.addLine();
+            }
         } else {
-            confidence = 0.80; // 80% confidence if we don't see anything
-        }
+             currentPlacement = DuckPlacement.LEFT;
+             confidence = 0.825;
+         }
+
+
+//        if(contoursLeft != 0 || contoursCenter != 0) { // L & C not 0
+//            if(contoursLeft > contoursCenter) {
+//                currentPlacement = DuckPlacement.LEFT;
+//            } else {
+//                currentPlacement = DuckPlacement.RIGHT;
+//            }
+//            confidence = Math.abs(contoursLeft - contoursCenter) / (contoursLeft + contoursCenter);
+//        } else {
+//            confidence = 0.80; // 80% confidence if we don't see anything
+//        }
 
         placement = currentPlacement;
         Pair<DuckPlacement, Double> placementDataEntry = new Pair<>(currentPlacement, confidence);
@@ -495,8 +561,8 @@ public class AutoCameraControl {
             telemetry.addLine(String.format(Locale.ENGLISH, "Sat\': [%.2f, %.2f]", localHsvSat[0]*0.39215686274, localHsvSat[1]*0.39215686274));
             telemetry.addLine(String.format(Locale.ENGLISH, "Val\': [%.2f, %.2f]", localHsvVal[0]*0.39215686274, localHsvVal[1]*0.39215686274));
             telemetry.addLine();
-            telemetry.addData("contoursLeft", String.format(Locale.ENGLISH, "%.2f", contoursLeft));
-            telemetry.addData("contoursCenter", String.format(Locale.ENGLISH, "%.2f", contoursCenter));
+//            telemetry.addData("contoursLeft", String.format(Locale.ENGLISH, "%.2f", contoursLeft));
+//            telemetry.addData("contoursCenter", String.format(Locale.ENGLISH, "%.2f", contoursCenter));
 //            telemetry.addData("contoursRight", String.format(Locale.ENGLISH, "%.2f", contoursRight));
             telemetry.addLine();
             telemetry.addData("placement", placement);
@@ -528,8 +594,8 @@ public class AutoCameraControl {
             multiTelemetry.addLine(String.format(Locale.ENGLISH, "Sat: [%.2f, %.2f]", localHsvSat[0]*0.39215686274, localHsvSat[1]*0.39215686274));
             multiTelemetry.addLine(String.format(Locale.ENGLISH, "Val: [%.2f, %.2f]", localHsvVal[0]*0.39215686274, localHsvVal[1]*0.39215686274));
             multiTelemetry.addLine();
-            multiTelemetry.addData("contoursLeft", String.format(Locale.ENGLISH, "%.2f", contoursLeft));
-            multiTelemetry.addData("contoursCenter", String.format(Locale.ENGLISH, "%.2f", contoursCenter));
+//            multiTelemetry.addData("contoursLeft", String.format(Locale.ENGLISH, "%.2f", contoursLeft));
+//            multiTelemetry.addData("contoursCenter", String.format(Locale.ENGLISH, "%.2f", contoursCenter));
 //            multiTelemetry.addData("contoursRight", String.format(Locale.ENGLISH, "%.2f", contoursRight));
             multiTelemetry.addLine();
             multiTelemetry.addData("placement", placement);
@@ -609,32 +675,40 @@ public class AutoCameraControl {
     private Pair<DuckPlacement, Double> calculateAdjustedPlacement() {
         Pair<DuckPlacement, Double> newPlacement = new Pair<>(DuckPlacement.UNKNOWN, 0.0);
         double[] confSums = {0.0, 0.0, 0.0, 0,0};
+        double maxPossible = 0.0;
 
         for(int i = 0; i < fullPlacementData.size(); i++) {
             Pair<DuckPlacement, Double> data = fullPlacementData.get(i);
             double confAdj = data.snd * Math.sqrt(1-0.75*i/fullPlacementData.size()); // Decay formula = sqrt(1-(1-min^2)*i)/n) where min = 1/2
-            if(data.fst == DuckPlacement.LEFT)
-                confSums[0] += confAdj;
-            if(data.fst == DuckPlacement.CENTER)
-                confSums[1] += confAdj;
-            if(data.fst == DuckPlacement.RIGHT)
-                confSums[2] += confAdj;
-            if(data.fst == DuckPlacement.UNKNOWN)
-                confSums[3] += confAdj * 0.9; // Scale UNKNOWN by even more to reduce it's occurrence
+            switch (data.fst) {
+                case LEFT:
+                    confSums[0] += confAdj;
+                    break;
+                case CENTER:
+                    confSums[1] += confAdj;
+                    break;
+                case RIGHT:
+                    confSums[2] += confAdj;
+                    break;
+                case UNKNOWN:
+                    confSums[3] += confAdj * 0.9;// Scale UNKNOWN by even more to reduce it's occurrence
+            }
+
+            maxPossible += Math.sqrt(1-0.75*i/fullPlacementData.size()); // Scale to [0,1]
         }
 
         double maxConf = largest(confSums);
         if(confSums[0] == maxConf) {
-            newPlacement = new Pair<>(DuckPlacement.LEFT, confSums[0]);
+            newPlacement = new Pair<>(DuckPlacement.LEFT, util.roundTo(confSums[0] / maxPossible, 4));
         }
         if(confSums[1] == maxConf) {
-            newPlacement = new Pair<>(DuckPlacement.CENTER, confSums[1]);
+            newPlacement = new Pair<>(DuckPlacement.CENTER, util.roundTo(confSums[1] / maxPossible, 4));
         }
         if(confSums[2] == maxConf) {
-            newPlacement = new Pair<>(DuckPlacement.RIGHT, confSums[2]);
+            newPlacement = new Pair<>(DuckPlacement.RIGHT, util.roundTo(confSums[2] / maxPossible, 4));
         }
         if(confSums[3] > maxConf) {
-            newPlacement = new Pair<>(DuckPlacement.UNKNOWN, confSums[3]);
+            newPlacement = new Pair<>(DuckPlacement.UNKNOWN, util.roundTo(confSums[3] / maxPossible, 4));
         }
 
 

@@ -12,7 +12,9 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPatternPipeline;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPlacement;
 
-@Autonomous(name = "test cam", group = "testing")
+import java.util.Date;
+
+@Autonomous(name = "Test cam", group = "testing")
 public class TestCamera extends LinearOpMode implements DogeOpMode {
     private AutoCameraControl cam;
 
@@ -22,16 +24,25 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
 
         cam = new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
         
-        while (!cam.getCamera().hasInitialized && !isStarted() && !isStopRequested());
+        while (!cam.getCamera().hasInitialized && !opModeIsActive() && !isStopRequested());
 
         telemetry.addLine("started control");
         telemetry.update();
 
-        sleep(3000);
+//        sleep(3000);
 
-        while (!isStarted() && !isStopRequested()) {
+        while (!isStopRequested() && !opModeIsActive()) {
+            telemetry.addData("pre-init at", new Date().getTime());
             cam.periodic();
+            if(isStopRequested()) {
+                cam.getCamera().stop();
+            }
         }
+
+        telemetry.addData("start", isStarted());
+        telemetry.addData("stop", isStopRequested());
+        telemetry.addData("active", opModeIsActive());
+        telemetry.update();
 
         commander.init();
         waitForStart();
@@ -39,17 +50,17 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
         telemetry.addLine("ran");
         telemetry.addData("placement", cam.getPlacement());
         telemetry.update();
-        sleep(3000);
+//        sleep(3000);
 
         switch (choosePlacement(cam)) {
             case LEFT:
-                runPathBottom();
+                runPathTop();
                 break;
             case CENTER:
                 runPathMiddle();
                 break;
             case RIGHT:
-                runPathTop();
+                runPathBottom();
                 break;
             case UNKNOWN: //Run most point path if something goes wrong
                 runPathTop();
@@ -61,6 +72,8 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
     private void runCommonPathBeforeSplit() {
         telemetry.addLine("common path 1");
         telemetry.update();
+        cam.getCamera().stop();
+        sleep(1000);
 
 
     }
@@ -69,6 +82,7 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("bottom path");
         telemetry.update();
+        sleep(1000);
 
         runCommonPathAfterSplit();
     }
@@ -77,6 +91,7 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("middle path");
         telemetry.update();
+        sleep(1000);
 
 
         runCommonPathAfterSplit();
@@ -86,7 +101,7 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("top path");
         telemetry.update();
-
+        sleep(1000);
 
         runCommonPathAfterSplit();
     }
@@ -94,13 +109,19 @@ public class TestCamera extends LinearOpMode implements DogeOpMode {
     private void runCommonPathAfterSplit() {
         telemetry.addLine("common path 2");
         telemetry.update();
+        sleep(1000);
 
     }
 
     private DuckPlacement choosePlacement(AutoCameraControl cam) {
         DuckPlacement placement = cam.getPlacement();
-        if(!placement.name().equals(DuckPlacement.UNKNOWN.name())) {
+        if(placement.name().equals(DuckPlacement.UNKNOWN.name())) {
+            telemetry.addData("choosing at", new Date().getTime());
             cam.periodic();
+            if(isStopRequested()) {
+                cam.getCamera().stop();
+                return null;
+            }
             return choosePlacement(cam);
         }
 

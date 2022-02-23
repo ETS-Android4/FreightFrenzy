@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.subsystems;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -31,9 +32,9 @@ public class Camera {
     private static double[] hsvSat = new double[]{45.40, 164.28};
     private static double[] hsvVal = new double[]{24.68, 172.96};
     //red: top=292.49, left=295.19, bot=451.27, right:640.00
-    private static double rectTop   = 292.49;
-    private static double rectLeft  = 295.19;
-    private static double rectBot   = 451.27;
+    private static double rectTop   = 0.0;
+    private static double rectLeft  = 0.0;
+    private static double rectBot   = 246.11;
     private static double rectRight = 640;
 
     private static final int IMG_WIDTH = 480;
@@ -77,6 +78,8 @@ public class Camera {
                 telemetry.addLine("pipeline set");
                 telemetry.update();
                 webcam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                FtcDashboard.getInstance().startCameraStream(webcam, 30);
+
                 telemetry.addLine("stream");
                 telemetry.update();
 
@@ -113,6 +116,12 @@ public class Camera {
         vision.setHsvValMax(hsvVal[1]);
 
         filterContoursOutput = vision.filterContoursOutput();
+    }
+
+    public void stop() {
+        webcam.stopRecordingPipeline();
+        webcam.stopStreaming();
+        FtcDashboard.getInstance().stopCameraStream();
     }
 
     public double[] getHsvHue() {

@@ -27,11 +27,10 @@ public class DuckPatternPipeline extends OpenCvPipeline {
     private static double[] hsvVal = new double[]{50.0, 255.0};      // Testing showed 50 (min) to be enough to cut out most of the Skystone
 //bot 313.23    left 193.12 right 308.82    top 182.74  bound 253.48
 
-    // TODO: Check values
-    private static double rectTop   = 182.74;
-    private static double rectLeft  = 193.12;
-    private static double rectBot   = 313.23;
-    private static double rectRight = 308.82;
+    private static double rectTop   = 0;
+    private static double rectLeft  = 0;
+    private static double rectBot   = 480;
+    private static double rectRight = 640;
 
     //red: 533.70
     private static double bound = 533.70;
