@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CarouselColorSensor;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Kicker;
 
 @TeleOp(name = "Test Carousel Color", group = "testing")
 public class TestCarouselColorSensor extends LinearOpMode implements DogeOpMode {
@@ -19,6 +20,7 @@ public class TestCarouselColorSensor extends LinearOpMode implements DogeOpMode 
 
         CarouselColorSensor carouselColorSensor = new CarouselColorSensor(hardwareMap, telemetry);
         Carousel carousel = new Carousel(hardwareMap);
+        Kicker kicker = new Kicker(hardwareMap);
         // Subsystem sub = new Subsystem()
 
         commander.registerSubsystem(carouselColorSensor);
