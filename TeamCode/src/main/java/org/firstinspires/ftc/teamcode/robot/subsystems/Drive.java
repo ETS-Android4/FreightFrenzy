@@ -23,8 +23,6 @@ public class Drive implements Subsystem {
     // Hardware map
     private HardwareMap hardwareMap;
 
-    private final double SLOW = 0.4;
-    private final double FAST = 1.0;
 
     private enum SPEEDS {
         SLOW, FAST,
@@ -37,7 +35,7 @@ public class Drive implements Subsystem {
                 case FAST:
                     return 1.0;
                 case RL_SLOW:
-                    return slowModeValue;
+                    return 0.3;
                 default:
                     return SPEEDS.FAST.getSpeed();
             }
@@ -56,7 +54,7 @@ public class Drive implements Subsystem {
     private double frPower = 0;
     private double rlPower = 0;
     private double rrPower = 0;
-    private double goSlow = FAST;
+    private double goSlow = SPEEDS.FAST.getSpeed();
     private boolean initIMU;
 
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.4064); // 509.7 mm TODO: Tune this if needed
