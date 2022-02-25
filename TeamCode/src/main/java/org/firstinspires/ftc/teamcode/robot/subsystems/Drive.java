@@ -67,12 +67,11 @@ public class Drive implements Subsystem {
     public static final double COUNTS_PER_INCH_EMPIRICAL = 3000 / 83;
     public static final int NUMBER_OF_ENCODERS = 4;
 
-    // pubic static variables for Dashboard
-    public static double turningMultiplier = 0.5;
-    public static double movingTurnMultiplier = -1.0;
-    public static double speedMultiplier = 1.0;
-    public static double movingDeadzone = 0.05;
-    public static double slowModeValue = 0.3;
+    // Tuning values for RL Drive
+    private final double turningMultiplier = 0.5;
+    private final double movingTurnMultiplier = -1.0;
+    private final double speedMultiplier = 1.0;
+    private final double movingDeadzone = 0.05;
 
     //private final SynchronousPID pid = new SynchronousPID
 
