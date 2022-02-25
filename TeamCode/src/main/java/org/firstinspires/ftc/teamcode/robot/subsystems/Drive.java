@@ -57,8 +57,12 @@ public class Drive implements Subsystem {
     private double goSlow = SPEEDS.FAST.getSpeed();
     private boolean initIMU;
 
+    public static double kS = 0.2;
+    public static double kV = 0.0;
+    public static double kA = 0.0;
+
     private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.4064); // 509.7 mm TODO: Tune this if needed
-    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1,1,0); //TODO: Tune this
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.2,0,0); //TODO: Tune this
 
     private static final double MOTOR_COUNTS_PER_REV = 100548.0 / 187.0 / 4.0; // ~537.69 ppr / 4 counts/pulse
     private static final double MOTOR_REV_TO_WHEEL_REV = 1.0 / 1.0 * 27.0 / 17.0; // 1:1 bevel & 27:17 pulley

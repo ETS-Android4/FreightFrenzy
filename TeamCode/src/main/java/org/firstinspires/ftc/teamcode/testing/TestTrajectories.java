@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Config
 @Autonomous(name = "Test Trajectories", group = "testing")
@@ -37,8 +38,8 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
     public static double cxf = 4.0;
     public static double cyf = 0.0;
     public static double cthetaf = 0.0;
-    public static double maxAcc = 50.0;
-    public static double maxAngAcc = 50.0;
+    public static double maxAcc = 2.0;
+    public static double maxAngAcc = 1.0;
     public static double rBeta = 0.3;
     public static double rZeta = 0.1;
 
@@ -60,7 +61,7 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         Pose2d start = new Pose2d(Units.feetToMeters(ax0), Units.feetToMeters(ay0), Rotation2d.fromDegrees(atheta0));
         Pose2d end = new Pose2d(Units.feetToMeters(cxf), Units.feetToMeters(cyf), Rotation2d.fromDegrees(cthetaf));
 
-        ArrayList<Translation2d> interiorWaypoints = new ArrayList<>();
+        List<Translation2d> interiorWaypoints = new ArrayList<>();
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(bx1), Units.feetToMeters(by1)));
 
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(maxAcc), Units.feetToMeters(maxAngAcc));
@@ -75,7 +76,8 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
         commander.init();
 
         telemetry.addLine("Ready!");
-        telemetry.addData("Total time", trajectory.getTotalTimeSeconds());
+        telemetry.addData("Total time:", trajectory.getTotalTimeSeconds());
+        telemetry.addData("States:",trajectory.getStates());
         telemetry.update();
 
         waitForStart();
@@ -92,6 +94,8 @@ public class TestTrajectories extends LinearOpMode implements DogeOpMode {
 //
 //        double leftPower = pidfController.calculate(leftSpeed);
 //        double rightPower = pidfController.calculate(rightSpeed);
+
+        commander.stop();
 
     }
 }
