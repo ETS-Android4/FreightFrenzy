@@ -87,3 +87,4 @@ lint/tmp/
 # lint/reports/
 TeamCode/src/main/java/org/firstinspires/ftc/teamcode/testing/TestCarouselColorSensor.java
 TeamCode/src/main/java/org/firstinspires/ftc/teamcode/testing/TestCarouselColorSensor.java
+*.java
