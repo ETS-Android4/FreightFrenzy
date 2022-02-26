@@ -28,17 +28,12 @@ public class TrackRobotPosition {
     private Telemetry telemetry;
 
     private ElapsedTime timer;
-    private SwampbotsUtil util;
 
     private Pose2d currentPos;
     private double t0;
     private Rotation2d theta;
     private double velocity;
     private Pair<int[], int[]> encoderPositions;
-
-    private final boolean REVERSE_X = false;
-    private final boolean REVERSE_Y = false;
-    private final double SCALE_POSITION = 6.35426791023; // Found thru ~8 tests of 24 inches and found the measured value
 
     public static double scaleVelocity = 3.0;
 
@@ -48,7 +43,6 @@ public class TrackRobotPosition {
         this.telemetry = telemetry;
 
         timer = new ElapsedTime();
-        util = new SwampbotsUtil();
     }
 
     public TrackRobotPosition(Drive drive, Pose2d initialPos) {
@@ -88,22 +82,22 @@ public class TrackRobotPosition {
 //        Rotation2d deltaTheta = theta.minus(currentPos.getRotation());
 
         // Parameterize velocity into x and y components
-        double vx = velocity * theta.getCos() * (REVERSE_X ? -1 : 1);
-        double vy = velocity * theta.getSin() * (REVERSE_Y ? -1 : 1);
+        double vx = velocity * theta.getCos();
+        double vy = velocity * theta.getSin();
         double deltaX = deltaT * vx;
         double deltaY = deltaT * vy;
-        Translation2d deltaPos = new Translation2d(deltaX, deltaY).times(SCALE_POSITION);
+        Translation2d deltaPos = new Translation2d(deltaX, deltaY);
 
 //        currentPos.plus(new Transform2d(deltaPos, deltaTheta));
         currentPos = new Pose2d(currentPos.getTranslation().plus(deltaPos), theta);
 
         if(telemetry != null) {
             telemetry.addLine("Robot Tracker Data:");
-            telemetry.addLine(String.format(Locale.ENGLISH, "current (x,y,Θ) = (%f, %f, %.4f)", currentPos.getX(), currentPos.getY(), currentPos.getRotation().getDegrees()));
+            telemetry.addLine(String.format(Locale.ENGLISH, "current (x,y,Θ) = (%.2f, %.2f, %.2f)", currentPos.getX(), currentPos.getY(), currentPos.getRotation().getDegrees()));
             telemetry.addLine(String.format(Locale.ENGLISH, "velocity (v,vx,vy) = (%.4f, %.4f, %.4f)", velocity, vx, vy));
             telemetry.addLine(String.format(Locale.ENGLISH, "change (Δx,Δy,ΔΘ) = (%.4f, %.4f, %.4f)", deltaX, deltaY, -1.0));
-            telemetry.addData("theta.sin()", util.roundTo(theta.getSin(), 4));
-            telemetry.addData("theta.cos()", util.roundTo(theta.getCos(), 4));
+            telemetry.addData("theta.sin()", theta.getSin());
+            telemetry.addData("theta.cos()", theta.getCos());
 //            telemetry.addData("deltaTheta", deltaTheta);
             telemetry.addData("deltaPos", deltaPos);
             telemetry.addLine();
@@ -157,11 +151,11 @@ public class TrackRobotPosition {
         velocity = Units.inchesToMeters(velocity / Drive.COUNTS_PER_INCH_EMPIRICAL);
 
         if(telemetry != null) {
+            telemetry.addLine();
             telemetry.addData("FL Adj Velo:", velocities[0]);
             telemetry.addData("FR Adj Velo:", velocities[1]);
             telemetry.addData("RL Adj Velo:", velocities[2]);
             telemetry.addData("RR Adj Velo:", velocities[3]);
-            telemetry.addLine();
         }
 
         periodic(velocity, angle);

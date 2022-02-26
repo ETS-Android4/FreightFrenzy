@@ -34,17 +34,6 @@ public class TestDriveTrackingCommand implements Command {
 
         tracker = new TrackRobotPosition(drive, this.telemetry);
     }
-    public TestDriveTrackingCommand(Drive drive, Telemetry telemetry) {
-        this.drive = drive;
-        this.gamepad = null;
-        this.telemetry = telemetry;
-
-        for(DcMotorEx m : drive.getMotors()) {
-            encoders.add(new Encoder(m));
-        }
-
-        tracker = new TrackRobotPosition(drive, this.telemetry);
-    }
     public TestDriveTrackingCommand(Drive drive, Gamepad gamepad) {
         this(drive ,gamepad, null);
     }
@@ -59,17 +48,11 @@ public class TestDriveTrackingCommand implements Command {
 
     @Override
     public void periodic() {
-        double speed = 0;
-        double turn = 0;
-        boolean goSlow = false;
-        if(gamepad != null) {
-            speed = gamepad.left_stick_y;
-            turn = gamepad.right_stick_x;
-            goSlow = gamepad.left_bumper || gamepad.right_bumper;
+        double speed = gamepad.left_stick_y;
+        double turn = gamepad.right_stick_x;
+        boolean goSlow = gamepad.left_bumper || gamepad.right_bumper;
 
-            drive.setArcadePower(speed, turn, goSlow);
-        }
-
+        drive.setArcadePower(speed, turn, goSlow);
 
         double[] velocities = encoders.stream().
                 flatMapToDouble(encoder -> DoubleStream.of(encoder.getCorrectedVelocity()))
