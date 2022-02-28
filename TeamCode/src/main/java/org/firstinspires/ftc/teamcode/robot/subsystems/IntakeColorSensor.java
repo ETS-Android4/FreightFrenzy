@@ -114,34 +114,34 @@ public class IntakeColorSensor implements Subsystem {
         std_blue = 10;
         std_green = 10;
 
-        if(telemetry != null) {
-            telemetry.addData("a", sensor.alpha());
-            telemetry.addData("r", sensor.red());
-            telemetry.addData("g", sensor.green());
-            telemetry.addData("b", sensor.blue());
-            telemetry.addData("n", sampleSize);
-            telemetry.addLine();
-            telemetry.addData("sa",         sum_alpha);
-            telemetry.addData("sa2", sum_square_alpha);
-            telemetry.addData("muA",         mu_alpha);
-            telemetry.addData("stdA",       std_alpha);
-            telemetry.addLine();
-            telemetry.addData("sr",         sum_red);
-            telemetry.addData("sr2", sum_square_red);
-            telemetry.addData("muR",         mu_red);
-            telemetry.addData("stdR",       std_red);
-            telemetry.addLine();
-            telemetry.addData("sg",         sum_green);
-            telemetry.addData("sg2", sum_square_green);
-            telemetry.addData("muG",         mu_green);
-            telemetry.addData("stdG",       std_green);
-            telemetry.addLine();
-            telemetry.addData("sb",         sum_blue);
-            telemetry.addData("sb2", sum_square_blue);
-            telemetry.addData("muB",         mu_blue);
-            telemetry.addData("stdB",       std_blue);
-            telemetry.addLine();
-        }
+//        if(telemetry != null) {
+//            telemetry.addData("a", sensor.alpha());
+//            telemetry.addData("r", sensor.red());
+//            telemetry.addData("g", sensor.green());
+//            telemetry.addData("b", sensor.blue());
+//            telemetry.addData("n", sampleSize);
+//            telemetry.addLine();
+//            telemetry.addData("sa",         sum_alpha);
+//            telemetry.addData("sa2", sum_square_alpha);
+//            telemetry.addData("muA",         mu_alpha);
+//            telemetry.addData("stdA",       std_alpha);
+//            telemetry.addLine();
+//            telemetry.addData("sr",         sum_red);
+//            telemetry.addData("sr2", sum_square_red);
+//            telemetry.addData("muR",         mu_red);
+//            telemetry.addData("stdR",       std_red);
+//            telemetry.addLine();
+//            telemetry.addData("sg",         sum_green);
+//            telemetry.addData("sg2", sum_square_green);
+//            telemetry.addData("muG",         mu_green);
+//            telemetry.addData("stdG",       std_green);
+//            telemetry.addLine();
+//            telemetry.addData("sb",         sum_blue);
+//            telemetry.addData("sb2", sum_square_blue);
+//            telemetry.addData("muB",         mu_blue);
+//            telemetry.addData("stdB",       std_blue);
+//            telemetry.addLine();
+//        }
 
         try {
             controlDists[0] = new NormalDistribution(mu_alpha, std_alpha);
@@ -154,29 +154,35 @@ public class IntakeColorSensor implements Subsystem {
             }
         }
 
+
         if(telemetry != null) {
-            telemetry.addData("p(a)=",controlDists[0].cumulativeProbability(sensor.alpha()));
-            telemetry.addData("p(r)=",controlDists[1].cumulativeProbability(sensor.red()));
-            telemetry.addData("p(g)=",controlDists[2].cumulativeProbability(sensor.green()));
-            telemetry.addData("p(b)=",controlDists[3].cumulativeProbability(sensor.blue()));
-            telemetry.addLine();
-            telemetry.addData("q=",
-                    controlDists[0].cumulativeProbability(sensor.alpha()) *
-                            controlDists[1].cumulativeProbability(sensor.red()) *
-                            controlDists[2].cumulativeProbability(sensor.green())); //*
-//                            controlDists[3].cumulativeProbability(sensor.blue()));
-            telemetry.addData("p=",1 -
-                    controlDists[0].cumulativeProbability(sensor.alpha()) *
-                            controlDists[1].cumulativeProbability(sensor.red()) *
-                            controlDists[2].cumulativeProbability(sensor.green())); // *
-//                            controlDists[3].cumulativeProbability(sensor.blue()));
-            telemetry.addLine();
-            telemetry.addData("do we got something?", doesSensorSeeAnything());
-            telemetry.addData("what do we have?", has);
-
-
+            toTelemetry();
             telemetry.update();
         }
+
+//        if(telemetry != null) {
+//            telemetry.addData("p(a)=",controlDists[0].cumulativeProbability(sensor.alpha()));
+//            telemetry.addData("p(r)=",controlDists[1].cumulativeProbability(sensor.red()));
+//            telemetry.addData("p(g)=",controlDists[2].cumulativeProbability(sensor.green()));
+//            telemetry.addData("p(b)=",controlDists[3].cumulativeProbability(sensor.blue()));
+//            telemetry.addLine();
+//            telemetry.addData("q=",
+//                    controlDists[0].cumulativeProbability(sensor.alpha()) *
+//                            controlDists[1].cumulativeProbability(sensor.red()) *
+//                            controlDists[2].cumulativeProbability(sensor.green())); //*
+////                            controlDists[3].cumulativeProbability(sensor.blue()));
+//            telemetry.addData("p=",1 -
+//                    controlDists[0].cumulativeProbability(sensor.alpha()) *
+//                            controlDists[1].cumulativeProbability(sensor.red()) *
+//                            controlDists[2].cumulativeProbability(sensor.green())); // *
+////                            controlDists[3].cumulativeProbability(sensor.blue()));
+//            telemetry.addLine();
+//            telemetry.addData("do we got something?", doesSensorSeeAnything());
+//            telemetry.addData("what do we have?", has);
+//
+//
+//            telemetry.update();
+//        }
     }
 
     public Scalar getColor() {
@@ -213,15 +219,15 @@ public class IntakeColorSensor implements Subsystem {
 //                double muARG = (pAlpha + pRed + pGreen) / 3.0;
 //                double sum2ARG = pAlpha * pAlpha + pRed * pRed + pGreen * pGreen;
 //                double pBlueDiff = new NormalDistribution(muARG, Math.sqrt(sum2ARG / 3.0 + muARG * muARG)).cumulativeProbability(pBlue);
-//
-//                if(telemetry != null) {
-//                    telemetry.addData("sumARG", muARG * 3);
-//                    telemetry.addData("muARG", muARG);
-//                    telemetry.addData("sum2ARG", sum2ARG);
-//                    telemetry.addData("pBlueDiff", pBlueDiff);
-//                }
 
                 double pBlueDiff = pAlpha + pRed + pGreen - 3.0 * pBlue; // sum(pX - pBlue)
+
+                if(telemetry != null) {
+                    telemetry.addData("A-B", pAlpha);
+                    telemetry.addData("R-B", pRed);
+                    telemetry.addData("G-B", pGreen);
+                    telemetry.addData("pBlueDiff", pBlueDiff);
+                }
 
                 if(pBlueDiff < 0.0001) {
                     has = HAS.BALL;
@@ -238,6 +244,67 @@ public class IntakeColorSensor implements Subsystem {
             return false;
         }
 
+    }
+
+    public void toTelemetry(Telemetry t) {
+        t.addLine("Intake Color Sensor Telemetry:");
+        t.addData("a", sensor.alpha());
+        t.addData("r", sensor.red());
+        t.addData("g", sensor.green());
+        t.addData("b", sensor.blue());
+        t.addData("n", sampleSize);
+        t.addLine();
+        t.addData("sa",         sum_alpha);
+        t.addData("sa2", sum_square_alpha);
+        t.addData("muA",         mu_alpha);
+        t.addData("stdA",       std_alpha);
+        t.addLine();
+        t.addData("sr",         sum_red);
+        t.addData("sr2", sum_square_red);
+        t.addData("muR",         mu_red);
+        t.addData("stdR",       std_red);
+        t.addLine();
+        t.addData("sg",         sum_green);
+        t.addData("sg2", sum_square_green);
+        t.addData("muG",         mu_green);
+        t.addData("stdG",       std_green);
+        t.addLine();
+        t.addData("sb",         sum_blue);
+        t.addData("sb2", sum_square_blue);
+        t.addData("muB",         mu_blue);
+        t.addData("stdB",       std_blue);
+        t.addLine();
+
+        try {
+            t.addData("p(a)=",controlDists[0].cumulativeProbability(sensor.alpha()));
+            t.addData("p(r)=",controlDists[1].cumulativeProbability(sensor.red()));
+            t.addData("p(g)=",controlDists[2].cumulativeProbability(sensor.green()));
+            t.addData("p(b)=",controlDists[3].cumulativeProbability(sensor.blue()));
+            t.addLine();
+            t.addData("q=",
+                    controlDists[0].cumulativeProbability(sensor.alpha()) *
+                            controlDists[1].cumulativeProbability(sensor.red()) *
+                            controlDists[2].cumulativeProbability(sensor.green())); //*
+//                            controlDists[3].cumulativeProbability(sensor.blue()));
+            t.addData("p=",1 -
+                    controlDists[0].cumulativeProbability(sensor.alpha()) *
+                            controlDists[1].cumulativeProbability(sensor.red()) *
+                            controlDists[2].cumulativeProbability(sensor.green())); // *
+//                            controlDists[3].cumulativeProbability(sensor.blue()));
+            t.addLine();
+            t.addData("do we got something?", doesSensorSeeAnything());
+            t.addData("what do we have?", has);
+        } catch (Exception e) {
+            t.addData("Error:", e);
+        } finally {
+            t.addLine();
+        }
+    }
+
+    public void toTelemetry() {
+        if(telemetry != null) {
+            toTelemetry(telemetry);
+        }
     }
 
 }
