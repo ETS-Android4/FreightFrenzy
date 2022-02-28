@@ -11,19 +11,26 @@ public class Cap implements Subsystem {
     private Servo cap;
 
     private POSITIONS position;
+    private double pos;
 
     public static double testPos = -1;
 
     public enum POSITIONS {
         IN,
+        HOLD,
+        PLACE,
         OUT;
 
         public double getPosition() {
             switch (this) {
                 case IN:
-                    return 0.0;
-                case OUT:
+                    return 1.0;
+                case HOLD:
                     return 0.5;
+                case PLACE:
+                    return 0.4;
+                case OUT:
+                    return 0.1;
                 default:
                     return IN.getPosition();
             }
@@ -40,12 +47,12 @@ public class Cap implements Subsystem {
         cap.setDirection(Servo.Direction.FORWARD);
 
         position = POSITIONS.IN;
-
+        pos = position.getPosition();
     }
 
     @Override
     public void periodic() {
-        double pos = position.getPosition();
+
 
         // Easy position testing setup using FtcDashboard
         if(testPos != -1.0) {
@@ -57,6 +64,10 @@ public class Cap implements Subsystem {
 
     public void setPosition(POSITIONS position) {
         this.position = position;
+        pos = position.getPosition();
+    }
+    public void increment(double val) {
+        pos += val;
     }
 
     public void setDirection(Servo.Direction direction) {

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.CommandDrive;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Cap;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
@@ -15,8 +16,7 @@ public class TeleOpCapstoneControl implements Command {
     private Gamepad gamepad;
     private Telemetry telemetry;
 
-    private final double POWER_SCALAR = 0.9;
-    private final double POWER_PRE_SCALAR = 0.7;
+    private final double INCREMENT_VAL = 0.00002;
 
     public TeleOpCapstoneControl(Cap cap, Gamepad gamepad, Telemetry telemetry) {
         this.cap = cap;
@@ -30,18 +30,18 @@ public class TeleOpCapstoneControl implements Command {
 
     @Override
     public void start() {
-        cap.setPower(0.0);
+        cap.setPosition(Cap.POSITIONS.IN);
     }
 
     @Override
     public void periodic() {
-        double power = Range.clip(gamepad.right_stick_y / POWER_PRE_SCALAR, -1, 1);
-
-        cap.setPower(power * POWER_SCALAR);
+        cap.increment(
+                gamepad.right_stick_y > CommandDrive.TRIGGER_THRESHOLD ? INCREMENT_VAL :
+                gamepad.right_stick_y < -CommandDrive.TRIGGER_THRESHOLD ? -INCREMENT_VAL : 0);
 
         if(telemetry != null) {
             telemetry.addLine("Cap telemetry:");
-            telemetry.addData("power", cap.getPower());
+            telemetry.addData("pos", cap.getPosition());
             telemetry.addData("direction", cap.getDirection());
             telemetry.update();
         }
@@ -49,7 +49,7 @@ public class TeleOpCapstoneControl implements Command {
 
     @Override
     public void stop() {
-        cap.setPower(0.0);
+        cap.setPosition(cap.getPosition());
     }
 
     @Override
