@@ -61,6 +61,10 @@ public class Intake implements Subsystem {
         return intake.getDirection();
     }
 
+    public LIFT_POSITIONS getPosition() {
+        return position;
+    }
+
     public void setPower(double power) {
         this.power = power;
     }
