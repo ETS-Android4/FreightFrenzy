@@ -67,7 +67,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
                 new TeleOpArcadeControl(drive, gamepad1),
                 new TeleOpCarouselControl(carousel, gamepad2),
                 new TeleOpIntakeControl(intake, gamepad2),
-                new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeColorSensor, gamepad1, telemetry)
+                new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeColorSensor, gamepad2, telemetry)
 
 //                new TeleOpLineColorSensor(lineColorSensor, true)
 //                new TeleOpIntakeColorSensor(intakeColorSensor, true)
