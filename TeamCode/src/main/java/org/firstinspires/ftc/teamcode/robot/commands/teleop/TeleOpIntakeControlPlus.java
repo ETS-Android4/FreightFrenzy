@@ -88,6 +88,7 @@ public class TeleOpIntakeControlPlus implements Command {
             if(liftToggle) {
                     if(intake.getPosition() == Intake.LIFT_POSITIONS.IN) {
                         misfireTimer = 0;
+                        delayUntilOverrideAgainTimer = 0;
                     }
                 intake.toggle();
                 liftToggle = false;

@@ -2,13 +2,16 @@ package org.firstinspires.ftc.teamcode.robot.subsystems;
 
 import com.disnodeteam.dogecommander.Subsystem;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 public class Intake implements Subsystem {
     private HardwareMap hardwareMap;
-    private DcMotor intake;
+    private DcMotorEx intake;
     private Servo lift;
 
     private double power;
@@ -21,9 +24,9 @@ public class Intake implements Subsystem {
         public double getPosition() {
             switch (this) {
                 case IN:
-                    return 1.0;
-                case OUT:
                     return 0.4;
+                case OUT:
+                    return 1.0;
                 default:
                     return 0.0;
             }
@@ -36,7 +39,7 @@ public class Intake implements Subsystem {
 
     @Override
     public void initHardware() {
-        intake = hardwareMap.get(DcMotor.class,"intake");
+        intake = hardwareMap.get(DcMotorEx.class,"intake");
         lift = hardwareMap.get(Servo.class, "intake_lift");
 
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -63,6 +66,10 @@ public class Intake implements Subsystem {
 
     public LIFT_POSITIONS getPosition() {
         return position;
+    }
+
+    public double getCurrent() {
+        return intake.getCurrent(CurrentUnit.MILLIAMPS);
     }
 
     public void setPower(double power) {

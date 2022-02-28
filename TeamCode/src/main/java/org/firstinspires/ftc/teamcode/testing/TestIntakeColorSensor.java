@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControlPlus;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CarouselColorSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
@@ -19,7 +20,7 @@ public class TestIntakeColorSensor extends LinearOpMode implements DogeOpMode {
     public void runOpMode() throws InterruptedException {
         DogeCommander commander = new DogeCommander(this);
 
-        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap, telemetry);
+        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         // Subsystem sub = new Subsystem()
 
@@ -31,7 +32,7 @@ public class TestIntakeColorSensor extends LinearOpMode implements DogeOpMode {
         waitForStart();
 
         commander.runCommandsParallel(
-                new TeleOpIntakeControl(intake, gamepad1)
+                new TeleOpIntakeControlPlus(intake, intakeColorSensor, gamepad1, telemetry)
                 // new CommandToTest(sub...)
         );
     }

@@ -21,6 +21,8 @@ public class IntakeColorSensor implements Subsystem {
     private NormalDistribution[] controlDists = new NormalDistribution[4];
     private final double SENSITIVITY = 0.05;
 
+    private final double STDDEV_OVERRIDE = 25.0;
+
     private Scalar color;
 
     private long sum_alpha = 0;
@@ -109,10 +111,13 @@ public class IntakeColorSensor implements Subsystem {
             if (std_green == 0) std_green = 1;
             if (std_blue == 0) std_blue = 1;
         }
-        std_alpha = 10;
-        std_red = 10;
-        std_blue = 10;
-        std_green = 10;
+        if(STDDEV_OVERRIDE > 0) {
+            std_alpha   = STDDEV_OVERRIDE;
+            std_red     = STDDEV_OVERRIDE;
+            std_blue    = STDDEV_OVERRIDE;
+            std_green   = STDDEV_OVERRIDE;
+        }
+
 
 //        if(telemetry != null) {
 //            telemetry.addData("a", sensor.alpha());
