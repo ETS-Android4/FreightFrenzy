@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCapstoneContro
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpDriveControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeColorSensor;
-import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControl;
+import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpIntakeControlPlus;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpLineColorSensor;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpRocketLeagueDriveControl;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpSlideControl;
@@ -43,7 +43,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         Carousel carousel = new Carousel(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
-//        Cap cap = new Cap(hardwareMap);
+        Cap cap = new Cap(hardwareMap);
 
 //        LineColorSensor lineColorSensor = new LineColorSensor(hardwareMap);
 //        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
@@ -56,6 +56,7 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(carousel);
         commander.registerSubsystem(intake);
         commander.registerSubsystem(intakeColorSensor);
+        commander.registerSubsystem(cap);
 
 //        commander.registerSubsystem(lineColorSensor);
 //        commander.registerSubsystem(intakeColorSensor);
@@ -66,8 +67,9 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         commander.runCommandsParallel(
                 new TeleOpArcadeControl(drive, gamepad1),
                 new TeleOpCarouselControl(carousel, gamepad2),
-                new TeleOpIntakeControl(intake, gamepad2),
-                new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeColorSensor, gamepad2, telemetry)
+                new TeleOpIntakeControlPlus(intake, intakeColorSensor, gamepad2),
+                new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeColorSensor, gamepad2, telemetry),
+                new TeleOpCapstoneControl(cap, gamepad1)
 
 //                new TeleOpLineColorSensor(lineColorSensor, true)
 //                new TeleOpIntakeColorSensor(intakeColorSensor, true)
