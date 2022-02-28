@@ -155,7 +155,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
             //TODO: Make sure this all works
             switch (currentState) {
                 case INTAKE:
-                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.IN.getTargets(), 10) && armToggle != "intake") {
+                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.IN.getTargets(), 10) && !armToggle.equals("intake")) {
                         kicker.open();
                         armToggle = "intake";
                         autoIntake = false;
@@ -203,7 +203,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
 
                     break;
                 case DEPOSIT:
-                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets(), 10) && armToggle != "deposit") {
+                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.OUT.getTargets(), 10) && !armToggle.equals("deposit")) {
                         arm.deposit();
                         armToggle = "deposit";
                     }
@@ -275,7 +275,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
 
                     break;
                 case HIGH_SHARED:
-                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.HIGH_SHARED.getTargets(), 10) && armToggle != "high") {
+                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.HIGH_SHARED.getTargets(), 10) && !armToggle.equals("high")) {
                         arm.deposit();
 
                         armToggle = "high";
@@ -346,7 +346,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
 
                     break;
                 case LOW_SHARED:
-                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.LOW_SHARED.getTargets(), 10) && armToggle != "low") {
+                    if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.LOW_SHARED.getTargets(), 10) && !armToggle.equals("low")) {
                         arm.deposit();
                         armToggle = "low";
                     }
