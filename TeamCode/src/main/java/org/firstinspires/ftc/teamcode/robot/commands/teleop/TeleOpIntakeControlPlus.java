@@ -120,6 +120,8 @@ public class TeleOpIntakeControlPlus implements Command {
             telemetry.addLine();
             telemetry.addData("Position:", intake.getPosition());
             telemetry.addLine();
+            telemetry.addData("Current (mA):", intake.getCurrent());
+            telemetry.addLine();
 
             telemetry.addData("deltaT=", deltaT);
             telemetry.addData("t0:", t0);
