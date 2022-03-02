@@ -19,7 +19,7 @@ public class IntakeColorSensor implements Subsystem {
     private final int MAX_SAMPLE_SIZE = 100;
     private int sampleSize = 0;
     private NormalDistribution[] controlDists = new NormalDistribution[4];
-    private final double SENSITIVITY = 0.05;
+    private final double SENSITIVITY = 0.01; //TODO: Tune this
 
     private final double STDDEV_OVERRIDE = 25.0;
 
