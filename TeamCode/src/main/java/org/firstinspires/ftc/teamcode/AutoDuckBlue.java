@@ -212,26 +212,6 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
                         }
                 ));
         sleep(500);
-        commander.runCommand(new KickerSetState(kicker, Kicker.POSITION.CLOSE));
-        sleep(300);
-        commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
-        sleep(700);
-        commander.runCommandsParallel(
-                new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.5),
-                new ActionAfterStatement(
-                        new ArmSetState(arm, Arm.POSITION.INTAKE),
-                        new BooleanSupplier() {
-                            @Override
-                            public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 50);
-                            }
-                        }
-                )
-        );
-        sleep(1000);
-
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(25.0), 50, 0.3, telemetry));
-        sleep(1000);
     }
 
     public void runPathMiddle() {
@@ -256,26 +236,6 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
                         }
                 ));
         sleep(500);
-        commander.runCommand(new KickerSetState(kicker, Kicker.POSITION.CLOSE));
-        sleep(300);
-        commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
-        sleep(700);
-        commander.runCommandsParallel(
-                new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.5),
-                new ActionAfterStatement(
-                        new ArmSetState(arm, Arm.POSITION.INTAKE),
-                        new BooleanSupplier() {
-                            @Override
-                            public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 50);
-                            }
-                        }
-                )
-        );
-        sleep(1000);
-
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(25.0), 50, 0.3, telemetry));
-        sleep(1000);
     }
 
     public void runPathTop() {
@@ -300,6 +260,15 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
                         }
                 ));
         sleep(500);
+
+
+    }
+
+    public void runCommonPathAfterSplit() {
+        telemetry.addLine("common path 2");
+        telemetry.update();
+        sleep(1000);
+
         commander.runCommand(new KickerSetState(kicker, Kicker.POSITION.CLOSE));
         sleep(300);
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
@@ -320,13 +289,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(25.0), 50, 0.3, telemetry));
         sleep(1000);
-    }
 
-    public void runCommonPathAfterSplit() {
-        telemetry.addLine("common path 2");
-        telemetry.update();
-        sleep(1000);
-        
         commander.runCommand(new ActionUntilStatement(
                 new DriveByTimer(drive, 1, 0.2),
                 new BooleanSupplier() {
