@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpCarouselControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 
+@Disabled
 @TeleOp(name = "Test Carousel", group = "testing")
 public class TestCarousel extends LinearOpMode implements DogeOpMode {
 

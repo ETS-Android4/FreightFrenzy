@@ -76,6 +76,7 @@ public class TrackRobotPosition {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void periodic(double velocity, float angle) {
         double deltaT = timer.seconds() - t0;
+        t0 = timer.seconds();
 
         // Change in angle of rotation
         theta = new Rotation2d(Units.degreesToRadians(angle));
@@ -105,7 +106,6 @@ public class TrackRobotPosition {
             telemetry.addLine(); // We don't update telemetry here because we update it in main program
         }
 
-        t0 = timer.seconds();
     }
 
     /**

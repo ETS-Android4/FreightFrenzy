@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpSlideControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
+@Disabled
 @TeleOp(name = "Test Slides", group = "testing")
 public class TestSlides extends LinearOpMode implements DogeOpMode {
 

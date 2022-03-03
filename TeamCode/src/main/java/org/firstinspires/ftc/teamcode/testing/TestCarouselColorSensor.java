@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CarouselColorSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Kicker;
 
+@Disabled
 @TeleOp(name = "Test Carousel Color", group = "testing")
 public class TestCarouselColorSensor extends LinearOpMode implements DogeOpMode {
 

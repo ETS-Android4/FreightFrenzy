@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+@Disabled
 @TeleOp(name = "Test Gamepad Rumble", group = "testing")
 public class TestGamepadVibrations extends OpMode {
     private ElapsedTime timer;

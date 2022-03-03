@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpDriveCurrentTr
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpRocketLeagueDriveControl;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
 
+@Disabled
 @TeleOp(name = "Test RL Control", group = "testing")
 public class TestRocketLeagueControl extends LinearOpMode implements DogeOpMode {
 

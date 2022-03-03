@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpLineColorSenso
 import org.firstinspires.ftc.teamcode.robot.subsystems.IntakeColorSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.LineColorSensor;
 
-
+@Disabled
 @TeleOp(name = "Test Color Sensors", group = "testing")
 public class TestColorSensors extends LinearOpMode implements DogeOpMode {
 
