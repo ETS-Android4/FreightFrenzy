@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.auto.ArmSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.AutoCameraControl;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByEncoder;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByTimer;
+import org.firstinspires.ftc.teamcode.robot.commands.auto.IntakeSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.KickerSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.RunCarouselForTime;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.SlidesByEncoder;
@@ -30,6 +31,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CarouselColorSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Kicker;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPlacement;
@@ -49,6 +51,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     private Arm arm;
     private Slides slides;
     private Kicker kicker;
+    private Intake intake;
     private AutoCameraControl cam;
 
     private SwampbotsUtil util = new SwampbotsUtil();
@@ -67,6 +70,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         arm = new Arm(hardwareMap);
         slides = new Slides(hardwareMap);
         kicker = new Kicker(hardwareMap);
+        intake = new Intake(hardwareMap);
         cam = new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
 
@@ -76,6 +80,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(arm);
         commander.registerSubsystem(slides);
         commander.registerSubsystem(kicker);
+        commander.registerSubsystem(intake);
 
         // Wait for cam to initialize
         while (!cam.getCamera().hasInitialized && !opModeIsActive() && !isStopRequested());
@@ -185,7 +190,9 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         cam.getCamera().stop();
         if(EXTRA_WAIT_TIMES) sleep(1000);
 
-        commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
+        commander.runCommandsParallel(
+                new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                new IntakeSetState(intake, Intake.LIFT_POSITIONS.IN));
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-19), 0, 0.3, telemetry));
         sleep(300);
         commander.runCommand(new TurnByGyroPID(drive, telemetry, 50, 0.3));

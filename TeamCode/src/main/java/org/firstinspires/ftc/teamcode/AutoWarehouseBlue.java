@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.auto.ArmSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.AutoCameraControl;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByEncoder;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByTimer;
+import org.firstinspires.ftc.teamcode.robot.commands.auto.IntakeSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.KickerSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.RunCarouselForTime;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.SlidesByEncoder;
@@ -133,7 +134,9 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         cam.getCamera().stop();
         if(EXTRA_WAIT_TIMES) sleep(1000);
 
-        commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
+        commander.runCommandsParallel(
+                new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                new IntakeSetState(intake, Intake.LIFT_POSITIONS.IN));
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), 0, 0.3, telemetry));
         sleep(300);
         commander.runCommand(new TurnByGyroPID(drive, telemetry, -25, 0.3));
