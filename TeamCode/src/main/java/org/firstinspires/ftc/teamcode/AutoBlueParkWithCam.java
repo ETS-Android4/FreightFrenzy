@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.commands.auto.ArmSetState;
@@ -23,6 +24,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.swampbots_util.DuckPlacement;
 
+@Deprecated
+@Disabled
 @Autonomous(name = "Blue Park w\\ Cam", group = "finalized")
 public class AutoBlueParkWithCam extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander = new DogeCommander(this);

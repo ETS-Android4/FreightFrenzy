@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -20,6 +21,8 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
 import static org.firstinspires.ftc.teamcode.CommandDrive.DEFAULT_TIMEOUT;
 
+@Deprecated
+@Disabled
 @Autonomous(name = "Blue Park", group = "finalized")
 public class AutoBluePark extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander = new DogeCommander(this);

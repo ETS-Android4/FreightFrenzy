@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.robot.commands.auto.ArmSetState;
@@ -23,6 +24,8 @@ import androidx.annotation.NonNull;
 
 import static org.firstinspires.ftc.teamcode.CommandDrive.DEFAULT_TIMEOUT;
 
+@Deprecated
+@Disabled
 @Autonomous(name = "Red Park w\\ Cam", group = "finalized")
 public class AutoRedParkWithCam extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander = new DogeCommander(this);
