@@ -51,6 +51,8 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
     public static double CAM_OVERRIDE = -1;
 
+    private final boolean EXTRA_WAIT_TIMES = true;
+
     @Override
     public void runOpMode() throws InterruptedException {
         commander = new DogeCommander(this);
@@ -129,7 +131,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         telemetry.addLine("common path 1");
         telemetry.update();
         cam.getCamera().stop();
-        sleep(1000);
+        if(EXTRA_WAIT_TIMES) sleep(1000);
 
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), 0, 0.3, telemetry));
@@ -143,7 +145,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("bottom path");
         telemetry.update();
-        sleep(1000);
+        if(EXTRA_WAIT_TIMES) sleep(1000);
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
         commander.runCommandsParallel(
@@ -170,7 +172,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("middle path");
         telemetry.update();
-        sleep(1000);
+        if(EXTRA_WAIT_TIMES) sleep(1000);
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
         commander.runCommandsParallel(
@@ -198,7 +200,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("top path");
         telemetry.update();
-        sleep(1000);
+        if(EXTRA_WAIT_TIMES) sleep(1000);
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
         commander.runCommandsParallel(
@@ -224,7 +226,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     private void runCommonPathAfterSplit() {
         telemetry.addLine("common path 2");
         telemetry.update();
-        sleep(1000);
+        if(EXTRA_WAIT_TIMES) sleep(1000);
 
         commander.runCommand(new KickerSetState(kicker, Kicker.POSITION.CLOSE));
         sleep(300);
