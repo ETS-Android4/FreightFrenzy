@@ -178,6 +178,11 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     }
 
     public void runCommonPathBeforeSplit() {
+        telemetry.addLine("common path 1");
+        telemetry.update();
+        cam.getCamera().stop();
+        sleep(1000);
+
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-19), 0, 0.3, telemetry));
         sleep(300);
@@ -186,6 +191,11 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     }
 
     public void runPathBottom() {
+        runCommonPathBeforeSplit();
+        telemetry.addLine("bottom path");
+        telemetry.update();
+        sleep(1000);
+
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new ActionAfterDelay(
@@ -225,6 +235,11 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     }
 
     public void runPathMiddle() {
+        runCommonPathBeforeSplit();
+        telemetry.addLine("middle path");
+        telemetry.update();
+        sleep(1000);
+
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new ActionAfterDelay(
@@ -264,6 +279,11 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     }
 
     public void runPathTop() {
+        runCommonPathBeforeSplit();
+        telemetry.addLine("top path");
+        telemetry.update();
+        sleep(1000);
+
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new ActionAfterDelay(
@@ -303,6 +323,10 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     }
 
     public void runCommonPathAfterSplit() {
+        telemetry.addLine("common path 2");
+        telemetry.update();
+        sleep(1000);
+        
         commander.runCommand(new ActionUntilStatement(
                 new DriveByTimer(drive, 1, 0.2),
                 new BooleanSupplier() {
