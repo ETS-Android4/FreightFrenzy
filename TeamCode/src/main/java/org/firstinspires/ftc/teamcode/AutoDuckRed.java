@@ -217,6 +217,8 @@ public class AutoDuckRed extends LinearOpMode implements DogeOpMode {
                         }
                 ));
         sleep(500);
+
+        runCommonPathAfterSplit();
     }
 
     public void runPathMiddle() {
@@ -241,6 +243,8 @@ public class AutoDuckRed extends LinearOpMode implements DogeOpMode {
                         }
                 ));
         sleep(500);
+
+        runCommonPathAfterSplit();
     }
 
     public void runPathTop() {
@@ -266,7 +270,7 @@ public class AutoDuckRed extends LinearOpMode implements DogeOpMode {
                 ));
         sleep(500);
 
-
+        runCommonPathAfterSplit();
     }
 
     public void runCommonPathAfterSplit() {
