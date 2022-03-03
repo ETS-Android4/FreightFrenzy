@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
 @Deprecated
 @Disabled
-@Autonomous(name = "Only Park", group = "finalized")
+@Autonomous(name = "Just Park", group = "finalized")
 public class AutoJustPark extends LinearOpMode{
 
     private Drive drive;
