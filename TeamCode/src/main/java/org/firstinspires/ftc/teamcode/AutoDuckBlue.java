@@ -45,14 +45,14 @@ import java.util.function.BooleanSupplier;
 public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander;
 
-    private Drive drive;
-    private Carousel carousel;
+    private Drive               drive;
+    private Carousel            carousel;
     private CarouselColorSensor carouselColorSensor;
-    private Arm arm;
-    private Slides slides;
-    private Kicker kicker;
-    private Intake intake;
-    private AutoCameraControl cam;
+    private Arm                 arm;
+    private Slides              slides;
+    private Kicker              kicker;
+    private Intake              intake;
+    private AutoCameraControl   cam;
 
     private SwampbotsUtil util = new SwampbotsUtil();
 
@@ -64,14 +64,14 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
     public void runOpMode() throws InterruptedException {
         commander = new DogeCommander(this);
 
-        drive = new Drive(hardwareMap, true);
-        carousel = new Carousel(hardwareMap);
-        carouselColorSensor = new CarouselColorSensor(hardwareMap, telemetry);
-        arm = new Arm(hardwareMap);
-        slides = new Slides(hardwareMap);
-        kicker = new Kicker(hardwareMap);
-        intake = new Intake(hardwareMap);
-        cam = new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
+        drive =                 new Drive(hardwareMap, true);
+        carousel =              new Carousel(hardwareMap);
+        carouselColorSensor =   new CarouselColorSensor(hardwareMap, telemetry);
+        arm =                   new Arm(hardwareMap);
+        slides =                new Slides(hardwareMap);
+        kicker =                new Kicker(hardwareMap);
+        intake =                new Intake(hardwareMap);
+        cam =                   new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
 
         commander.registerSubsystem(drive);
@@ -193,6 +193,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new IntakeSetState(intake, Intake.LIFT_POSITIONS.IN));
+
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-19), 0, 0.3, telemetry));
         sleep(300);
         commander.runCommand(new TurnByGyroPID(drive, telemetry, 50, 0.3));
@@ -282,6 +283,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         sleep(300);
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
         sleep(700);
+
         commander.runCommandsParallel(
                 new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.5),
                 new ActionAfterStatement(
@@ -297,7 +299,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         sleep(1000);
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(25.0), 50, 0.3, telemetry));
-        sleep(1000);
+        sleep(200);
 
         commander.runCommand(new ActionUntilStatement(
                 new DriveByTimer(drive, 1, 0.2),
@@ -314,17 +316,14 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         commander.runCommand(new TurnByGyroPID(drive, telemetry, 0, 0.2));
         sleep(500);
 
-//        commander.runCommand(new DriveByTimer(drive, 1, -0.2));
-
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-24.0), 0, 0.3, telemetry));
-
     }
 
     @Nullable
     private DuckPlacement choosePlacement(@NonNull AutoCameraControl cam) {
         DuckPlacement placement = cam.getPlacement();
         if(placement.name().equals(DuckPlacement.UNKNOWN.name())) {
-            telemetry.addData("choosing at", new Date().getTime());
+            telemetry.addData("choosing @", new Date().getTime());
             cam.periodic();
             if(isStopRequested()) {
                 cam.getCamera().stop();

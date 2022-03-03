@@ -41,12 +41,12 @@ import java.util.function.BooleanSupplier;
 public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander;
 
-    private Drive drive;
-    private Arm arm;
-    private Slides slides;
-    private Kicker kicker;
-    private Intake intake;
-    private AutoCameraControl cam;
+    private Drive               drive;
+    private Arm                 arm;
+    private Slides              slides;
+    private Kicker              kicker;
+    private Intake              intake;
+    private AutoCameraControl   cam;
 
     private SwampbotsUtil util = new SwampbotsUtil();
 
@@ -58,12 +58,12 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     public void runOpMode() throws InterruptedException {
         commander = new DogeCommander(this);
 
-        drive = new Drive(hardwareMap, true);
-        arm = new Arm(hardwareMap);
-        slides = new Slides(hardwareMap);
-        kicker = new Kicker(hardwareMap);
-        intake = new Intake(hardwareMap);
-        cam = new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
+        drive =     new Drive(hardwareMap, true);
+        arm =       new Arm(hardwareMap);
+        slides =    new Slides(hardwareMap);
+        kicker =    new Kicker(hardwareMap);
+        intake =    new Intake(hardwareMap);
+        cam =       new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
         commander.registerSubsystem(drive);
         commander.registerSubsystem(arm);
@@ -137,11 +137,11 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new IntakeSetState(intake, Intake.LIFT_POSITIONS.IN));
+
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), 0, 0.3, telemetry));
         sleep(300);
         commander.runCommand(new TurnByGyroPID(drive, telemetry, -25, 0.3));
         sleep(300);
-
     }
 
     private void runPathBottom() {
@@ -152,7 +152,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
         commander.runCommandsParallel(
-//                new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new ActionAfterDelay(
                         new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_HUB, 0.7),
                         0.5
@@ -179,7 +179,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
         commander.runCommandsParallel(
-//                new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new ActionAfterDelay(
                         new SlidesByEncoder(slides, Slides.TARGETS.OUT, 0.7),
                         0.5
@@ -195,7 +195,6 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
                 ));
         sleep(500);
 
-
         runCommonPathAfterSplit();
     }
 
@@ -207,7 +206,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
         commander.runCommandsParallel(
-//                new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                new ArmSetState(arm, Arm.POSITION.MIDDLE),
                 new ActionAfterDelay(
                         new SlidesByEncoder(slides, Slides.TARGETS.OUT, 0.7),
                         0.5
@@ -235,6 +234,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         sleep(300);
         commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
         sleep(1000);
+
         commander.runCommandsParallel(
                 new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.5)//,
 //                new ActionAfterStatement(
@@ -258,7 +258,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     private DuckPlacement choosePlacement(@NonNull AutoCameraControl cam) {
         DuckPlacement placement = cam.getPlacement();
         if(placement.name().equals(DuckPlacement.UNKNOWN.name())) {
-            telemetry.addData("choosing at", new Date().getTime());
+            telemetry.addData("choosing @", new Date().getTime());
             cam.periodic();
             if(isStopRequested()) {
                 cam.getCamera().stop();
