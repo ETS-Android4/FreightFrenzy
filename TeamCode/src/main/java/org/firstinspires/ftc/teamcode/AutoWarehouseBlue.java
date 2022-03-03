@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -31,6 +35,7 @@ import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 import java.util.Date;
 import java.util.function.BooleanSupplier;
 
+@Config
 @Autonomous(name = "Warehouse Blue", group = "finalized")
 public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander;
@@ -244,7 +249,8 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(30), -90, 0.3, telemetry));
     }
 
-    private DuckPlacement choosePlacement(AutoCameraControl cam) {
+    @Nullable
+    private DuckPlacement choosePlacement(@NonNull AutoCameraControl cam) {
         DuckPlacement placement = cam.getPlacement();
         if(placement.name().equals(DuckPlacement.UNKNOWN.name())) {
             telemetry.addData("choosing at", new Date().getTime());
