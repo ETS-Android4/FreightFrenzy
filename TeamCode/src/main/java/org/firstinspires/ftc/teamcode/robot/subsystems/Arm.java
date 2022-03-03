@@ -66,6 +66,7 @@ public class Arm implements Subsystem {
         DEPOSIT,
         LOW_HUB,
         MIDDLE_HUB,
+        TOP_HUB,
         LOW_SHARED,
         HIGH_SHARED;
 
@@ -78,9 +79,11 @@ public class Arm implements Subsystem {
                 case DEPOSIT:
                     return 0.56;
                 case LOW_HUB:
-                    return 0.61;
-                case MIDDLE_HUB:
                     return 0.60;
+                case MIDDLE_HUB:
+                    return 0.57;
+                case TOP_HUB:
+                    return 0.55;
                 case LOW_SHARED:
                     return 0.58;
                 case HIGH_SHARED:
@@ -155,8 +158,8 @@ public class Arm implements Subsystem {
     public void periodic() {
         double position = targetPos.getPosition();
 
-//        if(testPos >= 0.0)
-//            position = testPos;
+        if(testPos >= 0.0)
+            position = testPos;
 
 //        if(POWER_SCALAR < 0.6)
         arm1.setPosition(position);
