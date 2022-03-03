@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testing;
+package org.firstinspires.ftc.teamcode;
 
 import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
@@ -26,8 +26,8 @@ import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
 
 import java.util.function.BooleanSupplier;
 
-@Autonomous(name = "test warehouse blue", group = "testing")
-public class TestWarehouseAutoBlue extends LinearOpMode implements DogeOpMode {
+@Autonomous(name = "Warehouse Blue", group = "finalized")
+public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     private DogeCommander commander;
 
     private Drive drive;
