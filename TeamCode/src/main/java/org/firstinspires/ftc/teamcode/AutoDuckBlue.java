@@ -203,7 +203,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         runCommonPathBeforeSplit();
         telemetry.addLine("bottom path");
         telemetry.update();
-        sleep(1000);
+        if(EXTRA_WAIT_TIMES) sleep(1000);
 
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
