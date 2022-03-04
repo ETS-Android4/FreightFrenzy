@@ -214,7 +214,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
                         new BooleanSupplier() {
                             @Override
                             public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 10);
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.AUTO_MID.getTargets(), 10);
                             }
                         }
                 )
@@ -239,7 +239,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
                         new BooleanSupplier() {
                             @Override
                             public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 10);
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.AUTO_MID.getTargets(), 10);
                             }
                         }
                 )
@@ -264,7 +264,7 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
                         new BooleanSupplier() {
                             @Override
                             public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 10);
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.AUTO_MID.getTargets(), 10);
                             }
                         }
                 )

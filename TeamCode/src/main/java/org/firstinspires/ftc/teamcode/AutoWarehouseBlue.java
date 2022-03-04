@@ -140,7 +140,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), 0, 0.3, telemetry));
         sleep(300);
-        commander.runCommand(new TurnByGyroPID(drive, telemetry, -25, 0.3));
+        commander.runCommand(new TurnByGyroPID(drive, telemetry, -30, 0.3));
         sleep(300);
     }
 
@@ -150,22 +150,21 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         telemetry.update();
         if(EXTRA_WAIT_TIMES) sleep(1000);
 
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
+        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-7), -30, 0.3, telemetry));
         commander.runCommandsParallel(
-                new ArmSetState(arm, Arm.POSITION.MIDDLE),
-                new ActionAfterDelay(
-                        new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_HUB, 0.7),
-                        0.5
-                ),
+                new SlidesByEncoder(slides, Slides.TARGETS.LOW_SHARED, 0.7),
                 new ActionAfterStatement(
                         new ArmSetState(arm, Arm.POSITION.LOW_HUB),
                         new BooleanSupplier() {
                             @Override
                             public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets() - 50, 10);
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.AUTO_MID.getTargets(), 10);
                             }
                         }
-                ));
+                )
+        );
+        sleep(1500);
+        commander.runCommandsParallel(new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_HUB, 0.7));
         sleep(500);
 
         runCommonPathAfterSplit();
@@ -177,22 +176,21 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         telemetry.update();
         if(EXTRA_WAIT_TIMES) sleep(1000);
 
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
+        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-7), -30, 0.3, telemetry));
         commander.runCommandsParallel(
-                new ArmSetState(arm, Arm.POSITION.MIDDLE),
-                new ActionAfterDelay(
-                        new SlidesByEncoder(slides, Slides.TARGETS.OUT, 0.7),
-                        0.5
-                ),
+                new SlidesByEncoder(slides, Slides.TARGETS.LOW_SHARED, 0.7),
                 new ActionAfterStatement(
-                        new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                        new ArmSetState(arm, Arm.POSITION.MIDDLE_HUB),
                         new BooleanSupplier() {
                             @Override
                             public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets() - 50, 10);
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.AUTO_MID.getTargets(), 10);
                             }
                         }
-                ));
+                )
+        );
+        sleep(1500);
+        commander.runCommandsParallel(new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_HUB, 0.7));
         sleep(500);
 
         runCommonPathAfterSplit();
@@ -204,22 +202,21 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         telemetry.update();
         if(EXTRA_WAIT_TIMES) sleep(1000);
 
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), -25, 0.3, telemetry));
+        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-7), -30, 0.3, telemetry));
         commander.runCommandsParallel(
-                new ArmSetState(arm, Arm.POSITION.MIDDLE),
-                new ActionAfterDelay(
-                        new SlidesByEncoder(slides, Slides.TARGETS.OUT, 0.7),
-                        0.5
-                ),
+                new SlidesByEncoder(slides, Slides.TARGETS.LOW_SHARED, 0.7),
                 new ActionAfterStatement(
-                        new ArmSetState(arm, Arm.POSITION.DEPOSIT),
+                        new ArmSetState(arm, Arm.POSITION.TOP_HUB),
                         new BooleanSupplier() {
                             @Override
                             public boolean getAsBoolean() {
-                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets() - 50, 10);
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.AUTO_MID.getTargets(), 10);
                             }
                         }
-                ));
+                )
+        );
+        sleep(1500);
+        commander.runCommandsParallel(new SlidesByEncoder(slides, Slides.TARGETS.BOTTOM_HUB.getTargets() - 40, 0.7));
         sleep(500);
 
         runCommonPathAfterSplit();
@@ -232,26 +229,29 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommand(new KickerSetState(kicker, Kicker.POSITION.CLOSE));
         sleep(300);
-        commander.runCommand(new ArmSetState(arm, Arm.POSITION.MIDDLE));
-        sleep(1000);
 
         commander.runCommandsParallel(
-                new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.5)//,
-//                new ActionAfterStatement(
-//                        new ArmSetState(arm, Arm.POSITION.INTAKE),
-//                        new BooleanSupplier() {
-//                            @Override
-//                            public boolean getAsBoolean() {
-//                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.MIDDLE.getTargets(), 50);
-//                            }
-//                        }
-//                )
+                new SlidesByEncoder(slides, Slides.TARGETS.LOW_SHARED, 0.5),
+                new ActionAfterStatement(
+                        new ArmSetState(arm, Arm.POSITION.MIDDLE),
+                        new BooleanSupplier() {
+                            @Override
+                            public boolean getAsBoolean() {
+                                return util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.LOW_SHARED.getTargets(), 50);
+                            }
+                        }
+                )
         );
         sleep(1000);
 
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(6), -25, 0.3, telemetry));
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(12), -80, 0.3, telemetry));
-        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(30), -90, 0.3, telemetry));
+        commander.runCommandsParallel(
+                new DriveByEncoder(drive, SwampbotsUtil.inchToCount(7), -30, 0.3, telemetry),
+                new SlidesByEncoder(slides, Slides.TARGETS.IN, 0.7)
+        );
+        sleep(1000);
+        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(22), -70, 0.3, telemetry));
+//        sleep(1000);
+        commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(26), -85, 0.3, telemetry));
     }
 
     @Nullable
