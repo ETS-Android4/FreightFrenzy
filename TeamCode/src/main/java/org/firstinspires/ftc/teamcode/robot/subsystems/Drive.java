@@ -64,7 +64,7 @@ public class Drive implements Subsystem {
     private static final double MOTOR_REV_TO_WHEEL_REV = 1.0 / 1.0 * 27.0 / 17.0; // 1:1 bevel & 27:17 pulley
     private static final double WHEEL_REV_TO_METERS = Math.PI * 72.0 / 1000.0; // ~0.226 m, 8.9 in
 //    public static final double COUNTS_PER_INCH_EMPIRICAL = MOTOR_COUNTS_PER_REV * MOTOR_REV_TO_WHEEL_REV * Units.metersToInches(WHEEL_REV_TO_METERS); // 1000 Counts every 24 inches
-    public static final double COUNTS_PER_INCH_EMPIRICAL = 3000 / 83;
+    public static final double COUNTS_PER_INCH_EMPIRICAL = 3000.0 / 83.0;
     public static final int NUMBER_OF_ENCODERS = 4;
 
     // Tuning values for RL Drive
