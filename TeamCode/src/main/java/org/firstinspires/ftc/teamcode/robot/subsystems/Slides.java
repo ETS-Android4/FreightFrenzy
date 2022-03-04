@@ -27,6 +27,7 @@ public class Slides implements Subsystem {
         IN,
         MIDDLE,
         OUT,
+        AUTO_MID,
         BOTTOM_HUB,
         LOW_SHARED,
         HIGH_SHARED;
@@ -40,6 +41,8 @@ public class Slides implements Subsystem {
                     return -15;
                 case OUT:
                     return -450;
+                case AUTO_MID:
+                    return -85;
                 case BOTTOM_HUB:
                     return -250;
                 case LOW_SHARED:
