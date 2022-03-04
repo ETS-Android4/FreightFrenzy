@@ -16,6 +16,7 @@ public class TeleOpCapstoneControl implements Command {
     private Gamepad gamepad;
     private Telemetry telemetry;
 
+    private final double THRESHOLD = 0.3;
     private final double INCREMENT_VAL = 0.00002;
 
     public TeleOpCapstoneControl(Cap cap, Gamepad gamepad, Telemetry telemetry) {
@@ -35,9 +36,9 @@ public class TeleOpCapstoneControl implements Command {
 
     @Override
     public void periodic() {
-        cap.increment(
-                gamepad.right_stick_y > CommandDrive.TRIGGER_THRESHOLD ? INCREMENT_VAL :
-                gamepad.right_stick_y < -CommandDrive.TRIGGER_THRESHOLD ? -INCREMENT_VAL : 0);
+        // Don't move if magnitude of stick is less then threshold
+        cap.increment(Math.abs(gamepad.right_stick_y) <= THRESHOLD ? 0 :
+                gamepad.right_stick_y * INCREMENT_VAL);
 
         if(telemetry != null) {
             telemetry.addLine("Cap telemetry:");
