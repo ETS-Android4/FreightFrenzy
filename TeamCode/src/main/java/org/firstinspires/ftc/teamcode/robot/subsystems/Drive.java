@@ -16,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.swampbots_util.Units;
 
 @Config
 public class Drive implements Subsystem {
@@ -26,6 +25,7 @@ public class Drive implements Subsystem {
 
     private enum SPEEDS {
         SLOW, FAST,
+        ARCADE_TURN_SLOW,
         RL_SLOW;
 
         public double getSpeed() {
@@ -34,6 +34,8 @@ public class Drive implements Subsystem {
                     return 0.4;
                 case FAST:
                     return 1.0;
+                case ARCADE_TURN_SLOW:
+                    return 0.2;
                 case RL_SLOW:
                     return 0.3;
                 default:
@@ -72,6 +74,8 @@ public class Drive implements Subsystem {
     private final double movingTurnMultiplier = -1.0;
     private final double speedMultiplier = 1.0;
     private final double movingDeadzone = 0.05;
+
+    private final boolean REVERSE_TELEOP_DRIVE = true; 
 
     //private final SynchronousPID pid = new SynchronousPID
 
@@ -240,11 +244,24 @@ public class Drive implements Subsystem {
     }
 
     public void setArcadePower(double speed, double turn, boolean goSlow) {
+
         this.goSlow = goSlow ? SPEEDS.SLOW.getSpeed() : SPEEDS.FAST.getSpeed();
+        if(goSlow) {
+            if(Math.abs(speed) > 0.1) {
+                this.goSlow = SPEEDS.ARCADE_TURN_SLOW.getSpeed();
+            } else {
+                this.goSlow = SPEEDS.SLOW.getSpeed();
+            }
+        } else {
+            this.goSlow = SPEEDS.FAST.getSpeed();
+        }
+
+        this.goSlow = this.goSlow * (REVERSE_TELEOP_DRIVE ? -1 : 1);
+
         speed   = speed * this.goSlow;
         turn    = turn  * this.goSlow;
 
-        setPower((speed - turn) * -1, (speed + turn) * -1);
+        setPower((speed - turn), (speed + turn));
     }
 
     /**
