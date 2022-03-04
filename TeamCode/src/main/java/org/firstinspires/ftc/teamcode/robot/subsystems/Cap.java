@@ -17,6 +17,7 @@ public class Cap implements Subsystem {
 
     public enum POSITIONS {
         IN,
+        VERTICAL,
         HOLD,
         PLACE,
         OUT;
@@ -25,6 +26,8 @@ public class Cap implements Subsystem {
             switch (this) {
                 case IN:
                     return 1.0;
+                case VERTICAL:
+                    return 0.6;
                 case HOLD:
                     return 0.5;
                 case PLACE:
