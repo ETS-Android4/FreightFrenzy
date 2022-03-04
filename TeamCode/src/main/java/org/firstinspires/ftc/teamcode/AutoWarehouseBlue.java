@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.auto.ActionAfterStatement;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.ActionUntilStatement;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.ArmSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.AutoCameraControl;
+import org.firstinspires.ftc.teamcode.robot.commands.auto.CapSetState;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByEncoder;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.DriveByTimer;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.IntakeSetState;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.auto.SlidesByEncoder;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.TurnByGyroPID;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Camera;
+import org.firstinspires.ftc.teamcode.robot.subsystems.Cap;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Carousel;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CarouselColorSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Drive;
@@ -46,6 +48,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
     private Slides              slides;
     private Kicker              kicker;
     private Intake              intake;
+    private Cap                 cap;
     private AutoCameraControl   cam;
 
     private SwampbotsUtil util = new SwampbotsUtil();
@@ -63,6 +66,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         slides =    new Slides(hardwareMap);
         kicker =    new Kicker(hardwareMap);
         intake =    new Intake(hardwareMap);
+        cap =       new Cap(hardwareMap);
         cam =       new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
         commander.registerSubsystem(drive);
@@ -70,6 +74,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(slides);
         commander.registerSubsystem(kicker);
         commander.registerSubsystem(intake);
+        commander.registerSubsystem(cap);
 
         // Wait for cam to initialize
         while (!cam.getCamera().hasInitialized && !opModeIsActive() && !isStopRequested());
@@ -136,7 +141,9 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         commander.runCommandsParallel(
                 new ArmSetState(arm, Arm.POSITION.MIDDLE),
-                new IntakeSetState(intake, Intake.LIFT_POSITIONS.IN));
+                new IntakeSetState(intake, Intake.LIFT_POSITIONS.IN),
+                new CapSetState(cap, Cap.POSITIONS.VERTICAL)
+        );
 
         commander.runCommand(new DriveByEncoder(drive, SwampbotsUtil.inchToCount(-4), 0, 0.3, telemetry));
         sleep(300);
