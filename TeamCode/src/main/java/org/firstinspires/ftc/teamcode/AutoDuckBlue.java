@@ -77,6 +77,9 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
         cap =                   new Cap(hardwareMap);
         cam =                   new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
+        cam.Bound1Percent = 32.8125;
+        cam.Bound2Percent = 82.8125;
+        cam.Bound3Percent = 100.0;
 
         commander.registerSubsystem(drive);
         commander.registerSubsystem(carousel);

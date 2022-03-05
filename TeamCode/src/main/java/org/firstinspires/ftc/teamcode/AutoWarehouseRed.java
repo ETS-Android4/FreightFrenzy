@@ -50,6 +50,7 @@ public class AutoWarehouseRed extends LinearOpMode implements DogeOpMode {
     public static double CAM_OVERRIDE = -1;
 
     private final boolean EXTRA_WAIT_TIMES = true;
+    //43.75, 70.31
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -62,6 +63,11 @@ public class AutoWarehouseRed extends LinearOpMode implements DogeOpMode {
         intake =    new Intake(hardwareMap);
         cap =       new Cap(hardwareMap);
         cam =       new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
+
+        cam.Bound1Percent = 70.31;
+        cam.Bound2Percent = 99.99;
+        cam.Bound3Percent = 100.0;
+
 
         commander.registerSubsystem(drive);
         commander.registerSubsystem(arm);

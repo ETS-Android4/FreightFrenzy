@@ -22,6 +22,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
+import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -72,6 +73,10 @@ public class AutoCameraControl {
     private DuckPlacement placement;
     private ArrayList<Pair<DuckPlacement, Double>> fullPlacementData = new ArrayList<Pair<DuckPlacement, Double>>();
     private final int maxPlacementDataSize = 10;
+
+    public double Bound1Percent = 15.0;
+    public double Bound2Percent = 54.69;
+    public double Bound3Percent = 95.0;
 
     private ElapsedTime timer;
 
@@ -448,27 +453,29 @@ public class AutoCameraControl {
             DuckPatternPipeline.rectPoints.add(new Point(weightedXPos, IMG_HEIGHT * 0.75));
 
             for(int i = 0; i < IMG_HEIGHT / 4; i += 20) {
-                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.15, IMG_HEIGHT - i));
-                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.5469, IMG_HEIGHT - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * Bound1Percent / 100.0, IMG_HEIGHT - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * Bound2Percent / 100.0, IMG_HEIGHT - i));
 //                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.6, IMG_WIDTH - i));
-                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.92, IMG_HEIGHT - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * Bound3Percent / 100.0, IMG_HEIGHT - i));
             }
 
              confidence = Math.sqrt(totalWeight / 20000.0);
 
-            if(weightedXPos < IMG_WIDTH * 0.15) {
-                currentPlacement = DuckPlacement.LEFT;
-                confidence *= 1.1; // Slight multiplier due to small possible range of values
-//                telemetry.addLine("LEFT");
-            } else if(weightedXPos < IMG_WIDTH * 0.5469) {
-                currentPlacement = DuckPlacement.CENTER;
+            currentPlacement = PlacementByBounds(weightedXPos);
 
-//                telemetry.addLine("CENTER");
-            } else if(weightedXPos < IMG_WIDTH * 0.95) {
-                currentPlacement = DuckPlacement.RIGHT;
-
-//                telemetry.addLine("RIGHT");
-            }
+//            if(weightedXPos < IMG_WIDTH * 0.15) {
+//                currentPlacement = DuckPlacement.LEFT;
+//                confidence *= 1.1; // Slight multiplier due to small possible range of values
+////                telemetry.addLine("LEFT");
+//            } else if(weightedXPos < IMG_WIDTH * 0.5469) {
+//                currentPlacement = DuckPlacement.CENTER;
+//
+////                telemetry.addLine("CENTER");
+//            } else if(weightedXPos < IMG_WIDTH * 0.95) {
+//                currentPlacement = DuckPlacement.RIGHT;
+//
+////                telemetry.addLine("RIGHT");
+//            }
 
             confidence = Math.min(confidence, 1.0);
 //            confidence = x;
@@ -483,7 +490,7 @@ public class AutoCameraControl {
                 telemetry.addLine();
             }
         } else {
-             currentPlacement = DuckPlacement.LEFT;
+             currentPlacement = DuckPlacement.RIGHT;
              confidence = 0.825;
          }
 
@@ -715,6 +722,22 @@ public class AutoCameraControl {
         return newPlacement;
     }
 
+    private DuckPlacement PlacementByBounds(double pos) {
+        if(pos < IMG_WIDTH * Bound1Percent / 100.0) {
+            return DuckPlacement.LEFT;
+//            confidence *= 1.1; // Slight multiplier due to small possible range of values
+//                telemetry.addLine("LEFT");
+        } else if(pos < IMG_WIDTH * Bound2Percent / 100.0) {
+            return DuckPlacement.CENTER;
+
+//                telemetry.addLine("CENTER");
+        } else if(pos < IMG_WIDTH * Bound3Percent / 100.0) {
+            return DuckPlacement.RIGHT;
+
+//                telemetry.addLine("RIGHT");
+        }
+        return DuckPlacement.RIGHT;
+    }
 
     public Camera getCamera() {
         return camera;

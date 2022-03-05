@@ -76,6 +76,11 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(intake);
         commander.registerSubsystem(cap);
 
+        cam.Bound1Percent = 36.0;
+        cam.Bound2Percent = 55.49;
+        cam.Bound3Percent = 100.0;
+
+
         // Wait for cam to initialize
         while (!cam.getCamera().hasInitialized && !opModeIsActive() && !isStopRequested());
 

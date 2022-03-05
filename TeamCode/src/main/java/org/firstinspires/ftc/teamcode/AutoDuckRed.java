@@ -58,6 +58,7 @@ public class AutoDuckRed extends LinearOpMode implements DogeOpMode {
     public static double CAM_OVERRIDE = -1;
 
     private final boolean EXTRA_WAIT_TIMES = true;
+    // Mid: ~435; Top: null; Bot: ~108
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -73,6 +74,9 @@ public class AutoDuckRed extends LinearOpMode implements DogeOpMode {
         cap =                   new Cap(hardwareMap);
         cam =                   new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
+        cam.Bound1Percent = 35.625;
+        cam.Bound2Percent = 91.1;
+        cam.Bound3Percent = 100.0;
 
         commander.registerSubsystem(drive);
         commander.registerSubsystem(carousel);
