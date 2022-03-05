@@ -34,8 +34,8 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
 
     private final double DROP_TIME = 1.0;   //seconds
     private final double IN_TIME = 0.8;
-    private final double POWER_SCALAR = 0.7;
-    private final double LONG_DROP_POWER_SCALAR = 0.5;
+    private final double POWER_SCALAR = 1.0;
+    private final double LONG_DROP_POWER_SCALAR = 0.6;
 
     private States currentState;
     private double currentTimeout = -1;
@@ -72,7 +72,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                 case ARM_INTAKE_TO_MIDDLE:
                     return 1.3;
                 case KICKER:
-                    return 0.6;
+                    return 0.4; //TODO: Decreased from 0.6 -> 0.4
                 case DELAY_FOR_AUTO_INTAKE:
                     return 5.0;
                 default:
@@ -245,6 +245,8 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                     if(goingDown) {
                         if(kickerTimer > TIMEOUTS.KICKER.getTimeout()) {
                             arm.middle();
+                            slides.setPower(LONG_DROP_POWER_SCALAR); //TODO: Added this and line below to allow slides to decrease while arm moves
+                            slides.setTargetPos(Slides.TARGETS.LOW_SHARED.getTargets());
 
                             if(armTimer > ARM_TIMEOUT + TIMEOUTS.KICKER.getTimeout()) {
                                 slides.setPower(LONG_DROP_POWER_SCALAR);
