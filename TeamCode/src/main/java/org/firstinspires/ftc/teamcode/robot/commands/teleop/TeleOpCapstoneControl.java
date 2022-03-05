@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.commands.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.disnodeteam.dogecommander.Command;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,13 +12,14 @@ import org.firstinspires.ftc.teamcode.robot.subsystems.Cap;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapArm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.CapGrip;
 
+@Config
 public class TeleOpCapstoneControl implements Command {
     private Cap cap;
     private Gamepad gamepad;
     private Telemetry telemetry;
 
     private final double THRESHOLD = 0.3;
-    private final double INCREMENT_VAL = 0.00002;
+    public static double INCREMENT_VAL = 0.002;
 
     public TeleOpCapstoneControl(Cap cap, Gamepad gamepad, Telemetry telemetry) {
         this.cap = cap;
@@ -37,8 +39,8 @@ public class TeleOpCapstoneControl implements Command {
     @Override
     public void periodic() {
         // Don't move if magnitude of stick is less then threshold
-        cap.increment(Math.abs(gamepad.right_stick_y) <= THRESHOLD ? 0 :
-                gamepad.right_stick_y * INCREMENT_VAL);
+        cap.increment(Math.abs(gamepad.right_stick_y) > THRESHOLD ?
+                gamepad.right_stick_y * INCREMENT_VAL : 0);
 
         if(telemetry != null) {
             telemetry.addLine("Cap telemetry:");

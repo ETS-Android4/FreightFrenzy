@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideKicker
 import org.firstinspires.ftc.teamcode.robot.commands.teleop.TeleOpArmSlideKickerControlPlus;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.robot.subsystems.IntakeColorSensor;
+import org.firstinspires.ftc.teamcode.robot.subsystems.IntakeDistanceSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Kicker;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 
@@ -24,18 +25,18 @@ public class TestArmSlideFsmCommand extends LinearOpMode implements DogeOpMode {
         Arm arm = new Arm(hardwareMap);
         Slides slides = new Slides(hardwareMap);
         Kicker kicker = new Kicker(hardwareMap);
-        IntakeColorSensor intakeColorSensor = new IntakeColorSensor(hardwareMap);
+        IntakeDistanceSensor intakeDistanceSensor = new IntakeDistanceSensor(hardwareMap);
 
         commander.registerSubsystem(arm);
         commander.registerSubsystem(slides);
         commander.registerSubsystem(kicker);
-        commander.registerSubsystem(intakeColorSensor);
+        commander.registerSubsystem(intakeDistanceSensor);
 
         commander.init();
         waitForStart();
 
         commander.runCommandsParallel(
-                 new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeColorSensor, gamepad1, telemetry)
+                 new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeDistanceSensor, gamepad1, telemetry)
         );
     }
 }

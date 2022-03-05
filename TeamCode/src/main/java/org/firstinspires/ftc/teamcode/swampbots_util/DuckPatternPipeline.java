@@ -22,7 +22,7 @@ import java.util.List;
 
 public class DuckPatternPipeline extends OpenCvPipeline {
     // TODO: Check values
-    private static double[] hsvHue = new double[]{80.0, 119.0};     // Starts with red outside of threshold (red is hue of 120)
+    private static double[] hsvHue = new double[]{80.0, 119.0};
     private static double[] hsvSat = new double[]{105.0, 255.0};
     private static double[] hsvVal = new double[]{50.0, 255.0};      // Testing showed 50 (min) to be enough to cut out most of the Skystone
 //bot 313.23    left 193.12 right 308.82    top 182.74  bound 253.48

@@ -75,7 +75,7 @@ public class Drive implements Subsystem {
     private final double speedMultiplier = 1.0;
     private final double movingDeadzone = 0.05;
 
-    private final boolean REVERSE_TELEOP_DRIVE = true; 
+    private final boolean REVERSE_TELEOP_DRIVE = true;
 
     //private final SynchronousPID pid = new SynchronousPID
 

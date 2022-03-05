@@ -28,9 +28,9 @@ public class Camera {
     private static final double HSV_MIN = 0.0;
 
     // Initializes HSV values to the range used during testing
-    private static double[] hsvHue = new double[]{31.56, 77.72};
-    private static double[] hsvSat = new double[]{45.40, 164.28};
-    private static double[] hsvVal = new double[]{24.68, 172.96};
+    private static double[] hsvHue = new double[]{36.40, 101.08};
+    private static double[] hsvSat = new double[]{42.32, 255.00};
+    private static double[] hsvVal = new double[]{32.11, 217.04};
     //red: top=292.49, left=295.19, bot=451.27, right:640.00
     private static double rectTop   = 0.0;
     private static double rectLeft  = 0.0;

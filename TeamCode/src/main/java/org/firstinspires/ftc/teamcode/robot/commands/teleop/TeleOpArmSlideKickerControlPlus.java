@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.robot.subsystems.IntakeColorSensor;
+import org.firstinspires.ftc.teamcode.robot.subsystems.IntakeDistanceSensor;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Kicker;
 import org.firstinspires.ftc.teamcode.robot.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.swampbots_util.SwampbotsUtil;
@@ -18,7 +18,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
     private Arm arm;
     private Slides slides;
     private Kicker kicker;
-    private IntakeColorSensor colorSensor;
+    private IntakeDistanceSensor distanceSensor;
     private Gamepad gamepad;
     private Telemetry telemetry;
 
@@ -81,11 +81,11 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
         }
     }
 
-    public TeleOpArmSlideKickerControlPlus(Arm arm, Slides slides, Kicker kicker, IntakeColorSensor colorSensor, Gamepad gamepad, Telemetry telemetry) {
+    public TeleOpArmSlideKickerControlPlus(Arm arm, Slides slides, Kicker kicker, IntakeDistanceSensor distanceSensor, Gamepad gamepad, Telemetry telemetry) {
         this.arm = arm;
         this.slides = slides;
         this.kicker = kicker;
-        this.colorSensor = colorSensor;
+        this.distanceSensor = distanceSensor;
         this.gamepad = gamepad;
         this.telemetry = telemetry;
 
@@ -93,8 +93,8 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
         util = new SwampbotsUtil();
     }
 
-    public TeleOpArmSlideKickerControlPlus(Arm arm, Slides slides, Kicker kicker, IntakeColorSensor colorSensor, Gamepad gamepad) {
-        this(arm, slides, kicker, colorSensor, gamepad, null);
+    public TeleOpArmSlideKickerControlPlus(Arm arm, Slides slides, Kicker kicker, IntakeDistanceSensor distanceSensor, Gamepad gamepad) {
+        this(arm, slides, kicker, distanceSensor, gamepad, null);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
         t0 = timer.seconds();
         kickerTimer = DROP_TIME;
         intakeTimer = IN_TIME;
+        autoIntakeTimer = TIMEOUTS.DELAY_FOR_AUTO_INTAKE.getTimeout();
 
         currentState = States.INTAKE;
 
@@ -135,8 +136,8 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
         boolean cancelMoveAndReturn = gamepad.right_bumper;
         boolean deposit = gamepad.a;
         boolean lowShared = gamepad.b;
-        boolean highShared = gamepad.x;
-        boolean toggleKicker = gamepad.y;
+        boolean highShared = gamepad.y;
+        boolean toggleKicker = false;//gamepad.y;
 
         if(setAutoOn) {
             autoMode = true;
@@ -184,7 +185,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                         setTarget(deposit, lowShared, highShared);
                     }
 
-                    if(colorSensor.doesSensorSeeAnything() && !autoIntake && autoIntakeTimer > TIMEOUTS.DELAY_FOR_AUTO_INTAKE.getTimeout()) {
+                    if(distanceSensor.doesSensorSeeAnything() && !autoIntake && autoIntakeTimer > TIMEOUTS.DELAY_FOR_AUTO_INTAKE.getTimeout()) {
                         kicker.hold();
                         goingDown = false;
 
@@ -549,9 +550,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
             telemetry.addLine();
 
             telemetry.addLine("Color Sensor Telemetry:");
-            telemetry.addData("see anything?", colorSensor.doesSensorSeeAnything());
-            telemetry.addLine(String.format(Locale.ENGLISH, "(a,r,g,b)=(%d,%d,%d,%d)", colorSensor.getSensorAlpha(),
-                    colorSensor.getSensorRed(), colorSensor.getSensorGreen(), colorSensor.getSensorBlue()));
+            telemetry.addData("see anything?", distanceSensor.doesSensorSeeAnything());
 
             telemetry.addLine();
 
@@ -563,8 +562,8 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
             telemetry.addLine();
             telemetry.addData("current state:", currentState);
             telemetry.addLine();
-            telemetry.addData("delta t=", deltaT);
-            telemetry.addData("t0:", t0);
+            telemetry.addData("delta t=", String.format("%.3f",deltaT*1000));
+            telemetry.addData("t0:", String.format("%.3f",t0*1000));
             telemetry.addData("dropping timer:", kickerTimer);
             telemetry.addData("intake timer:", intakeTimer);
             telemetry.addData("arm timer:", armTimer);

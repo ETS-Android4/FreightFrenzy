@@ -448,13 +448,13 @@ public class AutoCameraControl {
             DuckPatternPipeline.rectPoints.add(new Point(weightedXPos, IMG_HEIGHT * 0.75));
 
             for(int i = 0; i < IMG_HEIGHT / 4; i += 20) {
-                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.15, IMG_WIDTH - i));
-                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.5469, IMG_WIDTH - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.15, IMG_HEIGHT - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.5469, IMG_HEIGHT - i));
 //                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.6, IMG_WIDTH - i));
-                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.92, IMG_WIDTH - i));
+                DuckPatternPipeline.rectPoints.add(new Point(IMG_WIDTH * 0.92, IMG_HEIGHT - i));
             }
 
-             confidence = Math.sqrt(totalWeight / 20000);
+             confidence = Math.sqrt(totalWeight / 20000.0);
 
             if(weightedXPos < IMG_WIDTH * 0.15) {
                 currentPlacement = DuckPlacement.LEFT;
