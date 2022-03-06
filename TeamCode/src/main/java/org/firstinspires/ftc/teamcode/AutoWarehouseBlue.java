@@ -77,7 +77,7 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
         commander.registerSubsystem(cap);
 
         cam.Bound1Percent = 36.0;
-        cam.Bound2Percent = 55.49;
+        cam.Bound2Percent = 84.375;
         cam.Bound3Percent = 100.0;
 
 
@@ -102,13 +102,13 @@ public class AutoWarehouseBlue extends LinearOpMode implements DogeOpMode {
 
         if(CAM_OVERRIDE == -1) {
             switch (choosePlacement(cam)) {
-                case LEFT:
+                case RIGHT:
                     runPathTop();
                     break;
                 case CENTER:
                     runPathMiddle();
                     break;
-                case RIGHT:
+                case LEFT:
                     runPathBottom();
                     break;
                 case UNKNOWN: //Run most point path if something goes wrong

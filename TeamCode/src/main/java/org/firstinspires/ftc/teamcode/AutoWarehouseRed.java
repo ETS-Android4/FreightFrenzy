@@ -8,6 +8,7 @@ import com.disnodeteam.dogecommander.DogeCommander;
 import com.disnodeteam.dogecommander.DogeOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.robot.commands.auto.ActionAfterDelay;
 import org.firstinspires.ftc.teamcode.robot.commands.auto.ActionAfterStatement;
@@ -64,8 +65,8 @@ public class AutoWarehouseRed extends LinearOpMode implements DogeOpMode {
         cap =       new Cap(hardwareMap);
         cam =       new AutoCameraControl(new Camera(hardwareMap, telemetry), gamepad1, gamepad2, telemetry);
 
-        cam.Bound1Percent = 70.31;
-        cam.Bound2Percent = 99.99;
+        cam.Bound1Percent = 28.125;
+        cam.Bound2Percent = 78.125;
         cam.Bound3Percent = 100.0;
 
 
@@ -89,6 +90,9 @@ public class AutoWarehouseRed extends LinearOpMode implements DogeOpMode {
 
         commander.init();
 
+//        slides.setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slides.resetEncoder();
+
         telemetry.addLine("Ready!");
         telemetry.update();
         waitForStart();
@@ -97,13 +101,13 @@ public class AutoWarehouseRed extends LinearOpMode implements DogeOpMode {
 
         if(CAM_OVERRIDE == -1) {
             switch (choosePlacement(cam)) {
-                case LEFT:
+                case RIGHT:
                     runPathTop();
                     break;
                 case CENTER:
                     runPathMiddle();
                     break;
-                case RIGHT:
+                case LEFT:
                     runPathBottom();
                     break;
                 case UNKNOWN: //Run most point path if something goes wrong

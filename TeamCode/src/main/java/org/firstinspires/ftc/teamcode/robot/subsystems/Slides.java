@@ -69,8 +69,8 @@ public class Slides implements Subsystem {
         slideLeft   = hardwareMap.get(DcMotorEx.class, "slide_left");
         slideRight  = hardwareMap.get(DcMotorEx.class, "slide_right");
 
-        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         targetPos = SwampbotsUtil.mean(slideLeft.getCurrentPosition(), slideRight.getCurrentPosition());
 

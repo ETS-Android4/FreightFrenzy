@@ -111,13 +111,13 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
 
         if(CAM_OVERRIDE == -1) {
             switch (choosePlacement(cam)) {
-                case LEFT:
+                case RIGHT:
                     runPathTop();
                     break;
                 case CENTER:
                     runPathMiddle();
                     break;
-                case RIGHT:
+                case LEFT:
                     runPathBottom();
                     break;
                 case UNKNOWN: //Run most point path if something goes wrong
@@ -190,6 +190,11 @@ public class AutoDuckBlue extends LinearOpMode implements DogeOpMode {
 //        runCommonPathAfterSplit();
 
         commander.stop();
+
+        // Lift intake up for rest of match
+        intake.setPosition(Intake.LIFT_POSITIONS.IN);
+        intake.periodic();
+        sleep(30000);
     }
 
     public void runCommonPathBeforeSplit() {

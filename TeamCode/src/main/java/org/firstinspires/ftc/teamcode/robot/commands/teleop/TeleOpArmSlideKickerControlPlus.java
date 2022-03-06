@@ -135,8 +135,8 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
         boolean dropAndReturn = gamepad.left_bumper;
         boolean cancelMoveAndReturn = gamepad.right_bumper;
         boolean deposit = gamepad.a;
-        boolean lowShared = gamepad.b;
-        boolean highShared = gamepad.y;
+        boolean lowShared = gamepad.y;
+        boolean highShared = gamepad.b;
         boolean toggleKicker = false;//gamepad.y;
 
         if(setAutoOn) {
@@ -179,6 +179,12 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                         intakeTimer = 0.0;
 //                        slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                         arm.middle();
+                    }
+
+                    if(!goingDown && cancelMoveAndReturn) {
+                        goingDown = true;
+                        kicker.open();
+                        arm.intake();
                     }
 
                     if(intakeTimer > IN_TIME) {
@@ -279,7 +285,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                     break;
                 case HIGH_SHARED:
                     if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.HIGH_SHARED.getTargets(), 10) && !armToggle.equals("high")) {
-                        arm.deposit();
+                        arm.highShared();
 
                         armToggle = "high";
                     }
@@ -320,7 +326,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                         if(kickerTimer > TIMEOUTS.KICKER.getTimeout()) {
                             arm.middle();
 
-                            if(armTimer > ARM_TIMEOUT + TIMEOUTS.KICKER.getTimeout()) {
+                            if(armTimer > ARM_TIMEOUT + TIMEOUTS.KICKER.getTimeout()+0.4)  {
                                 slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                                 kicker.open();
                             }
@@ -350,7 +356,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                     break;
                 case LOW_SHARED:
                     if(util.isCloseEnough(slides.getCurrentPos(), Slides.TARGETS.LOW_SHARED.getTargets(), 10) && !armToggle.equals("low")) {
-                        arm.deposit();
+                        arm.lowShared();
                         armToggle = "low";
                     }
 
@@ -390,7 +396,7 @@ public class TeleOpArmSlideKickerControlPlus implements Command {
                         if(kickerTimer > TIMEOUTS.KICKER.getTimeout()) {
                             arm.middle();
 
-                            if(armTimer > ARM_TIMEOUT + TIMEOUTS.KICKER.getTimeout()) {
+                            if(armTimer > ARM_TIMEOUT + TIMEOUTS.KICKER.getTimeout() + 0.4) {
                                 slides.setTargetPos(Slides.TARGETS.MIDDLE.getTargets());
                                 kicker.open();
                             }
