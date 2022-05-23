@@ -66,11 +66,11 @@ public class CommandDrive extends LinearOpMode implements DogeOpMode {
         waitForStart();
 
         commander.runCommandsParallel(
-                new TeleOpCapstoneControl(cap, gamepad1),
+//                new TeleOpCapstoneControl(cap, gamepad1),
                 new TeleOpArcadeControl(drive, gamepad1),
-                new TeleOpCarouselControl(carousel, gamepad2),
-                new TeleOpIntakeControlPlusV2(intake, intakeDistanceSensor, gamepad2),
-                new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeDistanceSensor, gamepad2, telemetry)
+                new TeleOpCarouselControl(carousel, gamepad1),
+                new TeleOpIntakeControlPlusV2(intake, intakeDistanceSensor, gamepad1),
+                new TeleOpArmSlideKickerControlPlus(arm, slides, kicker, intakeDistanceSensor, gamepad1, telemetry)
 
 
 //                new TeleOpLineColorSensor(lineColorSensor, true)
